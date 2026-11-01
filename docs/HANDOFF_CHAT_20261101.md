@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN POSTERIOR A LA AUDITORÍA — 2026-11-01:** Código corregido en commit `ef3e6d65e07923098f6ef8d9d483480bd6114a0a`. GitHub Actions `41316087563` **SUCCESS**. Se BLOQUEARON las rutas web anónimas para crear grants o llamar Meta (403), se etiquetó SAM como `SIMULATED_FIXTURE` con `model_executed=false`, se etiquetó la memoria hardcodeada como `UNVERIFIED_STATIC_EXAMPLE` y se eliminó la fabricación de IDs de respuesta Meta faltantes. **Persisten como P0**: saldo de créditos en Billing, endpoint de operador realmente autenticado, grant entre procesos, memoria real Cognee/AG-60, primera llamada auténtica a Meta y evidencia E2E. Los hallazgos históricos de abajo describen lo observado ANTES de estos fixes y se conservan para trazabilidad. 
+
 # HANDOFF CANÓNICO | InnerOS Meta Global AI Hackathon 2026
 **Auditoría:** 2026-11-01 (Ecuador) · **Destino:** nuevo chat ChatGPT / Antigravity IDE · **Prioridad:** cierre y entrega
 
