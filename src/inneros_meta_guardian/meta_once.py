@@ -216,7 +216,7 @@ class MetaOnceOperator:
             latency_ms = int((time.time() - start_time) * 1000)
             
             # Parse Responses API output
-            response_id = data.get("id") or f"meta_resp_{secrets.token_hex(8)}"
+            response_id = data.get("id")
             usage = data.get("usage", {})
             tokens_used = usage.get("total_tokens") or usage.get("output_tokens", 0)
 
@@ -225,6 +225,21 @@ class MetaOnceOperator:
             messages = [x for x in output if x.get("type") == "message"]
             content_pieces = [c.get("text", "") for m in messages for c in m.get("content", []) if c.get("type") == "output_text"]
             text_result = " ".join(content_pieces).strip()
+            if not isinstance(response_id, str) or not response_id.strip() or not text_result:
+                return {
+                    "ok": False,
+                    "status": "BLOCKED",
+                    "error": "PROVIDER_RECEIPT_INCOMPLETE: missing authentic response id or output text",
+                    "provider": "meta-muse-spark",
+                    "model": grant["model"],
+                    "truth": "NO_VERIFIED_MODEL_OUTPUT",
+                    "snapshot_digest": snapshot_digest,
+                    "request_hash": request_hash,
+                    "timestamp": now_iso(),
+                    "latency_ms": latency_ms,
+                    "local_fallback_applied": True,
+                    "response_id": None,
+                }
 
             return {
                 "ok": True,

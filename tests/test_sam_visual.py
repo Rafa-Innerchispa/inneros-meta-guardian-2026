@@ -10,15 +10,17 @@ class SAMInspectorTests(unittest.TestCase):
         inspector = SAMInspector()
         result = inspector.inspect_lab_asset("lab_rack_switch_led")
         self.assertTrue(result["ok"])
-        self.assertEqual("LAB_VERIFIED_VISUAL", result["status"])
+        self.assertEqual("SIMULATED_FIXTURE", result["status"])
         self.assertEqual("meta-sam-3.1", result["model"])
-        self.assertEqual("AUTHORIZED_LAB_BENCH_TEST", result["truth"])
+        self.assertFalse(result["model_executed"])
+        self.assertEqual("SIMULATED_FIXTURE", result["truth"])
         self.assertGreaterEqual(len(result["detected_objects"]), 2)
         for obj in result["detected_objects"]:
             self.assertIn("label", obj)
             self.assertIn("confidence", obj)
             self.assertIn("bbox", obj)
             self.assertGreater(obj["confidence"], 0.8)
+            self.assertEqual("STATIC_EXAMPLE_NOT_MODEL", obj["confidence_source"])
 
     def test_inspect_optical_fiber_tray(self):
         inspector = SAMInspector()

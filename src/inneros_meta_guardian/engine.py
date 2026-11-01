@@ -146,7 +146,7 @@ class Guardian:
             site = incident.get("site", "casa")
             facts = self.memory_client.recall_facts(site, query=query, limit=4)
             incident["memory"] = {
-                "truth": "VERIFIED_HISTORICAL_MEMORY",
+                "truth": "UNVERIFIED_STATIC_EXAMPLE",
                 "facts": facts,
                 "recalled_at": now(),
                 "site": site,
@@ -154,7 +154,7 @@ class Guardian:
             return self._save(
                 incident,
                 "REMEMBER",
-                {"site": site, "fact_count": len(facts), "facts": facts, "truth": "VERIFIED_HISTORICAL_MEMORY"},
+                {"site": site, "fact_count": len(facts), "facts": facts, "truth": "UNVERIFIED_STATIC_EXAMPLE"},
             )
 
     def analyze(self, id: str, mode: str = "deterministic", grant_token: str | None = None) -> dict:

@@ -47,8 +47,8 @@ function disableActions() {
 
   // Live and Meta buttons
   const hasCurrent = !!current;
-  if ($('btn-mint-grant')) $('btn-mint-grant').disabled = busy || !hasCurrent;
-  if ($('btn-meta-analyze')) $('btn-meta-analyze').disabled = busy || !currentGrant || s !== 'observed';
+  if ($('btn-mint-grant')) $('btn-mint-grant').disabled = true; // operator-only; never exposed on judge UI
+  if ($('btn-meta-analyze')) $('btn-meta-analyze').disabled = true; // paid model never invoked from anonymous web UI
   if ($('btn-recall-memory')) $('btn-recall-memory').disabled = busy || !hasCurrent;
 }
 
@@ -323,7 +323,7 @@ if ($('btn-run-sam')) {
   $('btn-run-sam').addEventListener('click', async () => {
     const asset = $('sam-asset-select').value;
     try {
-      say('Running SAM 3.1 optical inspection on lab hardware…');
+      say('Displaying static lab fixture; SAM 3.1 model NOT_RUN…');
       const data = await call(`/api/sam/inspect?asset=${asset}`);
       const box = $('sam-output');
       box.replaceChildren();
@@ -342,7 +342,7 @@ if ($('btn-run-sam')) {
         item.innerHTML = `<span>[${Math.round(obj.confidence * 100)}% CONFIDENCE]</span> ${obj.label} — <em>${obj.status}</em> <small style="color:#71879e;display:block;">bbox: [${obj.bbox.join(', ')}]</small>`;
         box.append(item);
       }
-      say('SAM 3.1 lab inspection complete.', true);
+      say('Static SAM-style fixture displayed. No Meta model was run.', true);
     } catch (e) {
       say(e.message);
     }

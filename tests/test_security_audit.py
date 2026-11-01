@@ -87,9 +87,9 @@ class SecurityAndPrivacyTests(unittest.TestCase):
         inspector = SAMInspector()
         # Even with an arbitrary or path traversal attempt, fallback to lab asset
         result = inspector.inspect_lab_asset("../../etc/shadow")
-        self.assertEqual("LAB_VERIFIED_VISUAL", result["status"])
+        self.assertEqual("SIMULATED_FIXTURE", result["status"])
         self.assertEqual("lab_hw_01_core_switch", result["asset_id"])
-        self.assertIn("Authorized lab equipment only", result["privacy_compliance"])
+        self.assertIn("no real image", result["privacy_compliance"])
 
 
 if __name__ == "__main__":

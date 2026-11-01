@@ -1,4 +1,4 @@
-"""SAM 3.1 Visual Laboratory Inspector for Physical Infrastructure.
+"""STATIC demonstration fixture for the intended SAM 3.1 visual inspection workflow.
 
 Secondary visual demo component:
 - Inspects physical laboratory rack setups and patch panels.
@@ -18,7 +18,7 @@ def now_iso() -> str:
 
 
 class SAMInspector:
-    """Inspector for laboratory visual inspection using Segment Anything Model (SAM)."""
+    """Offline illustrative data only. No images are loaded and no Meta model is called."""
 
     LAB_FIXTURES = {
         "lab_rack_switch_led": {
@@ -79,17 +79,18 @@ class SAMInspector:
 
         return {
             "ok": True,
-            "status": "LAB_VERIFIED_VISUAL",
+            "status": "SIMULATED_FIXTURE",
             "model": "meta-sam-3.1",
-            "provider": "meta-sam",
-            "truth": "AUTHORIZED_LAB_BENCH_TEST",
+            "provider": "STATIC_FIXTURE_NOT_META",
+            "model_executed": False,
+            "truth": "SIMULATED_FIXTURE",
             "timestamp": now_iso(),
             "asset_key": asset_key,
             "asset_id": fixture["asset_id"],
             "title": fixture["title"],
             "image_uri": fixture["image_uri"],
-            "image_hash": fixture["image_hash"],
-            "detected_objects": fixture["detected_objects"],
-            "analysis_notes": fixture["analysis_notes"],
-            "privacy_compliance": "Authorized lab equipment only; zero client PII or faces.",
+            "image_hash": None,  # No image is loaded or verified by this fixture adapter.
+            "detected_objects": [{**o, "confidence_source": "STATIC_EXAMPLE_NOT_MODEL"} for o in fixture["detected_objects"]],
+            "analysis_notes": "STATIC DEMO ONLY. No image was processed; device status, optical link health and cable bend radius are NOT verified.",
+            "privacy_compliance": "Fixture only: no real image loaded, retained or transmitted.",
         }

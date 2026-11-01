@@ -71,7 +71,8 @@ class Handler(BaseHTTPRequestHandler):
                     "hackathon": "Meta Global AI Developer Hackathon 2026",
                     "track": "Startup Track (Push the Frontier)",
                     "physical_actions_live": False,
-                    "meta_supported": True,
+                    "meta_supported": False,
+                    "meta_status": "OPERATOR_ONLY_NOT_CONNECTED",
                 },
             )
         elif path == "/api/state":
@@ -136,10 +137,7 @@ class Handler(BaseHTTPRequestHandler):
 
             # 3. Create single-use Meta grant
             if path == "/api/grants":
-                digest = body.get("snapshot_digest", "")
-                ttl = int(body.get("ttl_seconds", 300))
-                grant = GRANT_STORE.create_grant(snapshot_digest=digest, ttl_seconds=ttl)
-                self._json(201, grant)
+                self._json(403, {"error": "META_OPERATOR_ONLY: no grant creation from unauthenticated web UI."})
                 return
 
             # 4. Incident lifecycle actions: /api/incidents/{id}/{action}
@@ -151,6 +149,9 @@ class Handler(BaseHTTPRequestHandler):
                     result = self.guardian.remember(incident_id, query=query)
                 elif action == "analyze":
                     mode = body.get("mode", "deterministic")
+                    if mode == "meta":
+                        self._json(403, {"error": "META_OPERATOR_ONLY: paid inference disabled over web HTTP API."})
+                        return
                     grant_token = body.get("grant_token")
                     result = self.guardian.analyze(incident_id, mode=mode, grant_token=grant_token)
                 elif action == "approve":

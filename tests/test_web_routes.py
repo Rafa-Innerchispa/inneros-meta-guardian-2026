@@ -61,7 +61,7 @@ class WebRouteTests(unittest.TestCase):
         status, data = self._get("/api/health")
         self.assertEqual(200, status)
         self.assertTrue(data["ok"])
-        self.assertTrue(data["meta_supported"])
+        self.assertFalse(data["meta_supported"])
 
     def test_voiceops_receipt_endpoint(self):
         status, data = self._get("/api/voiceops/receipt")
@@ -72,7 +72,7 @@ class WebRouteTests(unittest.TestCase):
     def test_sam_inspect_endpoint(self):
         status, data = self._get("/api/sam/inspect?asset=lab_rack_switch_led")
         self.assertEqual(200, status)
-        self.assertEqual("LAB_VERIFIED_VISUAL", data["status"])
+        self.assertEqual("SIMULATED_FIXTURE", data["status"])
         self.assertGreaterEqual(len(data["detected_objects"]), 2)
 
     def test_complete_web_incident_workflow(self):
@@ -104,13 +104,18 @@ class WebRouteTests(unittest.TestCase):
         self.assertEqual(200, status)
         self.assertIn("memory", rem)
 
-        # 3. Request grant
+        # 3. Anonymous HTTP cannot mint Meta grants.
         status, grant = self._post("/api/grants", {"snapshot_digest": inc["snapshot_digest"], "ttl_seconds": 120})
-        self.assertEqual(201, status)
-        token = grant["token"]
+        self.assertEqual(403, status)
+        self.assertIn("META_OPERATOR_ONLY", grant["error"])
 
-        # 4. Analyze with Meta using grant
-        status, analyzed = self._post(f"/api/incidents/{inc_id}/analyze", {"mode": "meta", "grant_token": token})
+        # 4. Anonymous HTTP cannot trigger paid Meta inference even with a token.
+        status, denied = self._post(f"/api/incidents/{inc_id}/analyze", {"mode": "meta", "grant_token": "irrelevant"})
+        self.assertEqual(403, status)
+        self.assertIn("META_OPERATOR_ONLY", denied["error"])
+
+        # Local deterministic analysis remains available for sandbox tests.
+        status, analyzed = self._post(f"/api/incidents/{inc_id}/analyze", {"mode": "deterministic"})
         self.assertEqual(200, status)
         self.assertEqual("analyzed", analyzed["status"])
 

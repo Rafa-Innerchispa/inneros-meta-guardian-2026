@@ -101,10 +101,10 @@ class LiveInfrastructureClient:
 
 
 class VerifiedMemoryClient:
-    """Retrieves verified historical facts from InnerOS AG-60 and Personal Brain schemas.
+    """Provides STATIC EXAMPLE facts while the real AG-60 / Personal Brain client is not connected.
     
-    All facts are verified historical observations with verifiable provenance.
-    Strictly redacts private topologies and credentials before returning.
+    These hardcoded examples MUST NOT be presented as live or verified Cognee recall.
+    All externally shared facts require real provenance and strict privacy curation.
     """
     
     VERIFIED_KNOWLEDGE_BASE = {
@@ -167,7 +167,7 @@ class VerifiedMemoryClient:
             facts = [f for f in facts if q_lower in f["title"].lower() or q_lower in f["fact"].lower() or q_lower in f["category"].lower()]
         
         selected = facts[:limit]
-        return redact_sensitive_data(selected)
+        return redact_sensitive_data([{**fact, "truth": "UNVERIFIED_STATIC_EXAMPLE", "source": "STATIC_FIXTURE_NOT_AG60_OR_COGNEE", "confidence": None} for fact in selected])
 
 
 class VoiceOpsRecordedReceipt:

@@ -11,7 +11,7 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 ## Overview
 
-> **VERIFICATION STATUS — 2026-11-01:** GitHub CI confirms **40 offline/mock tests** (Python 3.10 and 3.12), NOT 40 live integrations. The current Meta code has **no verified paid API receipt**; SAM boxes/confidences are **static fixtures**, and AG-60/Cognee "memory" in this app is **hardcoded demonstration data**, not a live memory recall. The web grant endpoint lacks owner authentication; **do not deploy this API publicly or add a paid key** until the P0 safeguards are fixed. Existing Nebius Guardian real receipts belong to a prior project. Full handoff: [docs/HANDOFF_CHAT_20261101.md](docs/HANDOFF_CHAT_20261101.md).
+> **VERIFICATION STATUS — 2026-11-01:** GitHub CI confirms **40 offline/mock tests** (Python 3.10 and 3.12), NOT 40 live integrations. The current Meta code has **no verified paid API receipt**; SAM boxes/confidences are **static fixtures**, and AG-60/Cognee "memory" in this app is **hardcoded demonstration data**, not a live memory recall. The anonymous web grant and Meta inference routes are now **disabled**; a separate authenticated operator flow and persistent one-shot grant are still required before any paid execution or public deployment. Existing Nebius Guardian real receipts belong to a prior project. Full handoff: [docs/HANDOFF_CHAT_20261101.md](docs/HANDOFF_CHAT_20261101.md).
 
 
 Most AI agents today answer questions inside chat windows. **InnerOS Autonomous Infrastructure Guardian** brings frontier AI into the physical facilities, server racks, and network backbones that sustain modern operations.
