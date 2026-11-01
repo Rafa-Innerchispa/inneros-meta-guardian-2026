@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN DE CRÉDITOS — 2026-11-01:** El propietario aportó una captura de Meta Model API **Billing → Overview** que muestra **Free credits in use: $150.00**, **Current balance: $0.00** y **Please add a payment method**. Los créditos ESTÁN acreditados. Falta agregar método de pago por el propietario, revisar Business information, crear/recuperar API key en el vault del servidor, comprobar Usage y ejecutar la primera llamada real solo tras controles de gasto y grant seguro. Meta advierte que el contenido enviado mientras se usen créditos gratuitos puede emplearse para mejorar sus productos. No enviar datos de clientes, topología, telemetría privada ni memoria confidencial a modelos externos. Consultar documentación oficial: https://dev.meta.ai/help/billing/set-up-billing ; https://dev.meta.ai/docs/authentication ; https://dev.meta.ai/docs/api-reference/responses/create-response .
+
 > **ACTUALIZACIÓN POSTERIOR A LA AUDITORÍA — 2026-11-01:** Código corregido en commit `ef3e6d65e07923098f6ef8d9d483480bd6114a0a`. GitHub Actions `41316087563` **SUCCESS**. Se BLOQUEARON las rutas web anónimas para crear grants o llamar Meta (403), se etiquetó SAM como `SIMULATED_FIXTURE` con `model_executed=false`, se etiquetó la memoria hardcodeada como `UNVERIFIED_STATIC_EXAMPLE` y se eliminó la fabricación de IDs de respuesta Meta faltantes. **Persisten como P0**: saldo de créditos en Billing, endpoint de operador realmente autenticado, grant entre procesos, memoria real Cognee/AG-60, primera llamada auténtica a Meta y evidencia E2E. Los hallazgos históricos de abajo describen lo observado ANTES de estos fixes y se conservan para trazabilidad. 
 
 # HANDOFF CANÓNICO | InnerOS Meta Global AI Hackathon 2026
@@ -17,7 +19,7 @@
 - El owner confirmó en el chat que **completó el formulario** de US$150. Esto acredita su declaración, no un recibo externo del formulario.
 - Correo oficial 2026-10-26 "Claim your $150 in Meta Model API credits" indicó: distribución por lotes; verificar saldo en **Billing**; se requiere un método de pago para hacer llamadas aun consumiendo créditos; plazo formulario 2026-11-04 21:00 ET.
 - Búsqueda de Gmail hasta 2026-11-01: **sin correo nuevo de aplicación de créditos** y **sin recibo de respuesta de Google Forms**. No volver a enviar por duplicado sin comprobar.
-- **SALDO PROMOCIONAL: UNKNOWN / UNVERIFIED.** **API key operativa: UNKNOWN.** **Método de pago registrado: UNKNOWN.** La cuenta Meta Model API empresarial sí tuvo correo de bienvenida 2026-10-26.
+- **CRÉDITOS META CONFIRMADOS EN CAPTURA DEL OWNER EL 2026-11-01:** pantalla Billing → Overview indica `Free credits in use: $150.00` en verde, `Current balance: $0.00` y `How you'll pay: Please add a payment method`. Por tanto, **la promoción de US$150 está aplicada/activa; el método de pago aún NO está registrado**. El saldo por cobrar es cero, pero esta captura NO demuestra que no haya habido uso previo ni revela el saldo restante por modelo; consultar Usage y actividad de pagos. **API key operativa: UNKNOWN.** Falta comprobar Business information, método de pago y API key. La cuenta Meta Model API empresarial tuvo correo de bienvenida 2026-10-26.
 - Verificación efectiva: iniciar sesión con la cuenta empresarial correcta en https://dev.meta.ai/ → **Meta Model API** → seleccionar equipo → **Billing** → consultar Promotional/Free credits (aplicado, saldo y vencimiento), Payment methods y Spend Limits; consultar **Usage** por modelo y fecha; comprobar equipo/proyecto correctos.
 - **ALERTA IMPORTANTE:** la alerta de gasto no constituye un bloqueo duro. Fuente oficial: https://dev.meta.ai/help/billing/spend-limit-alert. Si Billing aún no muestra créditos, documentar captura con datos de pago ocultos y consultar soporte/Discord de organizadores. No agregar una tarjeta ni hacer llamadas pagadas sin una decisión explícita del propietario.
 
@@ -57,7 +59,7 @@
 **P1 ACCESO DEL JURADO:** repo privado; revisar si jueces necesitarán acceso público o demo pública separada y segura. No cambiar privacidad sin comprobar reglas y qué código/activos se expondrán.
 
 ## 6. Orden de trabajo para los próximos 3 días
-1. **AHORA:** verificar saldo en Billing con sesión autenticada y registrar `credits_applied`, `payment_method`, `api_key_present`, `usage`; todos UNKNOWN hasta comprobar. Evitar solicitud duplicada.
+1. **AHORA:** créditos de US$150 YA CONFIRMADOS por captura del usuario. Falta agregar método de pago (Meta lo exige para acceder a API), revisar Business information, API keys y Usage; no repetir formulario. Acción de tarjeta solo por owner, nunca por agente ni pegando datos en chat.
 2. **AHORA:** cerrar vulnerabilidad de grants anónimos, falsos `REAL`, SAM simulado y memoria hardcodeada; proteger el operador Meta pagado. Commit + CI.
 3. **SIGUIENTE:** captura E2E real de solo lectura desde Guardian existente, recuperación real de memoria curada con procedencia, y una sola inferencia Muse Spark autorizada **después** de conocer crédito y costo; guardar recibo real (o `NOT_RUN` explícito).
 4. **DESPUÉS:** SAM 3.1 solo con fotografía del laboratorio y consentimiento y respuesta real. Si falta tiempo, dejarlo `NOT_RUN`, no inventar datos.
@@ -67,7 +69,8 @@
 - [x] Registro aprobado y cuenta Meta Model API registrada.
 - [x] Owner declara formulario US$150 enviado.
 - [x] GitHub exclusivo en `main`, CI offline 40/40 Python 3.10 y 40/40 Python 3.12.
-- [ ] Saldo promocional **comprobado** en Billing y cuota/gasto seguro.
+- [x] Créditos promocionales US$150 **comprobados visualmente** en Billing (captura del propietario, 2026-11-01).
+- [ ] Registrar método de pago + completar Business information SOLO por el propietario; después verificar API key, Usage, vigencia y estrategia de gasto seguro.
 - [ ] Endpoint pago autenticado, grant seguro en procesos múltiples, recibos sin IDs inventados.
 - [ ] Guardian real + memoria verdadera E2E en el nuevo proyecto, sin fuga de datos.
 - [ ] Muse Spark realmente ejecutado y recibo original.
@@ -77,7 +80,7 @@
 - [ ] Entrega Cerebral Valley confirmada.
 
 ## 8. Protocolo del siguiente chat
-1. Abrir este archivo en GitHub y pedir: **"Continúa el Meta Hackathon desde docs/HANDOFF_CHAT_20261101.md, verifica main, Billing y CI; prioriza cierre P0 y entrega, ejecuta sin crear tareas en RalfIA/Temporal."**
+1. Abrir este archivo en GitHub y pedir: **"Continúa el Meta Hackathon desde docs/HANDOFF_CHAT_20261101.md. Créditos US$150 ya acreditados según captura del propietario; falta método de pago, API key y primera inferencia real. Verifica main y CI, cierra P0 sin delegar en RalfIA/Temporal."**
 2. Actualizar primero SHA y pruebas para evitar usar evidencia vieja.
 3. Usar el IDE de Antigravity o ejecución directa, no despachar a agentes internos ni entrar en loops.
 4. Si Billing no se puede ver desde herramientas, el owner debe entrar al panel Meta autenticado y abrir la pestaña para inspección. Nunca pegar números de tarjeta, API key ni tokens en un chat.
