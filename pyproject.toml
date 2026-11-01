@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inneros-meta-guardian-2026"
+version = "0.1.0"
+description = "Meta hackathon sandbox: local-first, governed physical infrastructure AI demonstration"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "InnerChispa"}]
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+inneros_meta_guardian = ["static/*"]
