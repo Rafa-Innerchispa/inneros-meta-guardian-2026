@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import urllib.error
 import urllib.request
@@ -159,8 +160,30 @@ class VerifiedMemoryClient:
         ],
     }
 
+    DEFAULT_SERVICE_URL = "http://127.0.0.1:8103"
+
+    def __init__(self, service_url: str | None = None, timeout: float = 2.0):
+        self.service_url = (service_url or os.getenv("INNEROS_SHARED_MEMORY_URL", self.DEFAULT_SERVICE_URL)).rstrip("/")
+        self.timeout = timeout
+
     def recall_facts(self, site: str, query: str = "", limit: int = 5) -> list[dict[str, Any]]:
         site_clean = str(site).strip().lower()
+        if os.getenv("ENABLE_LIVE_MEMORY_SERVICE", "").strip().lower() in ("true", "1", "yes"):
+            try:
+                import urllib.parse
+                params = urllib.parse.urlencode({"site": site_clean, "q": query, "limit": limit})
+                req = urllib.request.Request(
+                    f"{self.service_url}/api/internal/shared-memory/recall?{params}",
+                    headers={"Accept": "application/json", "User-Agent": "InnerOS-Meta-Guardian-Memory/2026.11"},
+                )
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                if isinstance(data, dict) and data.get("ok") and isinstance(data.get("facts"), list):
+                    clean_facts = redact_sensitive_data(data["facts"][:limit])
+                    return [{**f, "truth": "VERIFIED_COGNEE_MEMORY", "source": "PERSONAL_BRAIN_COGNEE"} for f in clean_facts]
+            except Exception:
+                pass
+
         facts = self.VERIFIED_KNOWLEDGE_BASE.get(site_clean, [])
         if query:
             q_lower = query.lower()

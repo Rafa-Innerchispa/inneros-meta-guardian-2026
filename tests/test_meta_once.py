@@ -67,9 +67,17 @@ class MetaOnceOperatorTests(unittest.TestCase):
         self.assertTrue(receipt["ok"])
         self.assertEqual("NOT_RUN", receipt["status"])
         self.assertEqual("MODEL_API_KEY_ABSENT_OR_CREDITS_PENDING", receipt["reason"])
-        self.assertTrue(receipt["local_fallback_applied"])
+        self.assertEqual("owner_vault:model_api_provider/meta_model_api_key", receipt["credential_ref"])
+        self.assertIn(receipt["vault_status"], ("CONFIGURED", "MISSING"))
         self.assertIn("observations", receipt["analysis"])
         self.assertIn("recommended_action", receipt["analysis"])
+
+    def test_provider_vault_status_does_not_reveal_secret(self):
+        from inneros_meta_guardian.meta_once import get_provider_vault_status
+        status = get_provider_vault_status()
+        self.assertFalse(status["secret_returned"])
+        self.assertEqual("owner_vault:model_api_provider/meta_model_api_key", status["credential_ref"])
+        self.assertIn(status["status"], ("CONFIGURED", "MISSING"))
 
     @patch("urllib.request.urlopen")
     def test_meta_operator_live_success_with_key(self, mock_urlopen):

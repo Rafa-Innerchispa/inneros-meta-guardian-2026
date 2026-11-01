@@ -93,6 +93,26 @@ class OneShotGrantStore:
 GRANT_STORE = OneShotGrantStore()
 
 
+def get_provider_vault_status() -> dict[str, Any]:
+    """Check central vault reference status without exposing secrets."""
+    ref = "owner_vault:model_api_provider/meta_model_api_key"
+    try:
+        from inneros_core_runtime import meta_model_provider
+        st = meta_model_provider.provider_status()
+        return {
+            "status": "CONFIGURED" if st.get("configured_in_owner_vault") else "MISSING",
+            "credential_ref": ref,
+            "secret_returned": False,
+        }
+    except Exception:
+        key_present = bool(os.getenv("MODEL_API_KEY") or os.getenv("META_API_KEY"))
+        return {
+            "status": "CONFIGURED" if key_present else "MISSING",
+            "credential_ref": ref,
+            "secret_returned": False,
+        }
+
+
 class MetaOnceOperator:
     """Executes a single, governed inference against Meta Muse Spark 1.3."""
 
@@ -113,6 +133,7 @@ class MetaOnceOperator:
     def __init__(self, endpoint: str | None = None, api_key: str | None = None) -> None:
         self.endpoint = endpoint or os.getenv("META_RESPONSES_URL", self.OFFICIAL_ENDPOINT)
         self.api_key = api_key or os.getenv("MODEL_API_KEY") or os.getenv("META_API_KEY")
+        self.vault_ref = "owner_vault:model_api_provider/meta_model_api_key"
 
     def execute_inference(
         self,
@@ -156,6 +177,7 @@ class MetaOnceOperator:
         # 4. Check if Meta API Key is available
         if not self.api_key:
             # Deterministic, governed fallback when key is not configured or credits pending
+            vault_st = get_provider_vault_status()
             latency_ms = int((time.time() - start_time) * 1000)
             return {
                 "ok": True,
@@ -164,6 +186,8 @@ class MetaOnceOperator:
                 "model": grant["model"],
                 "provider": "meta-muse-spark",
                 "truth": "GOVERNED_ONE_SHOT_RECEIPT",
+                "credential_ref": self.vault_ref,
+                "vault_status": vault_st["status"],
                 "grant_token": grant_token,
                 "snapshot_digest": snapshot_digest,
                 "request_hash": request_hash,
