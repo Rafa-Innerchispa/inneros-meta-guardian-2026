@@ -88,8 +88,11 @@ class GuardianLifecycleTests(unittest.TestCase):
             path = str(Path(temp) / 'db.sqlite3')
             g = Guardian(path)
             row = g.ingest()
-            self.assertEqual(row['id'], Guardian(path).get(row['id'])['id'])
-            self.assertTrue(Guardian(path).store.verify()['valid'])
+            g.close()
+            g2 = Guardian(path)
+            self.assertEqual(row['id'], g2.get(row['id'])['id'])
+            self.assertTrue(g2.store.verify()['valid'])
+            g2.close()
 
     def test_after_restart_readback_must_fail_safe(self):
         # The virtual actuator has NOT persisted; this is intentionally not fake-proofed.
@@ -100,9 +103,11 @@ class GuardianLifecycleTests(unittest.TestCase):
             row = original.analyze(row['id'])
             row = original.approve(row['id'], 'Operator', row['recommended_action'])
             original.execute(row['id'])
+            original.close()
             restarted = Guardian(path)
             row = restarted.verify(row['id'])
             self.assertEqual('failed_safe', row['status'])
+            restarted.close()
 
 
 class ProviderTests(unittest.TestCase):
@@ -128,7 +133,7 @@ class ProviderTests(unittest.TestCase):
             guardian.analyze(incident['id'], 'meta')
 
     def test_web_has_no_meta_inference_option(self):
-        html = (Path(__file__).resolve().parents[1] / 'src' / 'inneros_meta_guardian' / 'static' / 'index.html').read_text()
+        html = (Path(__file__).resolve().parents[1] / 'src' / 'inneros_meta_guardian' / 'static' / 'index.html').read_text(encoding='utf-8')
         self.assertNotIn('value="meta"', html)
 
     def test_meta_wrong_endpoint_blocked(self):

@@ -66,3 +66,7 @@ class Store:
                 return {"valid": False, "broken_at": row["seq"], "entries": len(history)}
             previous = row["entry_hash"]
         return {"valid": True, "entries": len(history), "head": previous, "scope": "DEMO_HASH_CHAIN_NOT_PRODUCTION_ATTESTATION"}
+
+    def close(self) -> None:
+        with self.lock:
+            self.db.close()

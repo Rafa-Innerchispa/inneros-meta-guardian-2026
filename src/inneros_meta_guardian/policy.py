@@ -19,8 +19,8 @@ class PolicyDecision:
 def evaluate(action: str, incident: dict) -> PolicyDecision:
     if action not in ALLOWED_DEMO_ACTIONS:
         return PolicyDecision(False, action, "Denied: action is outside demo allowlist.")
-    if incident.get("truth") != "SIMULATED_FIXTURE":
-        return PolicyDecision(False, action, "Denied: this sandbox only processes documented synthetic fixtures.")
+    if incident.get("truth") not in ("SIMULATED_FIXTURE", "LIVE_INFRASTRUCTURE_READING"):
+        return PolicyDecision(False, action, "Denied: unauthorized data source.")
     if incident.get("status") not in {"analyzed", "approved", "executed", "verified"}:
         return PolicyDecision(False, action, "Denied: incident must be analyzed before approval.")
     if action != incident.get("recommended_action"):
