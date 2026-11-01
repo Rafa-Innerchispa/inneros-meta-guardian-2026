@@ -11,6 +11,9 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 ## Overview
 
+> **VERIFICATION STATUS — 2026-11-01:** GitHub CI confirms **40 offline/mock tests** (Python 3.10 and 3.12), NOT 40 live integrations. The current Meta code has **no verified paid API receipt**; SAM boxes/confidences are **static fixtures**, and AG-60/Cognee "memory" in this app is **hardcoded demonstration data**, not a live memory recall. The web grant endpoint lacks owner authentication; **do not deploy this API publicly or add a paid key** until the P0 safeguards are fixed. Existing Nebius Guardian real receipts belong to a prior project. Full handoff: [docs/HANDOFF_CHAT_20261101.md](docs/HANDOFF_CHAT_20261101.md).
+
+
 Most AI agents today answer questions inside chat windows. **InnerOS Autonomous Infrastructure Guardian** brings frontier AI into the physical facilities, server racks, and network backbones that sustain modern operations.
 
 Connected to live physical telemetry from Casa and Bellini facilities in Ecuador, InnerOS operates an end-to-end governed autonomic loop:

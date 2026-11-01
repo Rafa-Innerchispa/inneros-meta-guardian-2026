@@ -1,3 +1,5 @@
+> **HISTORICAL BASELINE ONLY:** This report predates the later `4c97855` integration commit. Current HEAD has 40 passing offline tests and still lacks independent real Meta/SAM/Cognee E2E verification. Use [HANDOFF_CHAT_20261101.md](HANDOFF_CHAT_20261101.md) for the current audit.
+
 # Code recovery and migration status | 2026-11-01
 
 The standalone private Meta hackathon repository was initialized independently by Antigravity. This baseline was subsequently recovered from the old public composition branch in READ-ONLY mode. The old repository `main` was not modified, and the new repository has its own independent commit ancestry.

@@ -11,6 +11,8 @@
 
 ---
 
+> **AUDIT NOTICE (2026-11-01):** This is a draft, NOT a submitted or independently verified live demo. The 40 tests are fully offline and include mocked Meta/Guardian responses. Current SAM visual detections and memory facts are hardcoded fixtures. Do NOT submit language below implying those outcomes were returned by Meta, Cognee, or physical sensors until actual receipts and source timestamps are captured. See [HANDOFF_CHAT_20261101.md](HANDOFF_CHAT_20261101.md).
+
 ## 1. Project Summary (For Cerebral Valley Portal)
 
 Most AI agents today answer questions in chat windows. InnerOS Autonomous Infrastructure Guardian brings frontier AI into the physical and network infrastructure that powers modern facilities.
@@ -42,14 +44,17 @@ As an additional visual capability, InnerOS integrates **Meta SAM 3.1** for opti
 - [x] Dedicated, standalone repository with clean Git history (`Rafa-Innerchispa/inneros-meta-guardian-2026`).
 - [x] 40 passing automated tests covering units, integration, replay prevention, privacy redaction, and web routes.
 - [x] Continuous Integration via GitHub Actions on Python 3.10 and 3.12 (100% offline, zero paid credential dependencies).
-- [x] Real-time read-only live telemetry integration with production infrastructure (Casa & Bellini).
-- [x] Verified historical memory recall with PII and credential scrubbing.
-- [x] Governed one-shot Meta Muse Spark 1.3 operator with atomic grant consumption.
-- [x] Secondary visual inspection using Meta SAM 3.1 on authorized laboratory hardware.
-- [x] VoiceOps telephone call verification proof (3,853 tx / 9,389 rx RTP packets, 7 accepted turns).
+- [x] Read-only Guardian HTTP adapter authored and mock-tested; real E2E connection in this repo is NOT_VERIFIED.
+- [ ] Real Guardian API read captured, dated and source-verified in this new project.
+- [ ] Live Personal Brain/Cognee/AG-60 recall with verified provenance (current code returns static examples).
+- [x] Muse Spark 1.3 one-shot adapter authored and mocked offline; NOT a real Meta receipt.
+- [ ] Operator-only authorization and persistent atomic grants repaired; first real Muse Spark API receipt captured.
+- [ ] SAM 3.1 executed on authorized lab imagery (current boxes/confidences are static fixtures, NOT_RUN).
+- [x] Prior-project VoiceOps telephone call evidence available only as HISTORIC/REPLAY; not a call made for this Meta run.
 - [x] Tamper-evident SHA-256 hash-chained audit trail with JSON export.
-- [x] Responsive dark console for desktop and mobile.
+- [x] Responsive dark console code authored and offline-tested; publicly deployed judge URL NOT_VERIFIED.
 - [x] Complete documentation: Architecture, Provenance, Reuse Handoff, and Storyboard.
+- [ ] Fix truth labels, remove fake SAM confidence and hardcoded VERIFIED memory claims; verify auth and no unbounded billing.
 - [ ] Record final 2-3 minute video following `docs/JUDGE_STORYBOARD_20261101.md`.
 - [ ] Submit official form on Cerebral Valley portal before Nov 4, 21:00 Ecuador time.
 

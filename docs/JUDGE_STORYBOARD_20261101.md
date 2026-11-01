@@ -5,6 +5,8 @@
 
 ---
 
+> **DRAFT / DO NOT FILM AS FACT (AUDIT 2026-11-01):** The following shots and narration are a target storyboard, not footage or evidence that Muse Spark, SAM 3.1, memory and Guardian have already completed live calls in THIS app. The SAM 98/94/96% values are hardcoded examples; the shown digest `d4c9...` is illustrative; the VoiceOps receipt is historical. Replace every illustrative score, receipt, timestamp and spoken statement with captured real results, or explicitly label it SIMULATED / NOT_RUN. See [HANDOFF_CHAT_20261101.md](HANDOFF_CHAT_20261101.md).
+
 ## Storyboard & Video Narrative (180 Seconds)
 
 ### [0:00 - 0:25] ACT I: The Real-World Physical Infrastructure Problem

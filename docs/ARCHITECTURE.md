@@ -1,3 +1,5 @@
+> **BASELINE ARCHITECTURE (HISTORICAL):** This document describes the earlier synthetic demo, not all added API adapters. The current implementation still needs owner-authenticated web grants, true Personal Brain memory, and a real Meta receipt. See [HANDOFF_CHAT_20261101.md](HANDOFF_CHAT_20261101.md).
+
 # Architecture and safety contract
 
 ## End-to-end demo
