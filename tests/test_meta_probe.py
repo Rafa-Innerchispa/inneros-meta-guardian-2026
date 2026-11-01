@@ -91,7 +91,7 @@ class MetaProbeTests(unittest.TestCase):
             self.assertEqual(MAX_OUTPUT_TOKENS, payload["max_output_tokens"])
             self.assertEqual(False, payload["store"])
             self.assertEqual(SYNTHETIC_INPUT, payload["input"])
-            self.assertNotIn("customer", payload["input"].lower())
+            self.assertIn("FICTIONAL LAB DATA ONLY", payload["input"])
             return FakeResponse(provider, headers={"x-request-id": "meta-req-test"})
         r = run_one_shot(self.key, "billing-probe-001", self.root,
                          owner_authorized=True, transport=transport)
