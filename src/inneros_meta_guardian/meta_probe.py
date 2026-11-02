@@ -21,6 +21,7 @@ ENDPOINT = "https://api.meta.ai/v1/responses"
 MODELS_ENDPOINT = "https://api.meta.ai/v1/models"
 MODEL = "muse-spark-1.3"
 MAX_OUTPUT_TOKENS = 192
+MAX_ALLOWED_OUTPUT_TOKENS = 1024
 MAX_RESPONSE_BYTES = 262144
 SYNTHETIC_INPUT = (
     "FICTIONAL LAB DATA ONLY (not a customer or a live device): "
@@ -30,6 +31,21 @@ SYNTHETIC_INPUT = (
     "Give exactly four short sections: OBSERVATIONS, HYPOTHESES, UNCERTAINTY, "
     "SAFE NEXT STEP. Never suggest executing a device command. "
     "Keep the total visible response under 90 words."
+)
+SYNTHETIC_SCENARIO_TWO_SERVER = (
+    "FICTIONAL LAB DATA ONLY (not a customer or live device): "
+    "Infrastructure topology: 2 physical lab servers (SRV-A primary, SRV-B standby) "
+    "with dual redundant communication links (Link-1 10G fiber, Link-2 1G copper backup). "
+    "Telemetry: At T+00, Link-1 reports missed heartbeat intermittently (3 dropped pings over 30s), "
+    "while Link-2 remains healthy at 1.2ms latency. Historical memory shows Link-1 experienced "
+    "transient optical packet loss during thermal cycling last month, self-recovering in 90 seconds. "
+    "Analyze and structure response into exactly five short sections: "
+    "1. VERIFIABLE OBSERVATIONS "
+    "2. HYPOTHESES ORDERED BY EVIDENCE "
+    "3. UNCERTAINTY "
+    "4. NEXT NON-DESTRUCTIVE VERIFICATION "
+    "5. HUMAN AUTHORIZATION REQUIREMENT (specify if owner approval is required before action). "
+    "Never suggest executing an unapproved or destructive command. Keep response under 130 words."
 )
 ALLOWED_PROBE_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{2,39}$")
 SAFE_RESPONSE_HEADERS = (
@@ -164,6 +180,12 @@ def classify(http: dict[str, Any], key: str) -> dict[str, Any]:
     rid = payload.get("id")
     txt = output_text(payload)
     usage = payload.get("usage") if isinstance(payload.get("usage"), dict) else {}
+    if payload.get("status") == "incomplete":
+        inc_reason = payload.get("incomplete_details", {}).get("reason") or "max_output_tokens"
+        return {"status": "INCOMPLETE_MODEL_RESPONSE",
+                "reason": inc_reason,
+                "provider_response_id": rid if isinstance(rid, str) else None,
+                "model_output_text": txt or None, "usage": usage}
     if not isinstance(rid, str) or not rid.strip() or payload.get("status") != "completed" or not txt:
         return {"status": "UNVERIFIED_RESPONSE",
                 "reason": "MISSING_PROVIDER_ID_COMPLETION_OR_TEXT",
@@ -203,13 +225,18 @@ def run_auth_check(key: str, output_root: Path, *, transport: Any = None) -> dic
 
 
 def run_one_shot(key: str, probe_id: str, output_root: Path, *,
-                 owner_authorized: bool = False, transport: Any = None) -> dict[str, Any]:
+                 owner_authorized: bool = False, transport: Any = None,
+                 max_output_tokens: int = MAX_OUTPUT_TOKENS,
+                 reasoning_effort: str | None = None,
+                 input_text: str | None = None) -> dict[str, Any]:
     if not owner_authorized:
         raise ValueError("One paid-capable request requires explicit --owner-authorized.")
     if not key:
         raise ValueError("MODEL_API_KEY is absent; no request attempted.")
     if not ALLOWED_PROBE_ID.fullmatch(probe_id):
         raise ValueError("Probe id must be 3–40 lowercase letters, numbers, - or _.")
+    if max_output_tokens <= 0 or max_output_tokens > MAX_ALLOWED_OUTPUT_TOKENS:
+        raise ValueError(f"max_output_tokens must be between 1 and {MAX_ALLOWED_OUTPUT_TOKENS}")
     create_private_directory(output_root)
     dest = output_root / probe_id
     # No retry with the same id even on 402, timeout, or process interruption.
@@ -218,11 +245,15 @@ def run_one_shot(key: str, probe_id: str, output_root: Path, *,
         "probe_id": probe_id, "claimed_at": utc_now(), "request_budget": 1,
         "owner_authorized": True, "retries_allowed": 0,
         "environment": "SYNTHETIC_FIXTURE_ONLY",
+        "max_output_tokens": max_output_tokens,
+        "reasoning_effort": reasoning_effort,
     })
-    request_body = {
-        "model": MODEL, "max_output_tokens": MAX_OUTPUT_TOKENS,
-        "store": False, "input": SYNTHETIC_INPUT,
+    request_body: dict[str, Any] = {
+        "model": MODEL, "max_output_tokens": max_output_tokens,
+        "store": False, "input": input_text or SYNTHETIC_INPUT,
     }
+    if reasoning_effort in ("low", "medium", "high"):
+        request_body["reasoning"] = {"effort": reasoning_effort}
     request_bytes = json.dumps(request_body, ensure_ascii=False,
                                separators=(",", ":"), sort_keys=True).encode("utf-8")
     write_private_json(dest / "request.json", {
@@ -240,14 +271,24 @@ def run_one_shot(key: str, probe_id: str, output_root: Path, *,
     classified = classify({**response, "provider_data": payload}, key)
     usage = classified["usage"]
     out_tokens = usage.get("output_tokens")
+    reasoning_tokens = (
+        usage.get("output_tokens_details", {}).get("reasoning_tokens")
+        if isinstance(usage.get("output_tokens_details"), dict)
+        else None
+    )
     latency_sec = response["latency_ms"] / 1000.0
     throughput = (round(out_tokens / latency_sec, 3)
                   if isinstance(out_tokens, int) and latency_sec > 0 else None)
+    truth_label = (
+        "REAL_PROVIDER_VERIFIED" if classified["status"] == "REAL_SUCCESS"
+        else ("INCOMPLETE_MODEL_RESPONSE" if classified["status"] == "INCOMPLETE_MODEL_RESPONSE"
+              else "NO_VERIFIED_MODEL_EXECUTION")
+    )
     receipt = {
         "schema_version": "1",
         "probe_id": probe_id,
         "timestamp_completed": utc_now(),
-        "truth": "REAL_PROVIDER_VERIFIED" if classified["status"] == "REAL_SUCCESS" else "NO_VERIFIED_MODEL_EXECUTION",
+        "truth": truth_label,
         "result": classified["status"],
         "reason": classified["reason"],
         "model_requested": MODEL,
@@ -258,6 +299,7 @@ def run_one_shot(key: str, probe_id: str, output_root: Path, *,
         "usage": usage,
         "input_tokens": usage.get("input_tokens"),
         "output_tokens": out_tokens,
+        "reasoning_tokens": reasoning_tokens,
         "total_tokens": usage.get("total_tokens"),
         "request_latency_ms": response["latency_ms"],
         "output_tokens_per_wall_second": throughput,
@@ -286,6 +328,12 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--one-shot", action="store_true", help="One POST /responses; may require billing")
     parser.add_argument("--probe-id", help="Unique explicit experiment ID for one-shot mode")
     parser.add_argument("--owner-authorized", action="store_true", help="Owner approved exactly one generation")
+    parser.add_argument("--max-output-tokens", type=int, default=512,
+                        help="Max output tokens (1-1024, default: 512 for reasoning models)")
+    parser.add_argument("--reasoning-effort", choices=["low", "medium", "high", "none"], default="medium",
+                        help="Reasoning effort tier for Muse Spark (default: medium)")
+    parser.add_argument("--scenario", choices=["two_server_redundant", "uplink_heartbeat"], default="two_server_redundant",
+                        help="Synthetic lab scenario to evaluate")
     parser.add_argument("--record-dir", default="runtime/meta_trials",
                         help="Private, gitignored local evidence directory")
     args = parser.parse_args(argv)
@@ -298,7 +346,19 @@ def main(argv: list[str] | None = None) -> int:
             return 0 if result.get("status") == "AUTH_ENDPOINT_OK" else 2
         if not args.probe_id:
             parser.error("--probe-id required for --one-shot")
-        result = run_one_shot(key, args.probe_id, root, owner_authorized=args.owner_authorized)
+        
+        scenario_text = (
+            SYNTHETIC_SCENARIO_TWO_SERVER if args.scenario == "two_server_redundant"
+            else SYNTHETIC_INPUT
+        )
+        effort = None if args.reasoning_effort == "none" else args.reasoning_effort
+        result = run_one_shot(
+            key, args.probe_id, root,
+            owner_authorized=args.owner_authorized,
+            max_output_tokens=args.max_output_tokens,
+            reasoning_effort=effort,
+            input_text=scenario_text,
+        )
         # All raw responses are stored privately under runtime/, not pushed to GitHub.
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0 if result.get("result") == "REAL_SUCCESS" else 2

@@ -150,11 +150,45 @@ class MetaProbeTests(unittest.TestCase):
 
     def test_incomplete_provider_response_is_not_real(self):
         def transport(req, timeout):
-            return FakeResponse({"id": "resp_x", "status": "incomplete", "output": []})
+            return FakeResponse({
+                "id": "resp_x",
+                "status": "incomplete",
+                "incomplete_details": {"reason": "max_output_tokens"},
+                "output": [],
+                "usage": {"input_tokens": 108, "output_tokens": 192, "total_tokens": 300,
+                          "output_tokens_details": {"reasoning_tokens": 190}},
+            })
         r = run_one_shot(self.key, "incomplete-001", self.root,
                          owner_authorized=True, transport=transport)
-        self.assertEqual("UNVERIFIED_RESPONSE", r["result"])
+        self.assertEqual("INCOMPLETE_MODEL_RESPONSE", r["result"])
+        self.assertEqual("INCOMPLETE_MODEL_RESPONSE", r["truth"])
+        self.assertEqual(190, r["reasoning_tokens"])
         self.assertIsNone(r["model_output_text"])
+
+    def test_one_shot_custom_budget_and_reasoning_effort(self):
+        reqs = []
+        def transport(req, timeout):
+            reqs.append(req)
+            payload = json.loads(req.data)
+            self.assertEqual(512, payload["max_output_tokens"])
+            self.assertEqual({"effort": "medium"}, payload["reasoning"])
+            return FakeResponse({
+                "id": "resp_custom",
+                "status": "completed",
+                "output": [{"type": "message", "content": [{"type": "output_text", "text": "VERIFIED"}]}],
+                "usage": {"input_tokens": 80, "output_tokens": 200, "total_tokens": 280,
+                          "output_tokens_details": {"reasoning_tokens": 120}},
+            })
+        r = run_one_shot(self.key, "custom-001", self.root, owner_authorized=True,
+                         max_output_tokens=512, reasoning_effort="medium", transport=transport)
+        self.assertEqual("REAL_SUCCESS", r["result"])
+        self.assertEqual(120, r["reasoning_tokens"])
+        self.assertEqual(1, len(reqs))
+
+    def test_one_shot_rejects_tokens_above_1024(self):
+        with self.assertRaises(ValueError):
+            run_one_shot(self.key, "invalid-tok-001", self.root, owner_authorized=True,
+                         max_output_tokens=2048, transport=lambda *a, **k: self.fail("network"))
 
     def test_no_paid_call_without_explicit_owner_authorization(self):
         with self.assertRaises(ValueError):
@@ -176,3 +210,4 @@ class MetaProbeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
