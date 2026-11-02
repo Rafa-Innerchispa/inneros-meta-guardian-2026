@@ -57,6 +57,22 @@ class WebRouteTests(unittest.TestCase):
             data = json.loads(exc.read().decode("utf-8"))
             return exc.code, data
 
+
+    def test_frontend_is_truth_labeled_and_avoids_unsafe_html(self):
+        root = f"http://127.0.0.1:{self.port}"
+        with urllib.request.urlopen(root + "/index.html", timeout=5) as res:
+            html = res.read().decode("utf-8")
+        with urllib.request.urlopen(root + "/app.js", timeout=5) as res:
+            script = res.read().decode("utf-8")
+        self.assertIn("MUSE: OPERATOR ONLY", html)
+        self.assertIn("SAM: STATIC PREVIEW", html)
+        self.assertIn("SIMULATED · NOT_RUN", html)
+        self.assertIn("no spending from this demo", html)
+        self.assertIn("Memory ${state}", script)
+        self.assertIn("STATIC FIXTURE (NOT_RUN)", script)
+        self.assertNotIn("item.innerHTML", script)
+        self.assertNotIn("receipt.grant_token", script)
+
     def test_health_endpoint(self):
         status, data = self._get("/api/health")
         self.assertEqual(200, status)
