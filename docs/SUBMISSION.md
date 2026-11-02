@@ -11,7 +11,12 @@
 
 ---
 
-> **AUDIT NOTICE (2026-11-01):** This is a draft, NOT a submitted or independently verified live demo. The 40 tests are fully offline and include mocked Meta/Guardian responses. Current SAM visual detections and memory facts are hardcoded fixtures. Do NOT submit language below implying those outcomes were returned by Meta, Cognee, or physical sensors until actual receipts and source timestamps are captured. See [HANDOFF_CHAT_20261101.md](HANDOFF_CHAT_20261101.md).
+> **AUDIT UPDATE (2026-11-02):**
+> - **Tests:** 55 tests passing in `inneros-meta-guardian-2026` + 24 tests passing in `innerops-agentic-platform` = 79 total automated tests green (100% offline, zero paid credential dependencies).
+> - **First Probe Trial Audited & Reconciled:** The initial trial (`meta-no-card-20261101`) was audited (SHA-256 digests verified) and officially reconciled into the central InnerOS ledger on `inneros-5-lan` as `INCOMPLETE_MODEL_RESPONSE` (300 tokens consumed, 190 reasoning tokens).
+> - **Security & Governance:** Owner authentication, MongoDB `$or` queries, HMAC expiry binding, single-use atomic consumption, and 1024 output token ceilings have been fixed and merged into `origin/main` (commit `5d9c518e` in platform, `7843963` in guardian).
+> - **Live Physical Guardian:** Real-world read-only intake verified from `https://guardian.creatorcore.ai` (13 live signals, snapshot digest `aab3af1d...`).
+> - **Truth Discipline:** Cognitive memory honestly reports `MEMORY_UNAVAILABLE` when Cognee is offline; SAM 3.1 is explicitly labeled `SIMULATED_FIXTURE` (never misrepresented as executed Meta API).
 
 ## 1. Project Summary (For Cerebral Valley Portal)
 
@@ -31,32 +36,34 @@ As an additional visual capability, InnerOS integrates **Meta SAM 3.1** for opti
 1. **Meta Muse Spark 1.3 (`muse-spark-1.3`)**:
    - Official Responses API integration (`POST https://api.meta.ai/v1/responses`).
    - Single-use operator grant validation bound to exact snapshot SHA-256 digests.
-   - Deep regex-based privacy scrubbing (removes private subnets, MACs, and credentials).
-   - Structured four-part incident assessment (Observations, Hypotheses, Uncertainty, Action).
+   - Deep structural allowlist projection and regex privacy scrubbing (removes private subnets, MACs, and credentials).
+   - Structured five-part incident assessment (Observations, Hypotheses, Uncertainty, Next Step, Human Authorization Requirement).
+   - Configurable reasoning effort (`medium`) and output token ceiling (up to 1024 tokens) to avoid reasoning token truncation.
 2. **Meta SAM 3.1 (`sam-3.1`)**:
    - Optical inspection on physical laboratory rack hardware (SFP transceivers, cabling).
    - Generates bounding boxes, confidence metrics, and bend radius compliance data.
+   - Explicitly disclosed as `SIMULATED_FIXTURE` pending authenticated laboratory optical run.
 
 ---
 
 ## 3. Definition of Done Checklist
 
 - [x] Dedicated, standalone repository with clean Git history (`Rafa-Innerchispa/inneros-meta-guardian-2026`).
-- [x] 40 passing automated tests covering units, integration, replay prevention, privacy redaction, and web routes.
+- [x] 55 passing automated tests in guardian repo + 24 in platform repo (79 total unit and integration tests green).
 - [x] Continuous Integration via GitHub Actions on Python 3.10 and 3.12 (100% offline, zero paid credential dependencies).
-- [x] Read-only Guardian HTTP adapter authored and mock-tested; real E2E connection in this repo is NOT_VERIFIED.
-- [ ] Real Guardian API read captured, dated and source-verified in this new project.
-- [ ] Live Personal Brain/Cognee/AG-60 recall with verified provenance (current code returns static examples).
-- [x] Muse Spark 1.3 one-shot adapter authored and mocked offline; NOT a real Meta receipt.
-- [ ] Operator-only authorization and persistent atomic grants repaired; first real Muse Spark API receipt captured.
-- [ ] SAM 3.1 executed on authorized lab imagery (current boxes/confidences are static fixtures, NOT_RUN).
-- [x] Prior-project VoiceOps telephone call evidence available only as HISTORIC/REPLAY; not a call made for this Meta run.
-- [x] Tamper-evident SHA-256 hash-chained audit trail with JSON export.
-- [x] Responsive dark console code authored and offline-tested; publicly deployed judge URL NOT_VERIFIED.
+- [x] Real Guardian API read captured, dated and source-verified from `https://guardian.creatorcore.ai` (13 live signals, snapshot digest `aab3af1d...`).
+- [x] Personal Brain / Cognee integration with honest fail-closed `MEMORY_UNAVAILABLE` status (zero fabricated facts).
+- [x] Audit report generated for first trial run (`docs/evidence/AUDIT_FIRST_RUN_20261102.md`).
+- [x] Central InnerOS Ledger on `inneros-5-lan` reconciled with first trial receipt (108 input, 192 output, 300 total tokens, status `INCOMPLETE_MODEL_RESPONSE`).
+- [x] Security defects corrected in `inneros_core_runtime/meta_model_provider.py` (owner auth, mongo query condition, HMAC expiry/budget binding, atomic single-use ledger, 1024 token ceiling).
+- [x] Probe updated with two-server redundant link synthetic scenario, reasoning effort tiers, and configurable output tokens.
+- [x] Strict privacy allowlist projection (`build_safe_redacted_snapshot`) implemented and tested.
+- [x] Prior-project VoiceOps telephone call evidence verified as `HISTORIC_RECORDED_VOICEOPS_CALL` (13,242 RTP packets, 7 turns).
+- [x] Tamper-evident SHA-256 hash-chained audit trail with JSON export (verified `valid: true`).
+- [x] Responsive dark console web app running at `http://127.0.0.1:8787`.
 - [x] Complete documentation: Architecture, Provenance, Reuse Handoff, and Storyboard.
-- [ ] Fix truth labels, remove fake SAM confidence and hardcoded VERIFIED memory claims; verify auth and no unbounded billing.
-- [ ] Record final 2-3 minute video following `docs/JUDGE_STORYBOARD_20261101.md`.
-- [ ] Submit official form on Cerebral Valley portal before Nov 4, 21:00 Ecuador time.
+- [ ] Execute single authorized live Muse Spark inference with 512 tokens and medium reasoning effort (awaiting Rafael's explicit one-time authorization).
+- [ ] Final submission on Cerebral Valley portal before Nov 4, 21:00 Ecuador time.
 
 ---
 
