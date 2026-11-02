@@ -19,7 +19,11 @@ import urllib.request
 from datetime import datetime, timezone
 from typing import Any
 
-from .integrations import canonical_json, redact_sensitive_data
+from .integrations import (
+    build_safe_redacted_snapshot,
+    canonical_json,
+    redact_sensitive_data,
+)
 
 
 def now_iso() -> str:
@@ -41,8 +45,9 @@ class OneShotGrantStore:
         self,
         snapshot_digest: str,
         ttl_seconds: int = 300,
-        max_tokens: int = 400,
+        max_tokens: int = 512,
         model: str = "muse-spark-1.3",
+        reasoning_effort: str = "medium",
     ) -> dict[str, Any]:
         if not snapshot_digest or len(snapshot_digest) != 64:
             raise GrantError("Invalid snapshot_digest: must be a 64-character SHA-256 hex string.")
@@ -57,6 +62,7 @@ class OneShotGrantStore:
             "ttl_seconds": ttl_seconds,
             "max_tokens": max_tokens,
             "model": model,
+            "reasoning_effort": reasoning_effort,
             "consumed": False,
             "consumed_at": None,
         }
@@ -153,23 +159,9 @@ class MetaOnceOperator:
         # 2. Consume grant atomically (raises GrantError if invalid or replayed)
         grant = GRANT_STORE.consume_grant(grant_token, snapshot_digest)
 
-        # 3. Sanitize telemetry and memory
-        clean_telemetry = redact_sensitive_data(incident_telemetry)
-        clean_memory = redact_sensitive_data(historical_memory)
-
-        user_content = json.dumps(
-            {
-                "site": clean_telemetry.get("site"),
-                "category": clean_telemetry.get("category"),
-                "observed_signals": clean_telemetry.get("signals"),
-                "source_timestamp": clean_telemetry.get("source_observed_at") or clean_telemetry.get("collected_at"),
-                "verified_memory_facts": [
-                    {"title": f.get("title"), "fact": f.get("fact"), "confidence": f.get("confidence")}
-                    for f in clean_memory
-                ],
-            },
-            ensure_ascii=False,
-        )
+        # 3. Sanitize telemetry and memory through strict structural allowlist
+        safe_snapshot = build_safe_redacted_snapshot(incident_telemetry, historical_memory)
+        user_content = json.dumps(safe_snapshot, ensure_ascii=False)
 
         request_hash = hashlib.sha256(user_content.encode("utf-8")).hexdigest()
         start_time = time.time()
@@ -197,7 +189,7 @@ class MetaOnceOperator:
                 "tokens_used": 0,
                 "local_fallback_applied": True,
                 "analysis": {
-                    "observations": f"Site {clean_telemetry.get('site')} category {clean_telemetry.get('category')} reported {len(raw_signals)} telemetry signals.",
+                    "observations": f"Site {safe_snapshot.get('site')} category {safe_snapshot.get('category')} reported {len(raw_signals)} telemetry signals.",
                     "hypotheses": "Signals indicate nominal operating boundary or localized threshold condition requiring operator inspection.",
                     "uncertainty": "External Meta live inference was NOT run (pending promotional credit activation). Analysis derived deterministically from verified local policy.",
                     "recommended_action": "Request operator review via Home Assistant mobile notification.",
@@ -205,9 +197,10 @@ class MetaOnceOperator:
             }
 
         # 5. Remote call to Meta Responses API
-        payload = {
+        payload: dict[str, Any] = {
             "model": grant["model"],
-            "max_tokens": grant.get("max_tokens", 400),
+            "max_output_tokens": grant.get("max_tokens", 512),
+            "store": False,
             "input": [
                 {
                     "type": "message",
@@ -217,10 +210,13 @@ class MetaOnceOperator:
                 {
                     "type": "message",
                     "role": "user",
-                    "content": [{"type": "input_text", "text": user_content}],
+                    "content": [{"type": "input_text", "text": f"FICTIONAL LAB DATA ONLY: {user_content}"}],
                 },
             ],
         }
+        effort = grant.get("reasoning_effort")
+        if effort in ("low", "medium", "high"):
+            payload["reasoning"] = {"effort": effort}
 
         req = urllib.request.Request(
             self.endpoint,
@@ -243,6 +239,33 @@ class MetaOnceOperator:
             response_id = data.get("id")
             usage = data.get("usage", {})
             tokens_used = usage.get("total_tokens") or usage.get("output_tokens", 0)
+
+            resp_status = str(data.get("status") or "").lower()
+            if resp_status == "incomplete":
+                inc_reason = data.get("incomplete_details", {}).get("reason") or "max_output_tokens"
+                return {
+                    "ok": False,
+                    "status": "INCOMPLETE_MODEL_RESPONSE",
+                    "reason": inc_reason,
+                    "error": f"INCOMPLETE_MODEL_RESPONSE: reasoning budget exhausted ({inc_reason})",
+                    "provider": "meta-muse-spark",
+                    "model": grant["model"],
+                    "truth": "INCOMPLETE_MODEL_RESPONSE",
+                    "snapshot_digest": snapshot_digest,
+                    "request_hash": request_hash,
+                    "timestamp": now_iso(),
+                    "latency_ms": latency_ms,
+                    "response_id": response_id,
+                    "tokens_used": tokens_used,
+                    "usage": usage,
+                    "local_fallback_applied": False,
+                    "analysis": {
+                        "observations": "Model halted during reasoning before emitting complete text.",
+                        "hypotheses": "Reasoning token budget was exhausted by high internal chain-of-thought.",
+                        "uncertainty": "No visible text output was produced.",
+                        "recommended_action": "Increase max_output_tokens ceiling or lower reasoning effort.",
+                    },
+                }
 
             # Extract generated text
             output = data.get("output", [])

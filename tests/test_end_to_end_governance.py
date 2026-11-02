@@ -46,10 +46,10 @@ class EndToEndGovernanceTests(unittest.TestCase):
                 self.assertEqual("observed", incident["status"])
                 self.assertEqual("d" * 64, incident["snapshot_digest"])
 
-                # 2. REMEMBER (retrieve verified facts)
+                # 2. REMEMBER (retrieve verified facts, honest fail-closed when service offline)
                 rem = guardian.remember(incident["id"])
                 self.assertIn("memory", rem)
-                self.assertEqual("UNVERIFIED_STATIC_EXAMPLE", rem["memory"]["truth"])
+                self.assertEqual("MEMORY_UNAVAILABLE", rem["memory"]["truth"])
                 self.assertGreater(len(rem["memory"]["facts"]), 0)
 
                 # 3. REASON WITH META (One-shot grant issued and consumed)

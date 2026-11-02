@@ -36,18 +36,28 @@ class LiveInfrastructureClientTests(unittest.TestCase):
 
 
 class VerifiedMemoryClientTests(unittest.TestCase):
-    def test_recall_facts_for_casa(self):
+    def test_recall_facts_when_service_unavailable(self):
         client = VerifiedMemoryClient()
         facts = client.recall_facts("casa")
+        self.assertEqual(1, len(facts))
+        self.assertEqual("MEMORY_UNAVAILABLE", facts[0]["truth"])
+        self.assertEqual("NONE", facts[0]["source"])
+        self.assertIn("Cognitive Memory Unavailable", facts[0]["title"])
+
+    def test_recall_facts_demo_fixture_mode(self):
+        client = VerifiedMemoryClient()
+        facts = client.recall_facts("casa", allow_static_fixture=True)
         self.assertGreater(len(facts), 0)
         for f in facts:
             self.assertIn("fact_id", f)
             self.assertIn("title", f)
-            self.assertIn("confidence", f)
+            self.assertEqual("STATIC_DEMO_FIXTURE_NOT_LIVE_COGNEE", f["truth"])
+            self.assertEqual("DEMO_FIXTURE_OFFLINE_ONLY", f["source"])
+            self.assertIsNone(f["confidence"])
 
-    def test_recall_facts_filtering(self):
+    def test_recall_facts_filtering_in_demo_mode(self):
         client = VerifiedMemoryClient()
-        facts = client.recall_facts("casa", query="UPS")
+        facts = client.recall_facts("casa", query="UPS", allow_static_fixture=True)
         self.assertEqual(1, len(facts))
         self.assertIn("APC Smart-UPS", facts[0]["fact"])
 
@@ -65,6 +75,40 @@ class VerifiedMemoryClientTests(unittest.TestCase):
         self.assertEqual("[REDACTED_SECRET]", clean["api_key"])
         self.assertIn("10.x.x.x", clean["nested"][0])
         self.assertEqual("[REDACTED_SECRET]", clean["nested"][1]["password"])
+
+    def test_build_safe_redacted_snapshot_allowlist(self):
+        from inneros_meta_guardian.integrations import build_safe_redacted_snapshot
+        dangerous_telemetry = {
+            "site": "casa",
+            "category": "network",
+            "severity": "warning",
+            "freshness": "fresh",
+            "internal_secret_token": "SHOULD_NOT_LEAK",
+            "customer_name": "Private Client Corp",
+            "device_credentials": {"admin": "rootpassword"},
+            "signals": [
+                {
+                    "name": "wan_ping",
+                    "status": "nominal",
+                    "latency_ms": 12.4,
+                    "uncertainty": "low",
+                    "private_snmp_community": "secret_public",
+                    "internal_routing_table": {"192.168.1.0/24": "eth0"},
+                }
+            ],
+        }
+        safe = build_safe_redacted_snapshot(dangerous_telemetry)
+        self.assertEqual("casa", safe["site"])
+        self.assertEqual("network", safe["category"])
+        self.assertNotIn("internal_secret_token", safe)
+        self.assertNotIn("customer_name", safe)
+        self.assertNotIn("device_credentials", safe)
+
+        signal = safe["signals"][0]
+        self.assertEqual("wan_ping", signal["name"])
+        self.assertEqual("nominal", signal["status"])
+        self.assertNotIn("private_snmp_community", signal)
+        self.assertNotIn("internal_routing_table", signal)
 
 
 class VoiceOpsRecordedReceiptTests(unittest.TestCase):

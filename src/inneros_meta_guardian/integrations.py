@@ -39,6 +39,65 @@ def redact_sensitive_data(val: Any) -> Any:
     return val
 
 
+def build_safe_redacted_snapshot(
+    telemetry: dict[str, Any],
+    memory_facts: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Constructs a strictly allowlisted, privacy-preserving snapshot representation.
+
+    Rules:
+    - Never passes arbitrary keys, internal configurations, or client device parameters.
+    - Only retains safe structural identifiers (site, category, severity, freshness, timestamps).
+    - Projects telemetry signals down to: name, status, category, latency_ms, uncertainty.
+    - Projects memory facts down to: title, category, observation.
+    - Enforces regex redaction on all retainable strings as defense-in-depth.
+    """
+    clean_site = str(telemetry.get("site") or "fictional_lab").strip().lower()
+    clean_cat = str(telemetry.get("category") or "network").strip().lower()
+
+    # 1. Project signals through strict allowlist
+    safe_signals = []
+    for sig in (telemetry.get("signals") or []):
+        if not isinstance(sig, dict):
+            continue
+        safe_sig = {
+            "name": str(sig.get("name") or "unknown_signal")[:64],
+            "status": str(sig.get("status") or "nominal")[:32],
+            "category": str(sig.get("category") or clean_cat)[:32],
+        }
+        if "latency_ms" in sig and isinstance(sig["latency_ms"], (int, float)):
+            safe_sig["latency_ms"] = float(sig["latency_ms"])
+        if "uncertainty" in sig:
+            safe_sig["uncertainty"] = str(sig["uncertainty"])[:128]
+        safe_signals.append(safe_sig)
+
+    # 2. Project memory facts through strict allowlist
+    safe_memory = []
+    for f in (memory_facts or []):
+        if not isinstance(f, dict):
+            continue
+        if f.get("truth") == "MEMORY_UNAVAILABLE":
+            continue
+        safe_memory.append({
+            "title": str(f.get("title") or "")[:80],
+            "category": str(f.get("category") or "topology")[:32],
+            "observation": str(f.get("fact") or f.get("observation") or "")[:250],
+        })
+
+    safe_snapshot = {
+        "site": clean_site,
+        "category": clean_cat,
+        "severity": str(telemetry.get("severity") or "info")[:16],
+        "freshness": str(telemetry.get("freshness") or "nominal")[:16],
+        "source_timestamp": str(telemetry.get("source_observed_at") or telemetry.get("collected_at") or "")[:32],
+        "snapshot_digest": str(telemetry.get("snapshot_digest") or "")[:64],
+        "signals": safe_signals,
+        "verified_memory_context": safe_memory,
+    }
+
+    return redact_sensitive_data(safe_snapshot)
+
+
 class LiveInfrastructureClient:
     """Fetches real-time infrastructure readings from the canonical Guardian deployment.
     
@@ -102,40 +161,40 @@ class LiveInfrastructureClient:
 
 
 class VerifiedMemoryClient:
-    """Provides STATIC EXAMPLE facts while the real AG-60 / Personal Brain client is not connected.
+    """Authentic client for InnerOS Personal Brain & Cognitive Memory.
     
-    These hardcoded examples MUST NOT be presented as live or verified Cognee recall.
-    All externally shared facts require real provenance and strict privacy curation.
+    If the service is offline or unreachable, returns status MEMORY_UNAVAILABLE.
+    Never invents antecedents or attributes static examples to a live query.
     """
     
-    VERIFIED_KNOWLEDGE_BASE = {
+    STATIC_DEMO_FIXTURES = {
         "casa": [
             {
                 "fact_id": "fact_casa_net_01",
                 "category": "topology",
                 "title": "Dual-node redundant core",
                 "fact": "Casa infrastructure runs active AMD primary with Intel standby. Gateway routes telemetry over local 1 Gbps LAN.",
-                "confidence": 0.99,
+                "confidence": None,
                 "verified_at": "2026-10-27T03:00:00Z",
-                "source": "AG-60 Network Engineer Memory",
+                "source": "DEMO_FIXTURE_OFFLINE_ONLY",
             },
             {
                 "fact_id": "fact_casa_net_02",
                 "category": "power",
                 "title": "Solar & Battery UPS Backup",
                 "fact": "Casa rack is powered via dedicated APC Smart-UPS with solar battery buffering. Average rack draw: 140W.",
-                "confidence": 0.98,
+                "confidence": None,
                 "verified_at": "2026-10-30T10:00:00Z",
-                "source": "Home Assistant Energy Sensor History",
+                "source": "DEMO_FIXTURE_OFFLINE_ONLY",
             },
             {
                 "fact_id": "fact_casa_srv_01",
                 "category": "servers",
                 "title": "Intel 1.4 recovery baseline",
                 "fact": "Intel 1.4 recovered on Oct 27. Primary AMD handles vLLM inference and storage replication.",
-                "confidence": 0.95,
+                "confidence": None,
                 "verified_at": "2026-10-27T04:00:00Z",
-                "source": "Incident RCA 2026-10-27",
+                "source": "DEMO_FIXTURE_OFFLINE_ONLY",
             },
         ],
         "bellini": [
@@ -144,18 +203,18 @@ class VerifiedMemoryClient:
                 "category": "topology",
                 "title": "Ruijie Switch Group Isolation",
                 "fact": "Bellini master station connects via isolated VLAN with Grandstream GWN uplink. Port detail monitored via cloud API.",
-                "confidence": 0.94,
+                "confidence": None,
                 "verified_at": "2026-10-24T15:30:00Z",
-                "source": "AG-60 Network Engineer Memory",
+                "source": "DEMO_FIXTURE_OFFLINE_ONLY",
             },
             {
                 "fact_id": "fact_bellini_net_02",
                 "category": "diagnostics",
                 "title": "Unreachable monitor baseline",
                 "fact": "Intermittent unreachability on auxiliary monitor port does NOT constitute physical link down. Requires secondary FDB check.",
-                "confidence": 0.97,
+                "confidence": None,
                 "verified_at": "2026-10-24T18:00:00Z",
-                "source": "Bellini Operational Rulebook",
+                "source": "DEMO_FIXTURE_OFFLINE_ONLY",
             },
         ],
     }
@@ -166,31 +225,60 @@ class VerifiedMemoryClient:
         self.service_url = (service_url or os.getenv("INNEROS_SHARED_MEMORY_URL", self.DEFAULT_SERVICE_URL)).rstrip("/")
         self.timeout = timeout
 
-    def recall_facts(self, site: str, query: str = "", limit: int = 5) -> list[dict[str, Any]]:
+    def recall_facts(
+        self,
+        site: str,
+        query: str = "",
+        limit: int = 5,
+        allow_static_fixture: bool = False,
+    ) -> list[dict[str, Any]]:
         site_clean = str(site).strip().lower()
-        if os.getenv("ENABLE_LIVE_MEMORY_SERVICE", "").strip().lower() in ("true", "1", "yes"):
-            try:
-                import urllib.parse
-                params = urllib.parse.urlencode({"site": site_clean, "q": query, "limit": limit})
-                req = urllib.request.Request(
-                    f"{self.service_url}/api/internal/shared-memory/recall?{params}",
-                    headers={"Accept": "application/json", "User-Agent": "InnerOS-Meta-Guardian-Memory/2026.11"},
-                )
-                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                    data = json.loads(resp.read().decode("utf-8"))
-                if isinstance(data, dict) and data.get("ok") and isinstance(data.get("facts"), list):
-                    clean_facts = redact_sensitive_data(data["facts"][:limit])
-                    return [{**f, "truth": "VERIFIED_COGNEE_MEMORY", "source": "PERSONAL_BRAIN_COGNEE"} for f in clean_facts]
-            except Exception:
-                pass
 
-        facts = self.VERIFIED_KNOWLEDGE_BASE.get(site_clean, [])
-        if query:
-            q_lower = query.lower()
-            facts = [f for f in facts if q_lower in f["title"].lower() or q_lower in f["fact"].lower() or q_lower in f["category"].lower()]
-        
-        selected = facts[:limit]
-        return redact_sensitive_data([{**fact, "truth": "UNVERIFIED_STATIC_EXAMPLE", "source": "STATIC_FIXTURE_NOT_AG60_OR_COGNEE", "confidence": None} for fact in selected])
+        # 1. Attempt authentic live memory service query
+        try:
+            import urllib.parse
+            params = urllib.parse.urlencode({"site": site_clean, "q": query, "limit": limit})
+            req = urllib.request.Request(
+                f"{self.service_url}/api/internal/shared-memory/recall?{params}",
+                headers={"Accept": "application/json", "User-Agent": "InnerOS-Meta-Guardian-Memory/2026.11"},
+            )
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            if isinstance(data, dict) and data.get("ok") and isinstance(data.get("facts"), list):
+                clean_facts = redact_sensitive_data(data["facts"][:limit])
+                return [{**f, "truth": "VERIFIED_COGNEE_MEMORY", "source": "PERSONAL_BRAIN_COGNEE"} for f in clean_facts]
+        except Exception:
+            pass
+
+        # 2. Explicit offline demo fixture mode
+        if allow_static_fixture or os.getenv("ALLOW_STATIC_MEMORY_FIXTURE", "").lower() in ("true", "1", "yes"):
+            facts = self.STATIC_DEMO_FIXTURES.get(site_clean, [])
+            if query:
+                q_lower = query.lower()
+                facts = [f for f in facts if q_lower in f["title"].lower() or q_lower in f["fact"].lower() or q_lower in f["category"].lower()]
+            selected = facts[:limit]
+            return redact_sensitive_data([
+                {
+                    **fact,
+                    "truth": "STATIC_DEMO_FIXTURE_NOT_LIVE_COGNEE",
+                    "source": "DEMO_FIXTURE_OFFLINE_ONLY",
+                    "confidence": None,
+                }
+                for fact in selected
+            ])
+
+        # 3. Honest fail-closed: MEMORY_UNAVAILABLE (never invent antecedents or attribute static fixtures to Cognee)
+        return [
+            {
+                "fact_id": f"mem_unavailable_{site_clean}",
+                "category": "system",
+                "title": "Cognitive Memory Unavailable",
+                "fact": f"Live Cognitive Memory (Personal Brain / Cognee at {self.service_url}) was unreachable. Operating honestly without fabricated historical antecedents.",
+                "confidence": None,
+                "truth": "MEMORY_UNAVAILABLE",
+                "source": "NONE",
+            }
+        ]
 
 
 class VoiceOpsRecordedReceipt:

@@ -139,14 +139,20 @@ class Guardian:
         self.store.append(incident["id"], event, payload)
         return incident
 
-    def remember(self, id: str, query: str = "") -> dict:
+    def remember(self, id: str, query: str = "", allow_demo_fallback: bool = False) -> dict:
         """Retrieves verified historical facts and attaches them to the incident."""
         with self.lock:
             incident = self.get(id)
             site = incident.get("site", "casa")
-            facts = self.memory_client.recall_facts(site, query=query, limit=4)
+            facts = self.memory_client.recall_facts(site, query=query, limit=4, allow_static_fixture=allow_demo_fallback)
+            is_unavailable = any(f.get("truth") == "MEMORY_UNAVAILABLE" for f in facts)
+            truth_label = "MEMORY_UNAVAILABLE" if is_unavailable else (
+                "VERIFIED_COGNEE_MEMORY" if any(f.get("truth") == "VERIFIED_COGNEE_MEMORY" for f in facts)
+                else "STATIC_DEMO_FIXTURE_NOT_LIVE_COGNEE"
+            )
             incident["memory"] = {
-                "truth": "UNVERIFIED_STATIC_EXAMPLE",
+                "truth": truth_label,
+                "status": "MEMORY_UNAVAILABLE" if is_unavailable else "RECALLED",
                 "facts": facts,
                 "recalled_at": now(),
                 "site": site,
@@ -154,7 +160,7 @@ class Guardian:
             return self._save(
                 incident,
                 "REMEMBER",
-                {"site": site, "fact_count": len(facts), "facts": facts, "truth": "UNVERIFIED_STATIC_EXAMPLE"},
+                {"site": site, "fact_count": len(facts), "facts": facts, "truth": truth_label},
             )
 
     def analyze(self, id: str, mode: str = "deterministic", grant_token: str | None = None) -> dict:

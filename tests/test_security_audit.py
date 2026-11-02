@@ -23,7 +23,7 @@ class SecurityAndPrivacyTests(unittest.TestCase):
             "snapshot_digest": digest,
             "secret_token": "supersecretpassword123",
         }
-        memory = [{"title": "Credentials", "fact": "Internal secret token: admin123", "ip": "10.10.10.10"}]
+        memory = [{"title": "Credentials", "fact": "Internal host at 192.168.1.50 with secret token: admin123", "ip": "10.10.10.10"}]
 
         operator = MetaOnceOperator()
         with patch.object(operator, "api_key", "dummy_key"):
