@@ -2,8 +2,8 @@
 
 const steps = [
   ['OBSERVE', 'Ingest real or synthetic infrastructure signals'],
-  ['REMEMBER', 'Recall verified AG-60 / Personal Brain memory'],
-  ['REASON', 'Meta Muse Spark 1.3 governed analysis'],
+  ['REMEMBER', 'Request AG-60 / Personal Brain memory; fail closed if unavailable'],
+  ['REASON', 'Local analysis; external Muse requires separate owner approval'],
   ['APPROVE', 'Explicit human authority gate (Rafael López)'],
   ['ACT', 'Governed virtual execution (fail-safe isolated)'],
   ['VERIFY', 'Independent state readback & VoiceOps proof'],
@@ -94,7 +94,8 @@ function renderMemory() {
   if (!facts.length) {
     const span = document.createElement('span');
     span.className = 'muted-italic';
-    span.textContent = "Click 'Recall Facts' to retrieve verified historical baseline for this site.";
+    const state = current?.memory?.status || current?.memory?.truth || "NOT_REQUESTED";
+    span.textContent = `Memory ${state}: no verified facts available. No history has been fabricated.`;
     box.append(span);
     return;
   }
@@ -123,11 +124,11 @@ function renderMetaReceipt() {
   const header = document.createElement('div');
   header.style.fontWeight = 'bold';
   header.style.color = '#75c8f6';
-  header.textContent = `⚡ META RECEIPT: ${receipt.status} (${receipt.model})`;
+  header.textContent = `⚡ INFERENCE RECEIPT: ${receipt.status || "UNVERIFIED"} (${receipt.model || "unknown"})`;
   const line1 = document.createElement('div');
-  line1.textContent = `Token: ${receipt.grant_token ? receipt.grant_token.slice(0, 16) + '...' : 'none'} | Latency: ${receipt.latency_ms}ms | Fallback: ${receipt.local_fallback_applied}`;
+  line1.textContent = `Result: ${receipt.truth || receipt.status || 'UNVERIFIED'} | Latency: ${receipt.latency_ms ?? 'unknown'} ms | Fallback: ${receipt.local_fallback_applied ?? 'unknown'}`;
   const line2 = document.createElement('div');
-  line2.textContent = `Digest: ${receipt.snapshot_digest.slice(0, 16)}... | ReqHash: ${receipt.request_hash.slice(0, 16)}...`;
+  line2.textContent = `Digest: ${(receipt.snapshot_digest || "").slice(0, 16)}... | ReqHash: ${(receipt.request_hash || "").slice(0, 16)}...`;
   box.append(header, line1, line2);
 }
 
@@ -229,21 +230,21 @@ async function operation(callback) {
 if ($('btn-live-casa-net')) {
   $('btn-live-casa-net').addEventListener('click', () => {
     currentGrant = null;
-    setText('grant-status', 'No active grant. Ingest telemetry to mint grant.');
+    setText('grant-status', 'OPERATOR ONLY: Meta spending disabled in web demo.');
     operation(() => call('/api/incidents/live', { site: 'casa', category: 'network' }));
   });
 }
 if ($('btn-live-casa-srv')) {
   $('btn-live-casa-srv').addEventListener('click', () => {
     currentGrant = null;
-    setText('grant-status', 'No active grant. Ingest telemetry to mint grant.');
+    setText('grant-status', 'OPERATOR ONLY: Meta spending disabled in web demo.');
     operation(() => call('/api/incidents/live', { site: 'casa', category: 'servers' }));
   });
 }
 if ($('btn-live-bellini')) {
   $('btn-live-bellini').addEventListener('click', () => {
     currentGrant = null;
-    setText('grant-status', 'No active grant. Ingest telemetry to mint grant.');
+    setText('grant-status', 'OPERATOR ONLY: Meta spending disabled in web demo.');
     operation(() => call('/api/incidents/live', { site: 'bellini', category: 'network' }));
   });
 }
@@ -252,7 +253,7 @@ if ($('btn-live-bellini')) {
 if ($('create')) {
   $('create').addEventListener('click', () => {
     currentGrant = null;
-    setText('grant-status', 'No active grant. Ingest telemetry to mint grant.');
+    setText('grant-status', 'OPERATOR ONLY: Meta spending disabled in web demo.');
     operation(() => call('/api/incidents', { scenario: $('scenario').value }));
   });
 }
@@ -330,7 +331,7 @@ if ($('btn-run-sam')) {
       const h = document.createElement('div');
       h.style.fontWeight = 'bold';
       h.style.color = '#75e7d2';
-      h.textContent = `👁 ${data.title} (${data.model})`;
+      h.textContent = `👁 STATIC FIXTURE (NOT_RUN): ${data.title}`;
       const note = document.createElement('p');
       note.style.fontSize = '12px';
       note.style.color = '#c5d5e6';
@@ -339,7 +340,14 @@ if ($('btn-run-sam')) {
       for (const obj of data.detected_objects) {
         const item = document.createElement('div');
         item.className = 'sam-detection';
-        item.innerHTML = `<span>[${Math.round(obj.confidence * 100)}% CONFIDENCE]</span> ${obj.label} — <em>${obj.status}</em> <small style="color:#71879e;display:block;">bbox: [${obj.bbox.join(', ')}]</small>`;
+        const score = document.createElement('span');
+        score.textContent = `[ILLUSTRATIVE ${Math.round(Number(obj.confidence) * 100)}%]`;
+        const label = document.createTextNode(` ${obj.label} — ${obj.status} `);
+        const coords = document.createElement('small');
+        coords.style.color = '#71879e';
+        coords.style.display = 'block';
+        coords.textContent = `Example bbox: [${(obj.bbox || []).join(', ')}]`;
+        item.append(score, label, coords);
         box.append(item);
       }
       say('Static SAM-style fixture displayed. No Meta model was run.', true);
