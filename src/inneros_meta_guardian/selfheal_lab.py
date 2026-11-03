@@ -18,9 +18,10 @@ CORE_REPO = "https://github.com/Rafa-Innerchispa/innerops-agentic-platform"
 DEMO_REPO = "https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026"
 BEFORE_CI = CORE_REPO + "/actions/runs/41558176002"
 AFTER_CI = CORE_REPO + "/actions/runs/41569825744"
-PR256_CI = CORE_REPO + "/actions/runs/41649821306"
+PR256_CI = CORE_REPO + "/actions/runs/41671522881"
 WONDER_REPORT = DEMO_REPO + "/blob/main/docs/evidence/MUSE_WONDER_SELF_HEALING_VERIFIED_20261102.md"
 WONDER_RECEIPT = DEMO_REPO + "/blob/main/docs/evidence/meta_wonder_receipt_20261102.json"
+QWEN_DIAGNOSTIC_JSON = DEMO_REPO + "/blob/main/docs/evidence/qwen_local_diagnostic_20261103.json"
 CORE_PR = CORE_REPO + "/pull/253"
 PR256_URL = CORE_REPO + "/pull/256"
 AUTH_PR = CORE_REPO + "/pull/252"
@@ -119,22 +120,32 @@ def case_evidence() -> dict[str, Any]:
         },
         "pr256_candidate_ci": {
             "url": PR256_CI,
-            "passed": 345,
+            "passed": 376,
             "failed": 0,
             "subtests_passed": 13,
             "pr_url": PR256_URL,
-            "commit": "e272d3f5",
+            "commit": "fe1d4575",
             "truth": "GITHUB_ACTIONS_VERIFIED",
-            "scope": "Branch PR #256; worker liveness checks, atomic CAS, CI 100% green",
+            "scope": "Branch PR #256; worker liveness checks, atomic CAS modified_count==1, MCP Wonder bridge, CI 100% green",
         },
         "local_qwen_diagnostic": {
+            "status": "REAL_SUCCESS",
+            "provider": "vllm-rocm-local",
             "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
-            "hardware": "AMD Radeon 9700 ROCm GPU (34.15 GB VRAM free)",
+            "hardware": "AMD Radeon AI PRO R9700 (ROCm 10.1)",
             "weights_present": True,
             "weights_path": "PRIVATE_LOCAL_VOLUME_REDACTED",
-            "vllm_port_8000": "UNREACHABLE_OFFLINE",
+            "vllm_port_8000": "ONLINE_ACTIVE_ROCM",
             "intel_ollama_port_11434": "UNREACHABLE_OFFLINE",
-            "truth": "AUTHENTIC_TELEMETRY_NO_INVENTED_RUN",
+            "latency_ms": 15155,
+            "prompt_tokens": 343,
+            "completion_tokens": 1024,
+            "total_tokens": 1367,
+            "cost_usd": 0.0,
+            "prompt_sha256": "aa7cbb864ae96d3b776edf84b7111390915a101954dba76eb4a4699989147d2c",
+            "evidence_file": "docs/evidence/qwen_local_diagnostic_20261103.json",
+            "evidence_url": QWEN_DIAGNOSTIC_JSON,
+            "truth": "AUTHENTIC_LOCAL_INFERENCE_ROCM_AMD",
         },
         "wonder": {
             "model": "muse-wonder-1.0",

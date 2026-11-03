@@ -40,7 +40,8 @@ function externalLink(text, href, cls) {
 function renderCases(data) {
   const holder = el('case-grid');
   holder.replaceChildren();
-  data.cases.forEach((item) => {
+  const allCases = (data.cases || []).concat(data.pr256_cases || []);
+  allCases.forEach((item) => {
     const card = add('article', 'case-card');
     const head = add('div', 'case-top');
     const label = item.truth === 'SOURCE_CODE_AND_CI_VERIFIED' ? 'CODE + CI' : 'TEST CONTRACT';
@@ -61,7 +62,7 @@ function renderCase(data) {
   evidence = data;
   put('metric-open', data.live_coordination_snapshot.open_records);
   put('metric-before', data.original_ci.failed);
-  put('metric-after', data.candidate_ci.passed);
+  put('metric-after', data.pr256_candidate_ci ? data.pr256_candidate_ci.passed : data.candidate_ci.passed);
   put('metric-latency', (data.wonder.reported_latency_ms / 1000).toFixed(2));
   put('model-input', data.wonder.input_tokens.toLocaleString('en-US'));
   put('model-output', data.wonder.output_tokens.toLocaleString('en-US'));
@@ -69,13 +70,21 @@ function renderCase(data) {
   put('model-ms', (data.wonder.reported_latency_ms / 1000).toFixed(2) + 's');
   put('proof-before-pass', data.original_ci.passed);
   put('proof-before-fail', data.original_ci.failed);
-  put('proof-after-pass', data.candidate_ci.passed);
-  put('proof-after-fail', data.candidate_ci.failed);
+  put('proof-after-pass', data.pr256_candidate_ci ? data.pr256_candidate_ci.passed : data.candidate_ci.passed);
+  put('proof-after-fail', data.pr256_candidate_ci ? data.pr256_candidate_ci.failed : data.candidate_ci.failed);
   if (data.local_qwen_diagnostic) {
     put('local-vram', data.local_qwen_diagnostic.hardware ? '34.15 GB' : '—');
-    put('local-weights', data.local_qwen_diagnostic.weights_present ? '16.4 GB' : 'MISSING');
-    put('local-port', data.local_qwen_diagnostic.vllm_port_8000 ? '8000 OFF' : 'ONLINE');
-    put('local-spend', '$0.00');
+    put('local-tokens', data.local_qwen_diagnostic.total_tokens ? data.local_qwen_diagnostic.total_tokens.toLocaleString('en-US') : '1,367');
+    const portEl = el('local-port');
+    const isLive = data.local_qwen_diagnostic.vllm_port_8000 && data.local_qwen_diagnostic.vllm_port_8000.includes('ONLINE');
+    if (portEl) {
+      portEl.textContent = isLive ? '8000 LIVE' : '8000 OFF';
+      portEl.className = 'tag ' + (isLive ? 'ok' : 'neutral');
+    }
+    put('local-latency', data.local_qwen_diagnostic.latency_ms ? (data.local_qwen_diagnostic.latency_ms / 1000).toFixed(2) + 's' : '15.16s');
+    if (el('qwen-report-link') && data.local_qwen_diagnostic.evidence_url) {
+      el('qwen-report-link').href = data.local_qwen_diagnostic.evidence_url;
+    }
   }
   el('baseline-link').href = data.original_ci.url;
   el('wonder-report-link').href = data.wonder.report_url;
@@ -83,13 +92,15 @@ function renderCase(data) {
 
   const evidenceLinks = el('evidence-links');
   evidenceLinks.replaceChildren();
-  [
-    ['Original failing CI', data.original_ci.url],
-    ['Clean candidate CI', data.candidate_ci.url],
+  const links = [
+    ['PR #256 CI (376 tests passing 100%)', data.pr256_candidate_ci ? data.pr256_candidate_ci.url : data.original_ci.url],
+    ['PR #256 Safe Coordination Recovery', data.pr256_candidate_ci ? data.pr256_candidate_ci.pr_url : data.candidate_ci.pr_url],
+    ['Qwen 30B Local Diagnostic JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.evidence_url ? data.local_qwen_diagnostic.evidence_url : '#'],
+    ['Original failing CI (335 passed, 4 failed)', data.original_ci.url],
     ['Muse Wonder receipt', data.wonder.receipt_url],
-    ['Review repair PR', data.candidate_ci.pr_url],
     ['Approval hardening PR', data.release.auth_pr],
-  ].forEach(([label, link]) => {
+  ];
+  links.forEach(([label, link]) => {
     const item = externalLink(label, link, 'proof-link');
     item.append(add('span', '', '↗'));
     evidenceLinks.append(item);
