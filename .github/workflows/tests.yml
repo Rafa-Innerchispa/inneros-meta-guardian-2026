@@ -13,6 +13,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Verify self-heal browser JavaScript syntax
+        run: node --check src/inneros_meta_guardian/static/self-heal.js
+      - name: Compile Python sources without external integrations
+        run: python -m compileall -q src/inneros_meta_guardian
       - name: Test without paid services
         env:
           PYTHONPATH: src
