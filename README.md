@@ -11,7 +11,7 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 ## Overview
 
-> **VERIFICATION STATUS — 2026-11-02:** The hackathon repo has **55 offline/mock tests passing per Python version**; the central InnerOS Muse metrology suite has **23 offline tests passing per version**. The first real Muse Spark API request (HTTP 200) was **INCOMPLETE**: 108 input, 192 output (190 hidden reasoning) tokens, no visible answer. The **Muse Wonder self-healing experiment is implemented as a private owner-operated one-shot trial but has NOT BEEN RUN against Meta**. The current live InnerOS MCP ledger previously returned zero Meta usage; receipts are not reconciled globally. Guardian real read-only evidence has been reported, but memory Cognee is not verified online and SAM 3.1 remains a static fixture. Anonymous web grants / paid inference routes remain DISABLED. Do not represent these as a completed live E2E integration. See [measured Muse self-healing case study](docs/evidence/MUSE_WONDER_SELFHEAL_CASE_STUDY_20261102.md) and [handoff](docs/HANDOFF_CHAT_20261101.md).
+> **EVIDENCE STATUS — 2026-11-02:** This repo now includes two frontend experiences: `/` (Physical Guardian) and `/self-heal` (interactive coordination self-healing lab). The judge-lab branch has **69/69 offline tests passing in Python 3.10 and 3.12**. Clean core candidate PR #253 passed **339/339** safety/coordination tests in GitHub CI; it is **not deployed to production**. An operator report records a Muse Wonder 1.0 response (3,442 tokens, ~22.06s), but provider billing and exact owner authorization are **not independently reconciled**. The public UI NEVER triggers paid model inference. Its coordination repair replay uses deterministic *in-memory virtual state*, not live agents, not Qwen, not Meta. SAM 3.1 remains a static optical fixture; Cognee memory may return MEMORY_UNAVAILABLE. Read [the judge walkthrough](docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md) and [independent limits review](docs/evidence/INDEPENDENT_REVIEW_WONDER_RUN_AND_CLEAN_PORT_20261102.md).
 
 
 Most AI agents today answer questions inside chat windows. **InnerOS Autonomous Infrastructure Guardian** brings frontier AI into the physical facilities, server racks, and network backbones that sustain modern operations.
@@ -21,7 +21,7 @@ Connected to live physical telemetry from Casa and Bellini facilities in Ecuador
 OBSERVE ➔ REMEMBER ➔ REASON ➔ AUTHORIZE ➔ ACT ➔ VERIFY ➔ PROVE
 ```
 
-Powered by **Meta Muse Spark 1.3** and **Meta SAM 3.1**, InnerOS analyzes live signals alongside verified AG-60 historical memory to diagnose network anomalies, explicitly separating factual observations from hypotheses and uncertainty. Every remote inference is strictly bounded by an atomic single-use cryptographic operator grant. Physical actions remain gated by human authority (Rafael López, Owner), followed by independent state readback, verified VoiceOps telephone confirmation, and permanent anchoring in a tamper-evident SHA-256 audit chain.
+The guarded local reasoning layer and a separately documented **Meta Muse Wonder 1.0** operator experiment target two kinds of incidents: physical network/sensor events and failures inside InnerOS's own agent control plane. The UI distinguishes historic evidence, local fixture replays and optional read-only live observations. Every remote inference is strictly bounded by an atomic single-use cryptographic operator grant. Physical actions remain gated by human authority (Rafael López, Owner), followed by independent state readback, verified VoiceOps telephone confirmation, and permanent anchoring in a tamper-evident SHA-256 audit chain.
 
 ---
 
@@ -93,7 +93,7 @@ flowchart TD
 - Python 3.10+ (Standard library only; zero external pip dependencies required for core demo).
 - Git.
 
-### 1. Run the Test Suite (40 Tests, 100% Offline)
+### 1. Run the Test Suite (69 Tests, 100% Offline)
 ```bash
 # Windows PowerShell
 $env:PYTHONPATH="src"; python -m unittest discover -s tests -v
@@ -112,6 +112,8 @@ PYTHONPATH=src python3 -m inneros_meta_guardian.web
 ```
 Open your browser to: **`http://127.0.0.1:8787`**
 
+Open **`http://127.0.0.1:8787/self-heal`** for the new Muse Wonder forensic mission control and interactive, synthetic self-healing replay. This route works without any external API keys and has a dedicated read-only case endpoint (`/api/selfheal/case`).
+
 ### 3. Operator CLI Utilities
 ```bash
 # Mint a single-use grant bound to a snapshot digest
@@ -124,6 +126,8 @@ python scripts/operator_meta_once.py <grant_token> incident.json --memory-json m
 ---
 
 ## Documentation Index
+
+- [`docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md`](docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md): Current 2m52s two-layer judge demonstration and truthful claim boundaries.
 
 - [`docs/META_REUSE_HANDOFF_20261101.md`](docs/META_REUSE_HANDOFF_20261101.md): Detailed architectural reuse breakdown (Pre-existing vs. New Meta developments).
 - [`docs/JUDGE_STORYBOARD_20261101.md`](docs/JUDGE_STORYBOARD_20261101.md): Complete 2–3 minute video storyboard and presentation walkthrough.
