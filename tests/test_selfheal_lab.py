@@ -25,6 +25,16 @@ class SelfHealingEvidenceTests(unittest.TestCase):
         self.assertIsNone(data["wonder"]["billing_verified_usd"])
         self.assertIn("OPERATOR_REPORTED", data["wonder"]["truth"])
 
+    def test_public_case_evidence_redacts_private_model_storage_location(self):
+        data = case_evidence()
+        serialized = json.dumps(data, sort_keys=True)
+        self.assertNotIn("/home/", serialized)
+        self.assertNotIn("C:\\\\Users\\\\", serialized)
+        self.assertEqual(
+            "PRIVATE_LOCAL_VOLUME_REDACTED",
+            data["local_qwen_diagnostic"]["weights_path"],
+        )
+
     def test_four_diagnostic_cases_distinguish_code_from_tests(self):
         cases = case_evidence()["cases"]
         self.assertEqual(["F1", "F2", "F3", "F4"], [c["id"] for c in cases])

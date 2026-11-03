@@ -131,7 +131,7 @@ def case_evidence() -> dict[str, Any]:
             "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
             "hardware": "AMD Radeon 9700 ROCm GPU (34.15 GB VRAM free)",
             "weights_present": True,
-            "weights_path": "/home/rlopez/inneros/inneros_core/var/local_models/QuantTrio__Qwen3-Coder-30B-A3B-Instruct-AWQ",
+            "weights_path": "PRIVATE_LOCAL_VOLUME_REDACTED",
             "vllm_port_8000": "UNREACHABLE_OFFLINE",
             "intel_ollama_port_11434": "UNREACHABLE_OFFLINE",
             "truth": "AUTHENTIC_TELEMETRY_NO_INVENTED_RUN",
