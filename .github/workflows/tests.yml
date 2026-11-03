@@ -22,3 +22,16 @@ jobs:
           PYTHONPATH: src
           ALLOW_EXTERNAL_META: 'false'
         run: python -m unittest discover -s tests -v
+      - name: Audit safe open-source candidate
+        run: python scripts/build_public_release.py --check
+      - name: Package clean-history candidate (Python 3.12 only)
+        if: matrix.python-version == '3.12'
+        run: python scripts/build_public_release.py --output dist/inneros-meta-open-source-candidate.zip
+      - name: Preserve clean-history ZIP as private artifact
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: inneros-meta-public-source-candidate
+          path: dist/inneros-meta-open-source-candidate.zip
+          if-no-files-found: error
+          retention-days: 7
