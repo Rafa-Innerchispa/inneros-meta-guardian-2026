@@ -14,13 +14,15 @@ from .engine import Guardian, LifecycleError
 from .integrations import VoiceOpsRecordedReceipt
 from .meta_once import GRANT_STORE, GrantError
 from .sam_inspector import SAMInspector
+from .selfheal_lab import SelfHealingLab, LabError, case_evidence
 
 STATIC = Path(__file__).parent / "static"
 
 
 class Handler(BaseHTTPRequestHandler):
     guardian: Guardian
-    server_version = "InnerOSMetaGuardian/1.0"
+    selfheal_lab = SelfHealingLab()  # process-local, isolated demo only
+    server_version = "InnerOSMetaGuardian/1.1"
 
     def _write(self, status: int, content: bytes, mime: str = "application/json; charset=utf-8") -> None:
         self.send_response(status)
@@ -61,6 +63,23 @@ class Handler(BaseHTTPRequestHandler):
             self._static("app.js", "application/javascript; charset=utf-8")
         elif path == "/styles.css":
             self._static("styles.css", "text/css; charset=utf-8")
+        elif path in ("/self-heal", "/self-heal.html"):
+            self._static("self-heal.html", "text/html; charset=utf-8")
+        elif path == "/self-heal.js":
+            self._static("self-heal.js", "application/javascript; charset=utf-8")
+        elif path == "/self-heal.css":
+            self._static("self-heal.css", "text/css; charset=utf-8")
+        elif path == "/api/selfheal/case":
+            self._json(200, case_evidence())
+        elif path.startswith("/api/selfheal/labs/") and path.endswith("/evidence"):
+            parts = path.strip("/").split("/")
+            if len(parts) != 5:
+                self._json(404, {"error": "Not found"})
+            else:
+                try:
+                    self._json(200, self.selfheal_lab.evidence(parts[3]))
+                except LabError as exc:
+                    self._json(404, {"error": str(exc)})
         elif path == "/api/health":
             self._json(
                 200,
@@ -121,6 +140,23 @@ class Handler(BaseHTTPRequestHandler):
         try:
             body = self._body() if self.headers.get("Content-Length") else {}
             
+            # Separate demo-only self-healing replay. No real agents or model calls.
+            if path == "/api/selfheal/labs":
+                self._json(201, self.selfheal_lab.start(
+                    scenario=str(body.get("scenario") or "stale_agent_claim"),
+                ))
+                return
+            if path.startswith("/api/selfheal/labs/") and path.endswith("/transition"):
+                parts = path.strip("/").split("/")
+                if len(parts) != 5:
+                    self._json(404, {"error": "Not found"})
+                    return
+                self._json(200, self.selfheal_lab.transition(
+                    parts[3], action=str(body.get("action") or ""),
+                    actor=str(body.get("actor") or ""),
+                ))
+                return
+
             # 1. Ingest simulated scenario
             if path == "/api/incidents":
                 scenario = body.get("scenario", "door_propped")
@@ -169,7 +205,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             self._json(404, {"error": "Unknown route"})
-        except (LifecycleError, GrantError, ValueError) as exc:
+        except (LifecycleError, GrantError, LabError, ValueError) as exc:
             self._json(409, {"error": str(exc)})
         except Exception as exc:
             self._json(500, {"error": f"Internal application error: {type(exc).__name__}"})
