@@ -71,7 +71,7 @@ class SelfHealingLabTests(unittest.TestCase):
         exported = self.lab.evidence(sid)
         self.assertEqual("SIMULATED_REPLAY_NOT_LIVE_INNEROS", exported["truth"])
         self.assertEqual(6, len(exported["lab"]["events"]))
-        self.assertIn("not", exported["limitations"][1].lower())
+        self.assertIn("no local qwen or meta", exported["limitations"][1].lower())
 
     def test_replay_not_an_authenticated_owner_approval(self):
         state = self.lab.start()
