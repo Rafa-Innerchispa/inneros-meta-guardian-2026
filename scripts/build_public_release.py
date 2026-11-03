@@ -27,8 +27,7 @@ TESTS = (
     "tests/test_selfheal_web_routes.py",
 )
 EXTRA = ("Dockerfile", "compose.yaml", "pyproject.toml",
-         ".github/workflows/tests.yml", "scripts/run_demo.sh",
-         "scripts/build_public_release.py")
+         ".github/workflows/tests.yml", "scripts/run_demo.sh")
 REPLACE = (
     ("guardian.creatorcore.ai", "demo-guardian.example.invalid"),
     ("inneros-5-lan", "demo-control-plane.invalid"),
