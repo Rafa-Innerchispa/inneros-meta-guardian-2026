@@ -71,6 +71,12 @@ function renderCase(data) {
   put('proof-before-fail', data.original_ci.failed);
   put('proof-after-pass', data.candidate_ci.passed);
   put('proof-after-fail', data.candidate_ci.failed);
+  if (data.local_qwen_diagnostic) {
+    put('local-vram', data.local_qwen_diagnostic.hardware ? '34.15 GB' : '—');
+    put('local-weights', data.local_qwen_diagnostic.weights_present ? '16.4 GB' : 'MISSING');
+    put('local-port', data.local_qwen_diagnostic.vllm_port_8000 ? '8000 OFF' : 'ONLINE');
+    put('local-spend', '$0.00');
+  }
   el('baseline-link').href = data.original_ci.url;
   el('wonder-report-link').href = data.wonder.report_url;
   renderCases(data);

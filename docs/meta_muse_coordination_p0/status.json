@@ -1,25 +1,32 @@
 {
   "mission_id": "meta-wonder-coordination-p0-20261102",
-  "run_id": "run_ag_20261102_2349_p0_meta_wonder",
-  "status": "VERIFIED_SUCCESS",
+  "run_id": "run_ag_20261103_p0_continuation_repair",
+  "status": "OFFLINE_PATCH_VERIFIED_CI_GREEN",
   "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
   "branch": "local-agent/meta-wonder-coordination-repair-20261102",
-  "verified_commit": "8eea3003058a5e557b6f3b06cf72a50aa1b01777",
+  "verified_commit": "e272d3f56d0251781297e5ea59e44ffc7d544075",
   "pull_request_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/pull/256",
   "issue_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/issues/255",
+  "ci_run_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/actions/runs/41649821306",
   "worktree": "/home/rlopez/inneros/inneros_core/var/local_execution/worktrees/meta-wonder-coordination-repair-20261102",
-  "timestamp_started": "2026-11-02T23:49:00-05:00",
-  "timestamp_completed": "2026-11-03T00:51:00-05:00",
+  "timestamp_started": "2026-11-03T08:51:00-05:00",
+  "timestamp_completed": "2026-11-03T09:20:00-05:00",
   "zero_spend_guarantee": {
     "paid_secondary_agents_disabled": true,
     "automatic_retries": 0,
     "current_run_spend_usd": 0.0,
-    "meta_wonder_requires_explicit_owner_grant": true
+    "meta_wonder_requires_explicit_owner_grant": true,
+    "owner_grant_status": "BLOCKED_UNTIL_OWNER_GRANT"
   },
   "running_processes_observed": {
     "host": "inneros-5-lan (192.168.1.5)",
     "gpu_rocm_vram_free_gb": 34.15,
-    "local_vllm_port_8000": "UNREACHABLE_OFFLINE",
+    "local_models_on_disk": {
+      "path": "/home/rlopez/inneros/inneros_core/var/local_models/QuantTrio__Qwen3-Coder-30B-A3B-Instruct-AWQ",
+      "size_gb": 16.4,
+      "weights_verified": true
+    },
+    "local_vllm_port_8000": "UNREACHABLE_OFFLINE (container stopped: volume mount path mismatch)",
     "intel_ollama_port_11434": "UNREACHABLE_OFFLINE",
     "cursor_process_status": {
       "pid": 877324,
@@ -30,11 +37,26 @@
       "notification_channels": ["Home Assistant (mobile_app_infinix_x6873)", "Telegram (InnerSparkOS_Bot, msg_id 37)"]
     }
   },
+  "worker_liveness_protections": {
+    "heartbeat_threshold_seconds": 180,
+    "pid_liveness_check": "os.kill(pid, 0)",
+    "git_worktree_lock_detection": ".git/index.lock",
+    "zero_writes_on_active_worker": true,
+    "atomic_cas_filter": ["task_id", "status: claimed", "claim_token", "lease_until", "revision"],
+    "cas_modified_count_enforced": true
+  },
   "reproduced_defect": {
     "task_id": "ops_fcd8686d7fc6",
-    "defect": "Stale claimed task with expired lease (15 days overdue) trapped between dev_swarm_scheduler and ops_interactive_recovery due to claim_token filter and missing provider precedence",
+    "defect": "Stale claimed task with expired lease (15 days overdue) trapped between dev_swarm_scheduler and ops_interactive_recovery. Unconditional claim wiping produced risk of duplicate execution on active workers.",
     "reproduction_test": "platform/tests/test_ops_expired_claim_lease_recovery.py",
     "status_before": "FAIL (AssertionError: awaiting_ide_claim != awaiting_antigravity_claim)"
+  },
+  "ci_trust_boundary_fix": {
+    "test_file": "platform/tests/test_provider_execution_trust_boundary.py",
+    "symptom": "Lifecycle validation returned resource_task_not_executable before reaching owner budget grant check",
+    "fix": "Provided status 'claimed' in mock fixture so execution_resource_guard transitions cleanly to owner budget grant barrier",
+    "ci_status_before": "337 passed, 1 failed (Run 41586285095)",
+    "ci_status_after": "345 passed, 0 failed, 13 subtests passed (Run 41649821306)"
   },
   "verified_patch": {
     "files_modified": [
@@ -42,7 +64,9 @@
       "platform/inneros_core_runtime/ops_interactive_recovery.py",
       "platform/inneros_core_runtime/ops_auto_claim_admission.py",
       "platform/inneros_core_runtime/local_model_router.py",
-      "platform/scripts/antigravity_ops_headless_execute_one.py"
+      "platform/scripts/antigravity_ops_headless_execute_one.py",
+      "platform/tests/test_provider_execution_trust_boundary.py",
+      ".github/workflows/inneros-runtime-gates.yml"
     ],
     "test_files_added": [
       "platform/tests/test_ops_expired_claim_lease_recovery.py"
@@ -51,19 +75,21 @@
       "tests/test_local_model_router_fallback.py",
       "tests/test_ops_auto_claim_admission.py",
       "tests/test_ops_antigravity_false_completion_regression.py",
-      "tests/test_ops_expired_claim_lease_recovery.py"
+      "tests/test_ops_expired_claim_lease_recovery.py",
+      "tests/test_provider_execution_trust_boundary.py"
     ],
     "test_delta": {
-      "before": "40 passed, 2 failed",
-      "after": "42 passed, 0 failed in 0.48s (100% GREEN)"
+      "local_recovery_suite": "7 passed, 0 failed in 0.16s (100% GREEN)",
+      "full_ci_suite": "345 passed, 0 failed, 13 subtests passed in 33.18s (100% GREEN)"
     }
   },
   "phases": {
-    "phase_0_claim_ack": { "status": "COMPLETED", "timestamp": "2026-11-02T23:49:15-05:00" },
-    "phase_1_defect_isolation": { "status": "COMPLETED", "timestamp": "2026-11-03T00:36:00-05:00" },
-    "phase_2_local_telemetry_diagnostic": { "status": "COMPLETED", "timestamp": "2026-11-03T00:40:00-05:00" },
-    "phase_3_meta_wonder_reasoning_alignment": { "status": "COMPLETED", "timestamp": "2026-11-03T00:43:00-05:00" },
-    "phase_4_patch_and_verify": { "status": "COMPLETED", "timestamp": "2026-11-03T00:49:00-05:00" },
-    "phase_5_pr_and_evidence_published": { "status": "COMPLETED", "timestamp": "2026-11-03T00:51:00-05:00" }
+    "phase_0_claim_ack": { "status": "COMPLETED", "timestamp": "2026-11-03T08:52:00-05:00" },
+    "phase_1_task_recovery_safeguards": { "status": "COMPLETED", "timestamp": "2026-11-03T09:05:00-05:00" },
+    "phase_2_ci_general_green": { "status": "COMPLETED", "timestamp": "2026-11-03T09:10:00-05:00" },
+    "phase_3_local_qwen_hardware_telemetry": { "status": "COMPLETED", "timestamp": "2026-11-03T09:13:00-05:00" },
+    "phase_4_meta_wonder_governed_bridge": { "status": "COMPLETED_GATE_AWAITING_GRANT", "timestamp": "2026-11-03T09:15:00-05:00" },
+    "phase_5_diagnostic_comparison_matrix": { "status": "COMPLETED", "timestamp": "2026-11-03T09:18:00-05:00" },
+    "phase_6_frontend_evidence_pipeline": { "status": "COMPLETED", "timestamp": "2026-11-03T09:20:00-05:00" }
   }
 }

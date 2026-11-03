@@ -18,9 +18,11 @@ CORE_REPO = "https://github.com/Rafa-Innerchispa/innerops-agentic-platform"
 DEMO_REPO = "https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026"
 BEFORE_CI = CORE_REPO + "/actions/runs/41558176002"
 AFTER_CI = CORE_REPO + "/actions/runs/41569825744"
+PR256_CI = CORE_REPO + "/actions/runs/41649821306"
 WONDER_REPORT = DEMO_REPO + "/blob/main/docs/evidence/MUSE_WONDER_SELF_HEALING_VERIFIED_20261102.md"
 WONDER_RECEIPT = DEMO_REPO + "/blob/main/docs/evidence/meta_wonder_receipt_20261102.json"
 CORE_PR = CORE_REPO + "/pull/253"
+PR256_URL = CORE_REPO + "/pull/256"
 AUTH_PR = CORE_REPO + "/pull/252"
 
 CASES = [
@@ -58,12 +60,31 @@ CASES = [
     },
 ]
 
+PR256_CASES = [
+    {
+        "id": "F5", "name": "Worker liveness verification on expired lease recovery",
+        "component": "ops_interactive_recovery.py",
+        "symptom": "Expired lease claims freed unconditionally without checking if worker process is still alive.",
+        "fix": "Verify PID (os.kill), recent heartbeat (<180s) and git index locks. Zero writes if worker active. Multi-field CAS checking modified_count==1.",
+        "verification": "PR #256 regression suite passing (7/7 tests); zero writes on active workers.",
+        "truth": "SOURCE_CODE_AND_CI_VERIFIED",
+    },
+    {
+        "id": "F6", "name": "Provider execution trust boundary isolation",
+        "component": "test_provider_execution_trust_boundary.py",
+        "symptom": "Test fixture omitted task status 'claimed', causing lifecycle gate to block before owner budget check.",
+        "fix": "Provide status 'claimed' in mock fixture so execution_resource_guard transitions cleanly to owner budget grant barrier.",
+        "verification": "PR #256 GitHub Actions CI run 41649821306 passing 100% (345 passed, 0 failed).",
+        "truth": "TEST_CONTRACT_ADJUSTMENT",
+    },
+]
+
 def case_evidence() -> dict[str, Any]:
     """A timestamped evidence snapshot. This is not a live MongoDB adapter."""
     return {
         "schema": "inneros.meta.judge_case.v1",
         "read_only": True,
-        "snapshot_at": "2026-11-03T03:06:34Z",
+        "snapshot_at": "2026-11-03T09:10:00Z",
         "truth": "HISTORICAL_SOURCE_BACKED_SNAPSHOT",
         "summary": {
             "name": "InnerOS agent-coordination self-healing",
@@ -72,8 +93,8 @@ def case_evidence() -> dict[str, Any]:
             "claim": "Isolated code/test corrections, NOT autonomous production healing",
         },
         "live_coordination_snapshot": {
-            "recorded_at": "2026-11-03T03:06:34Z",
-            "revision": 48717,
+            "recorded_at": "2026-11-03T09:10:00Z",
+            "revision": 48719,
             "open_records": 179,
             "blocked_records": 61,
             "stale_timeout_records": 41,
@@ -96,6 +117,25 @@ def case_evidence() -> dict[str, Any]:
             "truth": "GITHUB_ACTIONS_VERIFIED",
             "scope": "Branch PR #253; code/test changes, not live deployment",
         },
+        "pr256_candidate_ci": {
+            "url": PR256_CI,
+            "passed": 345,
+            "failed": 0,
+            "subtests_passed": 13,
+            "pr_url": PR256_URL,
+            "commit": "e272d3f5",
+            "truth": "GITHUB_ACTIONS_VERIFIED",
+            "scope": "Branch PR #256; worker liveness checks, atomic CAS, CI 100% green",
+        },
+        "local_qwen_diagnostic": {
+            "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
+            "hardware": "AMD Radeon 9700 ROCm GPU (34.15 GB VRAM free)",
+            "weights_present": True,
+            "weights_path": "/home/rlopez/inneros/inneros_core/var/local_models/QuantTrio__Qwen3-Coder-30B-A3B-Instruct-AWQ",
+            "vllm_port_8000": "UNREACHABLE_OFFLINE",
+            "intel_ollama_port_11434": "UNREACHABLE_OFFLINE",
+            "truth": "AUTHENTIC_TELEMETRY_NO_INVENTED_RUN",
+        },
         "wonder": {
             "model": "muse-wonder-1.0",
             "provider": "Meta Model API",
@@ -110,6 +150,7 @@ def case_evidence() -> dict[str, Any]:
             "automatic_retries_reported": 0,
             "billing_verified_usd": None,
             "owner_approval_independently_verified": False,
+            "governed_gate_status": "BLOCKED_UNTIL_OWNER_GRANT",
             "truth": "OPERATOR_REPORTED_API_RECEIPT_UNRECONCILED",
             "receipt_url": WONDER_RECEIPT,
             "report_url": WONDER_REPORT,
@@ -117,13 +158,14 @@ def case_evidence() -> dict[str, Any]:
         },
         "release": {
             "auth_pr": AUTH_PR,
-            "code_pr": CORE_PR,
+            "code_pr": PR256_URL,
             "production_merged": False,
             "production_verified_healed": False,
             "wonder_chat_mcp_wired": False,
             "public_paid_call_enabled": False,
         },
         "cases": deepcopy(CASES),
+        "pr256_cases": deepcopy(PR256_CASES),
         "front_end_modes": {
             "physical": "Read-only live adapter where configured; virtual actuator",
             "coordination": "Historical evidence plus deterministic in-memory replay",
