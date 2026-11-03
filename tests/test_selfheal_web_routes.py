@@ -10,6 +10,8 @@ import urllib.request
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 
+from inneros_meta_guardian.context_collector import SNAPSHOT_SCHEMA
+from inneros_meta_guardian.diagnostic_orchestrator import DiagnosticOrchestrator
 from inneros_meta_guardian.engine import Guardian
 from inneros_meta_guardian.selfheal_lab import SelfHealingLab
 from inneros_meta_guardian.web import Handler
@@ -24,6 +26,7 @@ class SelfHealingWebTests(unittest.TestCase):
             pass
         TestHandler.guardian = cls.guardian
         TestHandler.selfheal_lab = SelfHealingLab()
+        TestHandler.orchestrator = DiagnosticOrchestrator()
         cls.server = ThreadingHTTPServer(("127.0.0.1", 0), TestHandler)
         cls.root = "http://127.0.0.1:" + str(cls.server.server_port)
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
@@ -60,6 +63,7 @@ class SelfHealingWebTests(unittest.TestCase):
             self.assertEqual(200, status)
             self.assertIn("text/html", mime)
             self.assertIn("Interactive self-healing replay", html)
+            self.assertIn("5-Panel Muse &amp; Qwen Investigation Console", html)
             self.assertIn("SAFE REPLAY", html)
             self.assertIn("never calls the Meta API", html)
             self.assertIn("not a production release", html)
@@ -72,6 +76,7 @@ class SelfHealingWebTests(unittest.TestCase):
         self.assertEqual(200, status)
         self.assertIn("text/css", mime)
         self.assertIn(".lab-layout", css)
+        self.assertIn(".console-5grid", css)
 
     def test_evidence_snapshot_route_does_not_claim_wonder_connected(self):
         code, raw, mime = self.get("/api/selfheal/case")
@@ -82,6 +87,32 @@ class SelfHealingWebTests(unittest.TestCase):
         self.assertFalse(data["release"]["wonder_chat_mcp_wired"])
         self.assertFalse(data["release"]["production_verified_healed"])
         self.assertFalse(data["wonder"]["owner_approval_independently_verified"])
+
+    def test_orchestrator_snapshot_and_investigation_routes(self):
+        code, raw, mime = self.get("/api/orchestrator/snapshot")
+        self.assertEqual(200, code)
+        self.assertIn("application/json", mime)
+        snap = json.loads(raw)
+        self.assertEqual(SNAPSHOT_SCHEMA, snap["schema"])
+        self.assertEqual(64, len(snap["snapshot_sha256"]))
+
+        code, session = self.post("/api/orchestrator/investigate", {
+            "prompt": "Analiza por qué existen tareas pendientes sin ejecutarse.",
+            "engine_mode": "hybrid_comparison",
+        })
+        self.assertEqual(201, code)
+        self.assertEqual("COMPLETED_VERIFIED", session["status"])
+        self.assertGreaterEqual(len(session["tool_history"]), 3)
+        sid = session["session_id"]
+
+        code, fetched_raw, _ = self.get("/api/orchestrator/sessions/" + sid)
+        self.assertEqual(200, code)
+        fetched = json.loads(fetched_raw)
+        self.assertEqual(sid, fetched["session_id"])
+
+        code, cancelled = self.post("/api/orchestrator/sessions/" + sid + "/cancel", {})
+        self.assertEqual(200, code)
+        self.assertEqual("CANCELLED", cancelled["status"])
 
     def test_sandbox_lifecycle_enforces_order_and_exports_proof(self):
         code, state = self.post("/api/selfheal/labs", {"scenario": "stale_agent_claim"})

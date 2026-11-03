@@ -1,0 +1,36 @@
+{
+  "schema": "inneros.qwen.tool_investigation_receipt.v1",
+  "status": "REAL_SUCCESS",
+  "provider": "vllm-rocm-local",
+  "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
+  "hardware": "AMD Radeon AI PRO R9700 (ROCm 10.1)",
+  "timestamp": "2026-11-03T21:16:00.158828+00:00",
+  "turns": 2,
+  "total_latency_ms": 6440.31,
+  "turn_1": {
+    "latency_ms": 3168.74,
+    "usage": {
+      "prompt_tokens": 358,
+      "total_tokens": 562,
+      "completion_tokens": 204
+    },
+    "prompt_sha256": "61ca8837af41c6a2e107bfc2b9d7633280d9310bb5718d6bab3eba7c32b65223",
+    "output": "{\n  \"requested_tools\": [\n    {\n      \"name\": \"get_pending_tasks\",\n      \"arguments\": {\n        \"task_id\": \"ops_4e977fd8ec43\"\n      }\n    },\n    {\n      \"name\": \"get_pending_tasks\",\n      \"arguments\": {\n        \"task_id\": \"ops_fcd8686d7fc6\"\n      }\n    },\n    {\n      \"name\": \"get_worker_health\",\n      \"arguments\": {}\n    }\n  ],\n  \"initial_hypotheses\": [\n    \"ops_4e977fd8ec43 is stuck because it's awaiting an antigravity claim that hasn't been fulfilled, possibly due to resource unavailability or worker exhaustion.\",\n    \"ops_fcd8686d7fc6 is stuck because its claimed worker 'ralfiia-amd' has a lease that expired 15 days ago, indicating a stale claim or failed cleanup process.\"\n  ]\n}"
+  },
+  "turn_2": {
+    "latency_ms": 3271.57,
+    "usage": {
+      "prompt_tokens": 795,
+      "total_tokens": 960,
+      "completion_tokens": 165
+    },
+    "prompt_sha256": "ed400a3cb7a9794944bbc10eb48040cf81ea6aa481afc4b1e62d5b77744de20d",
+    "output": "{\n  \"requested_tools\": [],\n  \"initial_hypotheses\": [\n    \"ops_4e977fd8ec43 is stuck due to a temporal workflow mismatch - the task references a workflow that doesn't exist, likely caused by incomplete cleanup of stale workflows after worker failures.\",\n    \"ops_fcd8686d7fc6 is stuck due to a stale worker claim with expired lease - the worker 'ralfiia-amd' has a 15-day expired lease, suggesting either a failure to properly release resources or a race condition in claim management.\",\n    \"The root cause for both tasks involves improper resource lifecycle management in the ops_interactive_recovery.py module, specifically unsafe process validation and git lock handling that could lead to false positives in worker status checks.\"\n  ]\n}"
+  },
+  "aggregate_usage": {
+    "prompt_tokens": 1153,
+    "completion_tokens": 369,
+    "total_tokens": 1522
+  },
+  "cost_usd": 0.0
+}

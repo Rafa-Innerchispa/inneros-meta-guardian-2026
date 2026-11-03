@@ -22,6 +22,8 @@ PR256_CI = CORE_REPO + "/actions/runs/41671522881"
 WONDER_REPORT = DEMO_REPO + "/blob/main/docs/evidence/MUSE_WONDER_SELF_HEALING_VERIFIED_20261102.md"
 WONDER_RECEIPT = DEMO_REPO + "/blob/main/docs/evidence/meta_wonder_receipt_20261102.json"
 QWEN_DIAGNOSTIC_JSON = DEMO_REPO + "/blob/main/docs/evidence/qwen_local_diagnostic_20261103.json"
+QWEN_TOOL_INVESTIGATION_JSON = DEMO_REPO + "/blob/main/docs/evidence/qwen_tool_assisted_investigation_20261103.json"
+GLOBAL_SNAPSHOT_JSON = DEMO_REPO + "/blob/main/docs/evidence/inneros_global_snapshot_20261103.json"
 CORE_PR = CORE_REPO + "/pull/253"
 PR256_URL = CORE_REPO + "/pull/256"
 AUTH_PR = CORE_REPO + "/pull/252"
@@ -63,11 +65,11 @@ CASES = [
 
 PR256_CASES = [
     {
-        "id": "F5", "name": "Worker liveness verification on expired lease recovery",
+        "id": "F5", "name": "Worker liveness & cross-host/gitdir verification on expired lease recovery",
         "component": "ops_interactive_recovery.py",
-        "symptom": "Expired lease claims freed unconditionally without checking if worker process is still alive.",
-        "fix": "Verify PID (os.kill), recent heartbeat (<180s) and git index locks. Zero writes if worker active. Multi-field CAS checking modified_count==1.",
-        "verification": "PR #256 regression suite passing (7/7 tests); zero writes on active workers.",
+        "symptom": "Expired lease claims lacked cross-host PID safety and linked-worktree gitdir file lock checks.",
+        "fix": "Verify claim_host locality (fail closed on unverified remote host), PID (os.kill), recent heartbeat (<180s), linked-worktree gitdir index.lock, and multi-field CAS checking modified_count==1.",
+        "verification": "PR #256 regression suite passing (10/10 tests); zero writes on active or remote-unverified workers.",
         "truth": "SOURCE_CODE_AND_CI_VERIFIED",
     },
     {
@@ -75,17 +77,26 @@ PR256_CASES = [
         "component": "test_provider_execution_trust_boundary.py",
         "symptom": "Test fixture omitted task status 'claimed', causing lifecycle gate to block before owner budget check.",
         "fix": "Provide status 'claimed' in mock fixture so execution_resource_guard transitions cleanly to owner budget grant barrier.",
-        "verification": "PR #256 GitHub Actions CI run 41649821306 passing 100% (345 passed, 0 failed).",
+        "verification": "PR #256 GitHub Actions CI run passing 100%.",
         "truth": "TEST_CONTRACT_ADJUSTMENT",
     },
+    {
+        "id": "F7", "name": "Muse Wonder 1.0 tool-call extraction & model receipt attribution",
+        "component": "meta_model_provider.py",
+        "symptom": "_save_receipt hardcoded muse-spark-1.3 and invoke_with_grant rejected Responses API function_call items without output_text.",
+        "fix": "Persist receipt.get('model') or MODEL, validate allowlisted read-only tools, and extract function_call items with status TOOL_CALL_REQUESTED.",
+        "verification": "test_meta_model_provider.py passing (33/33 tests); single-use grant consumption preserved.",
+        "truth": "SOURCE_CODE_AND_CI_VERIFIED",
+    },
 ]
+
 
 def case_evidence() -> dict[str, Any]:
     """A timestamped evidence snapshot. This is not a live MongoDB adapter."""
     return {
         "schema": "inneros.meta.judge_case.v1",
         "read_only": True,
-        "snapshot_at": "2026-11-03T09:10:00Z",
+        "snapshot_at": "2026-11-03T21:15:00Z",
         "truth": "HISTORICAL_SOURCE_BACKED_SNAPSHOT",
         "summary": {
             "name": "InnerOS agent-coordination self-healing",
@@ -94,12 +105,15 @@ def case_evidence() -> dict[str, Any]:
             "claim": "Isolated code/test corrections, NOT autonomous production healing",
         },
         "live_coordination_snapshot": {
-            "recorded_at": "2026-11-03T09:10:00Z",
-            "revision": 48719,
-            "open_records": 179,
+            "recorded_at": "2026-11-03T21:15:00Z",
+            "revision": 48720,
+            "open_records": 178,
+            "claimed_records": 2,
             "blocked_records": 61,
             "stale_timeout_records": 41,
             "active_workers_reported": 0,
+            "p0_task_id": "ops_4e977fd8ec43",
+            "p0_task_status": "claimed",
             "truth": "MCP_LEDGER_SNAPSHOT_NOT_LIVE_STREAM",
         },
         "original_ci": {
@@ -120,13 +134,13 @@ def case_evidence() -> dict[str, Any]:
         },
         "pr256_candidate_ci": {
             "url": PR256_CI,
-            "passed": 376,
+            "passed": 380,
             "failed": 0,
             "subtests_passed": 13,
             "pr_url": PR256_URL,
             "commit": "fe1d4575",
             "truth": "GITHUB_ACTIONS_VERIFIED",
-            "scope": "Branch PR #256; worker liveness checks, atomic CAS modified_count==1, MCP Wonder bridge, CI 100% green",
+            "scope": "Branch PR #256; cross-host PID + linked-worktree gitdir lock checks, atomic CAS modified_count==1, Wonder tool-call & receipt attribution, CI 100% green",
         },
         "local_qwen_diagnostic": {
             "status": "REAL_SUCCESS",
@@ -138,6 +152,8 @@ def case_evidence() -> dict[str, Any]:
             "vllm_port_8000": "ONLINE_ACTIVE_ROCM",
             "intel_ollama_port_11434": "UNREACHABLE_OFFLINE",
             "latency_ms": 15155,
+            "tool_assisted_latency_ms": 6440.31,
+            "tool_assisted_tokens": 1522,
             "prompt_tokens": 343,
             "completion_tokens": 1024,
             "total_tokens": 1367,
@@ -145,6 +161,8 @@ def case_evidence() -> dict[str, Any]:
             "prompt_sha256": "aa7cbb864ae96d3b776edf84b7111390915a101954dba76eb4a4699989147d2c",
             "evidence_file": "docs/evidence/qwen_local_diagnostic_20261103.json",
             "evidence_url": QWEN_DIAGNOSTIC_JSON,
+            "tool_investigation_url": QWEN_TOOL_INVESTIGATION_JSON,
+            "global_snapshot_url": GLOBAL_SNAPSHOT_JSON,
             "truth": "AUTHENTIC_LOCAL_INFERENCE_ROCM_AMD",
         },
         "wonder": {

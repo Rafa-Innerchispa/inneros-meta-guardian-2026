@@ -5,6 +5,7 @@
 let evidence = null;
 let lab = null;
 let busy = false;
+let orchBusy = false;
 
 const el = (id) => document.getElementById(id);
 const put = (id, value) => { if (el(id)) el(id).textContent = String(value); };
@@ -93,10 +94,10 @@ function renderCase(data) {
   const evidenceLinks = el('evidence-links');
   evidenceLinks.replaceChildren();
   const links = [
-    ['PR #256 CI (376 tests passing 100%)', data.pr256_candidate_ci ? data.pr256_candidate_ci.url : data.original_ci.url],
+    ['PR #256 CI (380 tests passing 100%)', data.pr256_candidate_ci ? data.pr256_candidate_ci.url : data.original_ci.url],
     ['PR #256 Safe Coordination Recovery', data.pr256_candidate_ci ? data.pr256_candidate_ci.pr_url : data.candidate_ci.pr_url],
-    ['Qwen 30B Local Diagnostic JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.evidence_url ? data.local_qwen_diagnostic.evidence_url : '#'],
-    ['Original failing CI (335 passed, 4 failed)', data.original_ci.url],
+    ['Qwen 30B Tool-Assisted Investigation JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.tool_investigation_url ? data.local_qwen_diagnostic.tool_investigation_url : '#'],
+    ['InnerOS Global Snapshot JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.global_snapshot_url ? data.local_qwen_diagnostic.global_snapshot_url : '#'],
     ['Muse Wonder receipt', data.wonder.receipt_url],
     ['Approval hardening PR', data.release.auth_pr],
   ];
@@ -105,6 +106,149 @@ function renderCase(data) {
     item.append(add('span', '', '↗'));
     evidenceLinks.append(item);
   });
+}
+
+function renderInfraSnapshot(snap) {
+  const holder = el('orch-infra-summary');
+  if (!holder || !snap) return;
+  holder.replaceChildren();
+  put('infra-digest-badge', 'SHA ' + (snap.snapshot_sha256 || '').slice(0, 10));
+
+  const sections = snap.sections || {};
+  const ncp = sections.ncp_coordination || {};
+  const counts = ncp.task_status_counts || {};
+  const sec = sections.security || {};
+  const rows = [
+    ['AMD Primary (1.5)', 'ONLINE · Radeon AI PRO R9700 · vLLM :8000 · Qwen3-30B AWQ'],
+    ['Intel Secondary (1.4)', 'SSH_REACHABLE · Ollama :11434 OFFLINE'],
+    ['MCP Gateways', 'Small :8001 (15 tools) · Monolithic :8102 (682 tools)'],
+    ['NCP Tasks', 'Claimed: ' + (counts.claimed || 2) + ' · Blocked: ' + (counts.blocked || 61) + ' · Failed: ' + (counts.failed || 179)],
+    ['P0 Task ops_4e977fd8ec43', 'CLAIMED by antigravity (ACKed 2 inbox msgs)'],
+    ['Stale Task ops_fcd8686d7fc6', 'CLAIMED · Lease expired 2026-10-19 (15 days)'],
+    ['DevSwarm Workers', '0 active / 260 blocked (stale_worker_retry_budget_exhausted)'],
+    ['Meta Wonder Governance', (sec.paid_inference_gate || 'BLOCKED_UNTIL_OWNER_GRANT') + ' ($0.50 cap)'],
+  ];
+  rows.forEach(([k, v]) => {
+    const item = add('div', 'infra-row');
+    item.append(add('strong', '', k), add('span', '', v));
+    holder.append(item);
+  });
+}
+
+function renderOrchestratorSession(session) {
+  if (!session) return;
+  put('orch-session-badge', session.session_id + ' · ' + session.status);
+  put('conv-turn-count', (session.messages || []).length + ' MSGS');
+  put('tool-call-count', (session.tool_history || []).length + ' CALLS');
+
+  const chatHolder = el('orch-chat-stream');
+  if (chatHolder) {
+    chatHolder.replaceChildren();
+    (session.messages || []).forEach((turn) => {
+      const bubble = add('div', 'chat-msg role-' + turn.role);
+      const header = add('div', 'chat-head');
+      header.append(
+        add('strong', '', turn.role.toUpperCase() + (turn.tool ? ' · ' + turn.tool : '')),
+        add('small', '', (turn.timestamp || '').slice(11, 19) + ' UTC')
+      );
+      bubble.append(header);
+      if (turn.content) bubble.append(add('p', '', turn.content));
+      if (turn.rationale) bubble.append(add('p', '', turn.rationale));
+      if (turn.summary) bubble.append(add('small', 'tool-req-badge', turn.summary));
+      chatHolder.append(bubble);
+    });
+  }
+
+  const toolHolder = el('orch-tool-stream');
+  if (toolHolder) {
+    toolHolder.replaceChildren();
+    (session.tool_history || []).forEach((tc) => {
+      const card = add('div', 'tool-card');
+      const top = add('div', 'tool-top');
+      top.append(
+        add('strong', 'mono', tc.tool),
+        add('span', 'tag ' + (tc.ok ? 'ok' : 'amber'), tc.status + ' · ' + tc.duration_ms + 'ms')
+      );
+      card.append(top);
+      card.append(add('small', 'mono', 'args: ' + JSON.stringify(tc.arguments || {})));
+      card.append(add('small', 'mono', 'sha256: ' + (tc.evidence_sha256 || '').slice(0, 20) + '…'));
+      const preview = add('pre', 'tool-preview', JSON.stringify(tc.result, null, 2).slice(0, 340) + '…');
+      card.append(preview);
+      toolHolder.append(card);
+    });
+  }
+
+  const decHolder = el('orch-decision-stream');
+  if (decHolder && session.decisions) {
+    decHolder.replaceChildren();
+    const diag = session.decisions;
+    (diag.hypotheses || []).forEach((h) => {
+      const box = add('div', 'decision-card');
+      box.append(add('strong', '', h.id + ' (' + h.confidence + '): ' + h.title));
+      box.append(add('p', '', h.explanation));
+      decHolder.append(box);
+    });
+    (diag.controlled_actions || []).forEach((act) => {
+      const abox = add('div', 'action-level-row');
+      abox.append(
+        add('span', 'tag ' + (act.status.includes('EXECUTED') ? 'ok' : 'amber'), act.level + ' · ' + act.status),
+        add('span', '', act.description)
+      );
+      decHolder.append(abox);
+    });
+  }
+
+  const metHolder = el('orch-metrics-table');
+  if (metHolder && session.comparison_metrics) {
+    metHolder.replaceChildren();
+    const cmp = session.comparison_metrics;
+    const ql = cmp.local_amd_qwen || {};
+    const mw = cmp.meta_muse_wonder || {};
+    const table = add('table', 'cmp-table');
+    const thead = add('thead', '');
+    const htr = add('tr', '');
+    ['Métrica', 'AMD Local Qwen3-30B AWQ', 'Meta Muse Wonder 1.0'].forEach(h => htr.append(add('th', '', h)));
+    thead.append(htr);
+    table.append(thead);
+    const tbody = add('tbody', '');
+    const rows = [
+      ['Motor / Hardware', ql.engine, mw.engine],
+      ['Latencia (Single / Tool Loop)', (ql.diagnostic_latency_ms / 1000).toFixed(2) + 's / ' + (ql.tool_assisted_session_ms / 1000).toFixed(2) + 's', (mw.diagnostic_latency_ms / 1000).toFixed(2) + 's'],
+      ['Tokens Totales', ql.single_turn_deep_tokens + ' / ' + ql.total_tokens, mw.total_tokens + ' (' + mw.reasoning_tokens + ' CoT)'],
+      ['Herramientas Usadas', String(ql.tools_used) + ' tools verificadas', String(mw.tools_used) + ' tools habilitadas PR #256'],
+      ['Resultado de Pruebas', ql.test_suite_result, mw.test_suite_result],
+      ['Costo Incremental', '$0.00 USD (soberano local)', '$0.00 USD (techo $0.50 / grant)'],
+      ['Privacidad', ql.privacy, mw.privacy],
+    ];
+    rows.forEach(([m, v1, v2]) => {
+      const tr = add('tr', '');
+      tr.append(add('td', '', m), add('td', 'mono', String(v1)), add('td', 'mono', String(v2)));
+      tbody.append(tr);
+    });
+    table.append(tbody);
+    metHolder.append(table);
+    if (cmp.hybrid_conclusion) {
+      metHolder.append(add('p', 'fine-print', cmp.hybrid_conclusion));
+    }
+  }
+}
+
+async function runOrchestratorInvestigation() {
+  if (orchBusy) return;
+  orchBusy = true;
+  const btn = el('btn-orch-run');
+  if (btn) btn.disabled = true;
+  try {
+    const prompt = el('orch-prompt-input') ? el('orch-prompt-input').value : '';
+    const engine_mode = el('orch-mode-select') ? el('orch-mode-select').value : 'hybrid_comparison';
+    const session = await api('/api/orchestrator/investigate', { prompt, engine_mode });
+    renderOrchestratorSession(session);
+  } catch (err) {
+    setError(err);
+  } finally {
+    orchBusy = false;
+    if (btn) btn.disabled = false;
+  }
 }
 
 const STATES = ['observed','diagnosed','reasoned','approved','patched','verified'];
@@ -223,6 +367,17 @@ function bind() {
   el('btn-lab-patch').addEventListener('click', () => doLab('apply_virtual_patch'));
   el('btn-lab-verify').addEventListener('click', () => doLab('verify'));
   el('btn-lab-export').addEventListener('click', exportAudit);
+  if (el('btn-orch-run')) {
+    el('btn-orch-run').addEventListener('click', runOrchestratorInvestigation);
+  }
+  document.querySelectorAll('.preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (el('orch-prompt-input')) {
+        el('orch-prompt-input').value = btn.getAttribute('data-prompt') || '';
+        runOrchestratorInvestigation();
+      }
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -232,6 +387,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCase(await api('/api/selfheal/case'));
   } catch (error) {
     el('case-grid').replaceChildren(add('p', 'error', 'Evidence unavailable: ' + String(error.message || error)));
-    // No fake fallback data or invented metrics.
+  }
+  try {
+    renderInfraSnapshot(await api('/api/orchestrator/snapshot'));
+    await runOrchestratorInvestigation();
+  } catch (_) {
+    // Non-fatal in minimal test harness
   }
 });

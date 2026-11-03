@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from .diagnostic_orchestrator import ORCHESTRATOR, OrchestratorError
 from .engine import Guardian, LifecycleError
 from .integrations import VoiceOpsRecordedReceipt
 from .meta_once import GRANT_STORE, GrantError
@@ -22,7 +23,8 @@ STATIC = Path(__file__).parent / "static"
 class Handler(BaseHTTPRequestHandler):
     guardian: Guardian
     selfheal_lab = SelfHealingLab()  # process-local, isolated demo only
-    server_version = "InnerOSMetaGuardian/1.1"
+    orchestrator = ORCHESTRATOR
+    server_version = "InnerOSMetaGuardian/1.2"
 
     def _write(self, status: int, content: bytes, mime: str = "application/json; charset=utf-8") -> None:
         self.send_response(status)
@@ -71,6 +73,14 @@ class Handler(BaseHTTPRequestHandler):
             self._static("self-heal.css", "text/css; charset=utf-8")
         elif path == "/api/selfheal/case":
             self._json(200, case_evidence())
+        elif path == "/api/orchestrator/snapshot":
+            self._json(200, self.orchestrator.get_global_snapshot())
+        elif path.startswith("/api/orchestrator/sessions/") and len(path.strip("/").split("/")) == 4:
+            sid = path.strip("/").split("/")[3]
+            try:
+                self._json(200, self.orchestrator.get_session(sid))
+            except OrchestratorError as exc:
+                self._json(404, {"error": str(exc)})
         elif path.startswith("/api/selfheal/labs/") and path.endswith("/evidence"):
             parts = path.strip("/").split("/")
             if len(parts) != 5:
@@ -139,7 +149,29 @@ class Handler(BaseHTTPRequestHandler):
         path = urlsplit(self.path).path
         try:
             body = self._body() if self.headers.get("Content-Length") else {}
-            
+
+            # Autonomous tool-calling diagnostic orchestrator (read-only + simulation tools, zero paid calls)
+            if path == "/api/orchestrator/investigate":
+                session = self.orchestrator.start_investigation(
+                    prompt=str(body.get("prompt") or ""),
+                    engine_mode=str(body.get("engine_mode") or "hybrid_comparison"),
+                    max_tool_calls=int(body.get("max_tool_calls", 6)),
+                    max_tokens=int(body.get("max_tokens", 4096)),
+                    max_cost_usd=float(body.get("max_cost_usd", 0.50)),
+                )
+                self._json(201, session)
+                return
+
+            if path.startswith("/api/orchestrator/sessions/") and path.endswith("/cancel"):
+                parts = path.strip("/").split("/")
+                if len(parts) != 5:
+                    self._json(404, {"error": "Not found"})
+                    return
+                self._json(200, self.orchestrator.cancel_session(
+                    parts[3], reason=str(body.get("reason") or "operator_cancelled")
+                ))
+                return
+
             # Separate demo-only self-healing replay. No real agents or model calls.
             if path == "/api/selfheal/labs":
                 self._json(201, self.selfheal_lab.start(
@@ -205,7 +237,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             self._json(404, {"error": "Unknown route"})
-        except (LifecycleError, GrantError, LabError, ValueError) as exc:
+        except (LifecycleError, GrantError, LabError, OrchestratorError, ValueError) as exc:
             self._json(409, {"error": str(exc)})
         except Exception as exc:
             self._json(500, {"error": f"Internal application error: {type(exc).__name__}"})

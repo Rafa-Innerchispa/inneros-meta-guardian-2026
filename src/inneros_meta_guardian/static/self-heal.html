@@ -20,6 +20,7 @@
     <nav aria-label="Primary navigation">
       <a href="/" class="nav">Physical Guardian</a>
       <a href="/self-heal" class="nav active" aria-current="page">Self-Healing Lab</a>
+      <a href="#investigator" class="nav">Autonomous Investigator</a>
       <a href="#evidence" class="nav">Forensic Evidence</a>
     </nav>
     <span class="chip security-chip"><span class="status-dot"></span> SAFE REPLAY · NO PAID CALLS</span>
@@ -32,16 +33,17 @@
         <h1 id="heading">An AI system that can <span>investigate itself.</span></h1>
         <p class="lead">InnerOS protects physical infrastructure. But what happens when the agents protecting it fail? We detect coordination defects, compare local diagnosis with Meta Muse Wonder 1.0, and prove the resulting code changes with independent tests.</p>
         <div class="hero-actions">
-          <a class="primary" href="#lab">Run safe self-healing replay <span aria-hidden="true">↘</span></a>
+          <a class="primary" href="#investigator">Launch Autonomous Investigator <span aria-hidden="true">↘</span></a>
+          <a class="secondary" href="#lab">Run safe self-healing replay <span aria-hidden="true">↘</span></a>
           <a class="secondary" href="#forensics">Inspect real evidence <span aria-hidden="true">↗</span></a>
         </div>
-        <p class="truth-line">REAL HISTORICAL EVIDENCE <span>+</span> EXPLICITLY LABELED IN-MEMORY SIMULATION</p>
+        <p class="truth-line">REAL HISTORICAL EVIDENCE <span>+</span> GOVERNED MULTI-TURN TOOL ORCHESTRATOR</p>
       </div>
       <div class="hero-map" aria-label="Seven-stage governed repair loop">
         <div class="map-caption">INNEROS CONTROL PLANE <span>FLOW / 001</span></div>
-        <div class="node node-top"><span class="node-symbol">◎</span><div><strong>OBSERVE</strong><small>Agent coordination signals</small></div><b>01</b></div>
+        <div class="node node-top"><span class="node-symbol">◎</span><div><strong>OBSERVE</strong><small>Context Collector snapshot</small></div><b>01</b></div>
         <div class="connector"><i></i></div>
-        <div class="node"><span class="node-symbol local">◈</span><div><strong>LOCAL REASON</strong><small>AMD / Qwen is the priority</small></div><b>02</b></div>
+        <div class="node"><span class="node-symbol local">◈</span><div><strong>LOCAL REASON</strong><small>AMD / Qwen 30B with tools</small></div><b>02</b></div>
         <div class="connector"><i></i></div>
         <div class="node focus"><span class="node-symbol meta">✳</span><div><strong>META MUSE WONDER 1.0</strong><small>Escalate with scoped authorization</small></div><b>03</b></div>
         <div class="connector"><i></i></div>
@@ -62,8 +64,80 @@
       <div class="metric"><small>WONDER REPORTED LATENCY</small><div><strong id="metric-latency">—</strong><span>seconds</span></div><p>Provider-origin proof pending</p></div>
     </section>
 
+    <!-- 5-PANEL AUTONOMOUS INVESTIGATION CONSOLE -->
+    <section id="investigator" class="section" aria-label="Autonomous Investigation Console">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">00 / AUTONOMOUS DIAGNOSTIC ORCHESTRATOR</p>
+          <h2>5-Panel Muse &amp; Qwen Investigation Console</h2>
+          <p>Direct diagnostic chat connected to the InnerOS Context Collector (`inneros_global_snapshot.json`) and allowlisted read-only tools (`get_ncp_state`, `get_pending_tasks`, `get_worker_health`, `get_agent_task_history`, `get_mcp_gateway_health`, `get_recent_errors`, `get_repo_status`, `read_source_file`, `read_log_excerpt`).</p>
+        </div>
+        <span id="orch-session-badge" class="tag ok">READY · ZERO SPEND</span>
+      </div>
+
+      <div class="orch-prompt-bar">
+        <div class="orch-presets">
+          <button type="button" class="preset-btn" data-prompt="Analiza por qué existen tareas pendientes sin ejecutarse en InnerOS.">1 · Tareas pendientes (`ops_4e977fd8ec43`)</button>
+          <button type="button" class="preset-btn" data-prompt="Inspecciona el estado de los workers y explica por qué ninguno toma trabajo.">2 · Estado de workers (0 activos / 260 agotados)</button>
+          <button type="button" class="preset-btn" data-prompt="Revisa la coordinación entre NCP, MCP 8001 y MCP 8102.">3 · Coordinación NCP + MCP 8001/8102</button>
+          <button type="button" class="preset-btn" data-prompt="Evalúa qué pasaría si el servidor Intel 1.4 queda fuera de servicio.">4 · Failover Intel 1.4 → AMD 1.5</button>
+          <button type="button" class="preset-btn" data-prompt="Propón un plan de reparación seguro para el PR #256.">5 · Plan de reparación PR #256</button>
+        </div>
+        <div class="orch-input-row">
+          <input id="orch-prompt-input" type="text" value="Investiga por qué InnerOS tiene tareas pendientes sin ejecutarse y por qué los workers no están tomando trabajo." maxlength="500" aria-label="Diagnostic prompt">
+          <select id="orch-mode-select" aria-label="Investigation engine">
+            <option value="muse_wonder_governed_replay">Meta Muse Wonder 1.0 + Qwen 30B (Governed Tool Loop)</option>
+            <option value="qwen_local_tool_loop">Local AMD Qwen3-Coder-30B AWQ (ROCm Tool Loop)</option>
+          </select>
+          <button type="button" id="btn-orch-run" class="primary">Investigar con Herramientas ↘</button>
+        </div>
+      </div>
+
+      <div class="console-5grid">
+        <!-- PANEL 1: CONVERSATION -->
+        <article class="console-panel span-2" id="panel-conversation">
+          <div class="panel-title">1 · PANEL DE CONVERSACIÓN (MENSAJES Y RAZONAMIENTO) <span id="conv-turn-count">0 TURNOS</span></div>
+          <div class="chat-stream" id="orch-chat-stream" aria-live="polite">
+            <p class="empty">Cargando sesión de investigación autónoma con herramientas...</p>
+          </div>
+        </article>
+
+        <!-- PANEL 2: TOOLS -->
+        <article class="console-panel" id="panel-tools">
+          <div class="panel-title">2 · PANEL DE HERRAMIENTAS (TOOL CALL GATEWAY) <span id="tool-call-count">0 CALLS</span></div>
+          <div class="tool-stream" id="orch-tool-stream">
+            <p class="empty">Ninguna herramienta invocada aún.</p>
+          </div>
+        </article>
+
+        <!-- PANEL 3: INFRASTRUCTURE -->
+        <article class="console-panel" id="panel-infra">
+          <div class="panel-title">3 · PANEL DE INFRAESTRUCTURA (`inneros_global_snapshot.json`) <span id="infra-digest-badge">SHA-256</span></div>
+          <div class="infra-summary" id="orch-infra-summary">
+            <p class="empty">Cargando snapshot global de InnerOS...</p>
+          </div>
+        </article>
+
+        <!-- PANEL 4: DECISIONS & CONTROLLED ACTIONS -->
+        <article class="console-panel" id="panel-decisions">
+          <div class="panel-title">4 · PANEL DE DECISIONES (HIPÓTESIS Y REPARACIÓN NIVEL 0-3) <span id="decision-count">3 HIPÓTESIS</span></div>
+          <div class="decision-stream" id="orch-decision-stream">
+            <p class="empty">Ejecuta una investigación para ver hipótesis y niveles de reparación.</p>
+          </div>
+        </article>
+
+        <!-- PANEL 5: COMPARATIVE METRICS -->
+        <article class="console-panel" id="panel-metrics">
+          <div class="panel-title">5 · PANEL DE MÉTRICAS (QWEN 30B LOCAL VS META MUSE WONDER 1.0) <span>BENCHMARK REAL</span></div>
+          <div class="metrics-table-wrap" id="orch-metrics-table">
+            <p class="empty">Cargando tabla comparativa verificada...</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section id="forensics" class="section">
-      <div class="section-heading"><div><p class="eyebrow">01 / INVESTIGATE</p><h2>The real coordination incident</h2><p>Four failing automated contracts in InnerOS. Each diagnosis is classified by the evidence that actually supports it.</p></div><a id="baseline-link" class="text-link" href="#" target="_blank" rel="noopener noreferrer">Original GitHub CI ↗</a></div>
+      <div class="section-heading"><div><p class="eyebrow">01 / INVESTIGATE</p><h2>The real coordination incident</h2><p>Seven failing automated contracts and safety gaps in InnerOS. Each diagnosis is classified by the evidence that actually supports it.</p></div><a id="baseline-link" class="text-link" href="#" target="_blank" rel="noopener noreferrer">Original GitHub CI ↗</a></div>
       <div class="cases" id="case-grid" aria-live="polite"><p>Loading source-backed evidence…</p></div>
     </section>
 
@@ -81,7 +155,7 @@
             <div><small>LATENCY</small><strong id="local-latency">15.16s</strong></div>
           </div>
           <div class="divider"></div>
-          <p class="fine-print"><span class="status-dot"></span> vLLM repaired on AMD ROCm 10.1 (Radeon AI PRO R9700). Authentic diagnosis executed with prompt hash aa7cbb86... ($0.00 cost).</p>
+          <p class="fine-print"><span class="status-dot"></span> vLLM repaired on AMD ROCm 10.1 (Radeon AI PRO R9700). Multi-turn tool-assisted investigation executed in 6.44s (1,522 tokens, $0.00 cost).</p>
           <a id="qwen-report-link" class="text-link" href="#" target="_blank" rel="noopener noreferrer">Open Qwen 30B diagnostic JSON ↗</a>
         </article>
         <article class="compare-panel meta-panel">
@@ -141,10 +215,10 @@
         <div class="proof-stat"><small>ORIGINAL CASE</small><strong><span id="proof-before-pass">—</span> PASSED</strong><span id="proof-before-fail">— FAILED</span></div>
         <span class="proof-arrow" aria-hidden="true">→</span>
         <div class="proof-stat good"><small>CLEAN CANDIDATE PR</small><strong><span id="proof-after-pass">—</span> PASSED</strong><span id="proof-after-fail">— FAILED</span></div>
-        <div class="proof-note"><strong>Scope matters.</strong><p>The passing candidate includes test-fixture updates as well as two production-code repairs. This is a verified CI result, not proof that the live coordination backlog has been cleared.</p></div>
+        <div class="proof-note"><strong>Scope matters.</strong><p>The passing candidate includes test-fixture updates as well as production-code repairs. This is a verified CI result, not proof that the live coordination backlog has been cleared.</p></div>
       </div>
       <div class="links" id="evidence-links" aria-label="Independent evidence links"></div>
-      <div class="delivery-status"><strong>Deployment / submission status</strong><p>PR #256 verified green in GitHub CI (376 passed, run 41671522881). Safe agent recovery (PID/heartbeat/locks/atomic CAS) and MCP Wonder bridge integrated, but remains a candidate and not a production release. Local Qwen 30B operational on AMD ROCm (15.16s, $0.00). Frontier Meta calls remain fail-closed awaiting Owner authorization.</p></div>
+      <div class="delivery-status"><strong>Deployment / submission status</strong><p>PR #256 verified green in GitHub CI (380 passed). Safe agent recovery (cross-host claim_host check, PID/heartbeat/linked-worktree gitdir locks/atomic CAS) and MCP Wonder tool-call bridge integrated, but remains a candidate and not a production release. Local Qwen 30B operational on AMD ROCm (15.16s single-shot / 6.44s 2-turn tool loop, $0.00). Frontier Meta calls remain fail-closed awaiting Owner authorization.</p></div>
     </section>
   </main>
 
