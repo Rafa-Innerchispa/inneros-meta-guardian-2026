@@ -1,0 +1,98 @@
+{
+  "schema": "inneros.argon_independent_benchmark_receipt.v1",
+  "identity": {
+    "experiment_id": "argon_independent_repair_20261104",
+    "provider": "Google Antigravity IDE",
+    "selector_visible_name": "Gemini 4 Argon (Medium)",
+    "requested_model_id": "Gemini 4 Argon (Medium)",
+    "effective_model_id": "MODEL_ID_UNVERIFIED",
+    "model_identity_verified": false,
+    "model_verification_detail": "Selector switch from 'Gemini 3.8 Flash (Medium)' to 'Gemini 4 Argon (Medium)' is cryptographically recorded in transcript_full.jsonl at Step 2524 (2026-11-04T21:51:22Z) via <USER_SETTINGS_CHANGE>, accompanied by an immediate KV cache reset (cache_read_tokens: 0 at Step 2525, input_tokens: 134,400). Because Antigravity IDE does not expose the raw backend API response model header in transcript_full.jsonl, effective_model_id is recorded as MODEL_ID_UNVERIFIED per strict benchmark governance.",
+    "ide_version": "Antigravity IDE 1.107.0 (agy CLI 1.4.12)",
+    "session_id": "56250828-9f3d-47ae-94bc-16cdb57b9c91",
+    "execution_date_utc": "2026-11-04"
+  },
+  "inputs": {
+    "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+    "baseline_files_sha256": {
+      "platform/inneros_core_runtime/ops_interactive_recovery.py": "71e936a271e99c7ac5b0121a51d890b3679771726234604816f9ac81d4977b57",
+      "platform/inneros_core_runtime/ops_awaiting_claim.py": "c0a3bb1f7610009d4d0156800ded39e73bbb814fe33eb2535b68dc3531502511",
+      "platform/tests/test_ops_expired_claim_lease_recovery.py": "5ae82add2aa9f9632ad0b446b601e887146f3b6788c7c6deb4d296b044a449ff"
+    },
+    "blind_dossier_sha256": "8b8eeb9b209f14df2e925292c0bbe78e501484fb8ac535fd4b441f0669147a3c",
+    "guided_dossier_sha256": "20c3cc906e26c5af84bb97a5de26b70950fbe0cb70a55dae4d88cc20bda643c4",
+    "prompt_sha256": "f9571f89041f7536bf6c30b6cba1cff7a7ab162e5b6c7f22aa51fccf84698d56",
+    "context_tokens_initial_step_2525": 134400,
+    "max_output_tokens": "NOT_EXPOSED (Managed internally by Antigravity IDE runtime)",
+    "temperature": "NOT_EXPOSED (Managed internally by Antigravity IDE runtime)"
+  },
+  "timing": {
+    "experiment_start_utc": "2026-11-04T21:51:22Z",
+    "first_planner_response_utc": "2026-11-04T21:51:22Z",
+    "diagnostic_start_utc": "2026-11-04T21:57:54Z",
+    "diagnostic_end_utc": "2026-11-04T21:58:59Z",
+    "diagnostic_duration_seconds": 65.0,
+    "patch_generation_attempt_1_start_utc": "2026-11-04T21:59:28Z",
+    "patch_generation_attempt_1_end_utc": "2026-11-04T22:00:39Z",
+    "patch_generation_attempt_1_seconds": 71.0,
+    "patch_refinement_attempt_2_seconds": 16.0,
+    "patch_application_seconds": 2.0,
+    "target_test_execution_seconds": 0.36,
+    "regression_test_execution_seconds": 0.92,
+    "total_agent_workflow_seconds": 712.0
+  },
+  "consumption": {
+    "diagnostic_step_2586": {
+      "input_tokens": 3034,
+      "cache_read_tokens": 167619,
+      "output_tokens": 3856
+    },
+    "repair_generation_steps_2596_2598_2610": {
+      "input_tokens": 9025,
+      "cache_read_tokens": 559963,
+      "output_tokens": 6806
+    },
+    "reasoning_tokens": "NOT_EXPOSED (Antigravity transcript logs thinking text but combines reasoning + tool call tokens inside output_tokens)",
+    "tool_calls_in_experiment": 18,
+    "errors_and_retries": {
+      "api_retries": 0,
+      "code_iterations": 2,
+      "iteration_note": "attempt_1 passed 10/10 target tests immediately; attempt_2 refined MagicMock compatibility to pass 19/19 extended regression tests."
+    },
+    "billed_cost_usd": "NOT_EXPOSED (Included in Antigravity IDE subscription; $0.00 incremental per-call API invoice)",
+    "estimated_cost_usd": "NOT_EXPOSED (IDE subscription tier; not priced per API token)"
+  },
+  "quality": {
+    "blind_diagnosis_correct_findings": 5,
+    "blind_diagnosis_incorrect_findings": 0,
+    "blind_diagnosis_ground_truth_total": 5,
+    "target_tests_passed_multi_module": 10,
+    "target_tests_failed_multi_module": 0,
+    "target_tests_passed_single_module": 8,
+    "target_tests_failed_single_module": 2,
+    "extended_regression_tests_passed": 19,
+    "extended_regression_tests_failed": 0,
+    "regressions_introduced": 0,
+    "security_risks_introduced": 0,
+    "zero_writes_on_rejected_recovery_verified": true,
+    "interface_compatibility": "100% compatible with baseline callers and new keyword parameter remote_liveness_verifier",
+    "final_patch_sha256": "5891cd457b54c9fbeb0dfddffc97023caadd86862c8aa7d8abfe6c5505a0293d",
+    "diagnostic_report_sha256": "ae3d4892e731250c30b31fd48a6706647902e50d4464516365df2c943d2f3dae"
+  },
+  "historical_antigravity_comparison": {
+    "historical_commit": "94d90d34ce5542f0a152f071852b2b2be4fadfd1",
+    "historical_session_id": "56250828-9f3d-47ae-94bc-16cdb57b9c91",
+    "historical_steps_in_transcript": "Steps 559..585 (2026-11-04T03:23:03Z to 2026-11-04T03:25:13Z)",
+    "historical_selector_setting_proven_by_transcript": "Gemini 3.8 Flash (Medium) (Selected at Step 388, 2026-11-04T03:09:54Z)",
+    "historical_effective_model_id": "ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED (Selector verified as 'Gemini 3.8 Flash (Medium)' in transcript Step 388; backend model string not exposed)",
+    "historical_repair_window_tokens": {
+      "planner_steps": 11,
+      "input_tokens_sum": 30802,
+      "cache_read_tokens_sum": 2598175,
+      "output_tokens_sum": 4551
+    },
+    "historical_tests_multi_module": "10/10 passed",
+    "historical_tests_single_module": "8/10 passed",
+    "comparison_verdict": "Both the historical run (executed under selector 'Gemini 3.8 Flash (Medium)') and the new independent run ('argon_independent_repair_20261104', executed under selector 'Gemini 4 Argon (Medium)') achieved 10/10 passing tests on the multi-module target suite and 8/10 on single-module evaluation, with 0 security flaws. The new Argon run additionally produced an uncontaminated 5/5 blind forensic diagnosis prior to repair and verified 19/19 passing tests across the extended claim/recovery regression suites."
+  }
+}

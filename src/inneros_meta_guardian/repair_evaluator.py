@@ -51,6 +51,18 @@ class RepairEvaluator:
                 data["guided_dossier"] = json.loads(guided_dossier_path.read_text(encoding="utf-8"))
             except Exception:
                 pass
+        argon_run_path = base_dir / "argon_independent_run.json"
+        if argon_run_path.is_file():
+            try:
+                data["argon_independent_run"] = json.loads(argon_run_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        argon_tests_path = base_dir / "argon_test_results.json"
+        if argon_tests_path.is_file():
+            try:
+                data["argon_test_results"] = json.loads(argon_tests_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
         return data
 
     @staticmethod

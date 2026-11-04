@@ -10,11 +10,68 @@
   },
   "results": [
     {
+      "candidate_id": "argon_independent_repair_20261104",
+      "metadata": {
+        "name": "Argon Independent Repair (Gemini 4 Argon Medium \u2014 Multi-File)",
+        "provider": "Google Antigravity IDE 1.107.0",
+        "model_id": "Gemini 4 Argon (Medium) [Selector Verified Step 2524 | Backend MODEL_ID_UNVERIFIED]",
+        "role": "New Independent Argon Benchmark Run",
+        "evaluation_sandbox": "Isolated Git Worktree (experiment/argon_independent_repair_20261104)",
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py",
+          "platform/inneros_core_runtime/ops_awaiting_claim.py"
+        ],
+        "cost_usd": 0.0,
+        "cost_classification": "IDE_SUBSCRIPTION_NOT_EXPOSED",
+        "generation_latency_ms": 87000.0
+      },
+      "syntax_valid": true,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "tests_total": 10,
+      "pass_rate_pct": 100.0,
+      "exit_code": 0,
+      "test_latency_ms": 360.0,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "10 passed in 0.36s (Target Suite) | 19 passed in 0.92s (Extended Claim/Recovery Regression Suite)",
+      "status": "PASS_100%",
+      "patch_sha256": "5891cd457b54c9fbeb0dfddffc97023caadd86862c8aa7d8abfe6c5505a0293d",
+      "notes": "Executed from scratch in isolated worktree (commit c6215389) after explicit switch to Gemini 4 Argon (Medium) at Step 2524. Includes 5/5 blind diagnosis, attempt_1 (10/10 target, 18/19 regression) and attempt_2 (10/10 target, 19/19 regression). Zero writes on abort verified."
+    },
+    {
+      "candidate_id": "argon_independent_repair_20261104_single",
+      "metadata": {
+        "name": "Argon Independent Repair (Gemini 4 Argon Medium \u2014 Single-Module)",
+        "provider": "Google Antigravity IDE 1.107.0",
+        "model_id": "Gemini 4 Argon (Medium) [Selector Verified Step 2524 | Backend MODEL_ID_UNVERIFIED]",
+        "role": "New Independent Argon Single-Module Run",
+        "evaluation_sandbox": "Isolated Git Worktree (experiment/argon_independent_repair_20261104)",
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py"
+        ],
+        "cost_usd": 0.0,
+        "cost_classification": "IDE_SUBSCRIPTION_NOT_EXPOSED",
+        "generation_latency_ms": 71000.0
+      },
+      "syntax_valid": true,
+      "tests_passed": 8,
+      "tests_failed": 2,
+      "tests_total": 10,
+      "pass_rate_pct": 80.0,
+      "exit_code": 1,
+      "test_latency_ms": 500.0,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "2 failed, 8 passed in 0.50s (Single-module parity check)",
+      "status": "PARTIAL_PASS",
+      "patch_sha256": "3beb186267a02d46c3ae296e3049b73d180946923106fbea1bd735a39a94fd50",
+      "notes": "Single-module evaluation (only ops_interactive_recovery.py patched against baseline ops_awaiting_claim.py). Passes all 8 recovery/safety invariants; 2 lane-precedence tests require ops_awaiting_claim.py."
+    },
+    {
       "candidate_id": "argon_reference_full",
       "metadata": {
-        "name": "Argon Comparative Agent (Multi-File Repair)",
+        "name": "Antigravity Historical Repair (Gemini 3.8 Flash Medium / Multi-File)",
         "provider": "Google Antigravity IDE",
-        "model_id": "gemini-4-argon / gemini-3.8-flash-medium",
+        "model_id": "ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED (Selector: Gemini 3.8 Flash Medium)",
         "role": "Comparative Reference Agent",
         "patched_files": [
           "platform/inneros_core_runtime/ops_interactive_recovery.py",
@@ -35,14 +92,14 @@
       "stdout_summary": "10 passed in 0.09s (100% GREEN)",
       "status": "PASS_100%",
       "patch_sha256": "0a054df41d344f5154043c361749ab5a5597b6f11b720e9254abf23a105b90b7",
-      "notes": "100% green pass in 0.09s; cleanly addresses both recovery logic and provider precedence."
+      "notes": "Historical 10/10 patch (commit 94d90d34). Transcript Step 388 confirms selector was switched to Gemini 3.8 Flash (Medium) before Steps 559-585."
     },
     {
       "candidate_id": "argon_reference_single_module",
       "metadata": {
-        "name": "Argon Comparative Agent (Single Module Repair)",
+        "name": "Antigravity Historical Repair (Gemini 3.8 Flash Medium / Single-Module)",
         "provider": "Google Antigravity IDE",
-        "model_id": "gemini-4-argon / gemini-3.8-flash-medium",
+        "model_id": "ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED (Selector: Gemini 3.8 Flash Medium)",
         "role": "Comparative Reference Agent",
         "patched_files": [
           "platform/inneros_core_runtime/ops_interactive_recovery.py"
@@ -204,7 +261,7 @@
         "provider": "Modal Cloud (modal.com)",
         "role": "ISOLATED_TEST_SANDBOX (NOT AN LLM)",
         "app_id": "ap-kxAe14gbo36ToQZDEKhNn3",
-        "cost_usd": 0.000045,
+        "cost_usd": 4.5e-05,
         "cost_classification": "PROVIDER_REPORTED",
         "generation_latency_ms": 3800.0
       },

@@ -101,6 +101,33 @@
         "cost_usd": 0,
         "cost_classification": "MARGINAL_API_ZERO",
         "qualitative_distinction": "Zero marginal API cost; sovereign on-premises inference with complete data privacy."
+      },
+      {
+        "candidate_id": "argon_independent_repair_20261104",
+        "name": "Argon Independent Session (Gemini 4 Argon Medium)",
+        "provider": "Google Antigravity IDE 1.107.0",
+        "model_id": "Gemini 4 Argon (Medium) [selector verified; backend MODEL_ID_UNVERIFIED]",
+        "turn_count": 1,
+        "tool_calls_executed": 3,
+        "tool_call_names": [
+          "read_file (ops_interactive_recovery.py)",
+          "read_file (ops_awaiting_claim.py)",
+          "read_file (expediente_ciego_diagnostico.json)"
+        ],
+        "defects_discovered_blind": 5,
+        "defects_ground_truth_total": 5,
+        "discovery_rate_pct": 100.0,
+        "latency_ms": 65000.0,
+        "tokens": {
+          "input": 3034,
+          "cache_read": 167619,
+          "output": 3856,
+          "reasoning": "NOT_EXPOSED",
+          "total": 6890
+        },
+        "cost_usd": 0.0,
+        "cost_classification": "IDE_SUBSCRIPTION_NOT_EXPOSED",
+        "qualitative_distinction": "Independent blind diagnosis under explicitly verified 'Gemini 4 Argon (Medium)' selector (Step 2524); identified all 5 root causes and distinguished symptoms from code defects."
       }
     ]
   },
@@ -109,10 +136,58 @@
     "dossier_sha256": "782ca483758b9cf4c6f37ee0b641bc380d90060953bf681c25143a41b5267493",
     "candidates": [
       {
+        "candidate_id": "argon_independent_repair_20261104",
+        "name": "Argon Independent Repair (Gemini 4 Argon Medium \u2014 Multi-File)",
+        "provider": "Google Antigravity IDE 1.107.0",
+        "model_id": "Gemini 4 Argon (Medium) [selector verified Step 2524; backend MODEL_ID_UNVERIFIED]",
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py",
+          "platform/inneros_core_runtime/ops_awaiting_claim.py"
+        ],
+        "experiment_commit": "c62153893d9d82aa015b7105665397736d1cc64b",
+        "syntax_valid": true,
+        "tests_passed": 10,
+        "tests_failed": 0,
+        "tests_total": 10,
+        "extended_regression_passed": "19/19",
+        "pass_rate_pct": 100.0,
+        "test_latency_ms": 360.0,
+        "generation_latency_ms": 87000.0,
+        "cost_usd": 0.0,
+        "cost_classification": "IDE_SUBSCRIPTION_NOT_EXPOSED",
+        "has_premature_write_safety_flaw": false,
+        "status": "PASS_100%",
+        "patch_sha256": "5891cd457b54c9fbeb0dfddffc97023caadd86862c8aa7d8abfe6c5505a0293d",
+        "notes": "Brand-new independent run under Gemini 4 Argon (Medium) selector. 10/10 target tests green in 0.36s + 19/19 extended claim/recovery regression tests green in 0.92s. Zero writes on rejected recovery verified."
+      },
+      {
+        "candidate_id": "argon_independent_repair_20261104_single",
+        "name": "Argon Independent Repair (Gemini 4 Argon Medium \u2014 Single-Module)",
+        "provider": "Google Antigravity IDE 1.107.0",
+        "model_id": "Gemini 4 Argon (Medium) [selector verified Step 2524; backend MODEL_ID_UNVERIFIED]",
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py"
+        ],
+        "experiment_commit": "c62153893d9d82aa015b7105665397736d1cc64b",
+        "syntax_valid": true,
+        "tests_passed": 8,
+        "tests_failed": 2,
+        "tests_total": 10,
+        "pass_rate_pct": 80.0,
+        "test_latency_ms": 500.0,
+        "generation_latency_ms": 71000.0,
+        "cost_usd": 0.0,
+        "cost_classification": "IDE_SUBSCRIPTION_NOT_EXPOSED",
+        "has_premature_write_safety_flaw": false,
+        "status": "PARTIAL_PASS",
+        "patch_sha256": "3beb186267a02d46c3ae296e3049b73d180946923106fbea1bd735a39a94fd50",
+        "notes": "Single-module evaluation of Argon independent repair without patching ops_awaiting_claim.py (8/10 passed; 2 lane-precedence tests require ops_awaiting_claim.py)."
+      },
+      {
         "candidate_id": "argon_reference_full",
-        "name": "Antigravity IDE Historical Repair (Multi-File Repair)",
+        "name": "Antigravity Historical Repair (Gemini 3.8 Flash Medium Selector / Multi-File)",
         "provider": "Google Antigravity IDE",
-        "model_id": "MODEL_ID_UNVERIFIED",
+        "model_id": "ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED (Selector: Gemini 3.8 Flash Medium at Step 388)",
         "patched_files": [
           "platform/inneros_core_runtime/ops_interactive_recovery.py",
           "platform/inneros_core_runtime/ops_awaiting_claim.py"
@@ -128,16 +203,16 @@
         "cost_classification": "ACTUALLY_BILLED",
         "has_premature_write_safety_flaw": false,
         "status": "PASS_100%",
-        "notes": "100% green unit test pass in 0.09s; cleanly addresses both recovery logic and provider precedence.",
+        "notes": "Historical 10/10 repair (commit 94d90d34). Forensic audit of transcript_full.jsonl proved selector was changed to 'Gemini 3.8 Flash (Medium)' at Step 388 prior to generation at Steps 559-585.",
         "model_id_reported_in_prior_docs": "gemini-4-argon / gemini-3.8-flash-medium",
         "model_identity_verified": false,
         "model_provenance_note": "Historical Antigravity IDE session. Operator reports Gemini Flash Medium selected; earlier reports used ambiguous 'gemini-4-argon / gemini-3.8-flash-medium'. No model-side runtime receipt found. See MODEL_PROVENANCE_ERRATUM.md."
       },
       {
         "candidate_id": "argon_reference_single_module",
-        "name": "Antigravity IDE Historical Repair (Single Module Repair)",
+        "name": "Antigravity Historical Repair (Gemini 3.8 Flash Medium Selector / Single-Module)",
         "provider": "Google Antigravity IDE",
-        "model_id": "MODEL_ID_UNVERIFIED",
+        "model_id": "ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED (Selector: Gemini 3.8 Flash Medium at Step 388)",
         "patched_files": [
           "platform/inneros_core_runtime/ops_interactive_recovery.py"
         ],
@@ -262,7 +337,7 @@
     "role": "CLOUD_INDEPENDENT_PYTEST_SANDBOX",
     "container_image": "debian_slim + pytest 9.2.0",
     "duration_seconds": 3.8,
-    "cost_usd": 0.000045,
+    "cost_usd": 4.5e-05,
     "cost_classification": "PROVIDER_REPORTED",
     "verified_invariants": 5,
     "container_destroyed_on_exit": true,
@@ -270,4 +345,3 @@
   },
   "provenance_erratum": "docs/evidence/bench_20261104/MODEL_PROVENANCE_ERRATUM.md"
 }
-

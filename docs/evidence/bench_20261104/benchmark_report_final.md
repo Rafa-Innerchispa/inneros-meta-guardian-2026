@@ -89,3 +89,31 @@
   - Produce un informe forense sanitizado y un plan de reparación de 7 puntos con compuertas de seguridad para el operador humano.
 - Esto libera a los ingenieros de investigar incidentes a ciegas y provee diagnósticos auditables con trazabilidad matemática de tokens y hashes.
 
+
+
+---
+
+## 8. Nueva Ejecución Independiente de Argon (`argon_independent_repair_20261104`) y Reconciliación con Antigravity Histórico
+
+El 4 de noviembre de 2026 (`2026-11-04T21:51:22Z`), tras detectar que el parche histórico `94d90d34` había sido ejecutado después de cambiar el selector del IDE a `Gemini 3.8 Flash (Medium)` (Step `388` del transcript), se realizó un experimento completamente nuevo y aislado (**`argon_independent_repair_20261104`**) con **`Gemini 4 Argon (Medium)`** explícitamente seleccionado (Step `2524`, con invalidación verificada del caché KV `cache_read_tokens: 0` en Step `2525`).
+
+### 8.1 Artefactos Primarios del Nuevo Experimento
+- **Recibo Estructurado de Medición:** [`argon_independent_run.json`](argon_independent_run.json)
+- **Diagnóstico Ciego Original y Evaluación Post-Hoc:** [`argon_diagnostic.md`](argon_diagnostic.md)
+- **Parche Git Independiente (`c6215389` sobre baseline `beccbd49`):** [`argon_repair.patch`](argon_repair.patch)
+- **Resultados de Pruebas (`attempt_1` y `attempt_2`):** [`argon_test_results.json`](argon_test_results.json)
+- **Matriz de Identidad de Modelos y Procedencia:** [`model_identity_matrix.md`](model_identity_matrix.md)
+- **Captura / Recibo de Configuración Antigravity IDE 1.107.0:** [`antigravity_argon_config_20261104.png`](antigravity_argon_config_20261104.png)
+
+### 8.2 Tabla Comparativa Consolidada (Sin Ranking Único entre Condiciones No Equivalentes)
+
+| Candidato / Experimento | Estado de Identidad del Modelo | Diagnóstico Ciego | Reparación Guiada (Multi-Módulo) | Reparación Original (Módulo Único) | Reparación Asistida | Tiempo de Inferencia / Generación | Tiempo Completo del Agente | Costo Observado | Tests y Seguridad (INV-1..5) |
+|---|---|---|---|---|---|---|---|---|---|
+| **`argon_independent_repair_20261104`** *(Nuevo)* | Selector confirmado: `Gemini 4 Argon (Medium)` (Step 2524) · Backend ID: `MODEL_ID_UNVERIFIED` | **5 / 5 (100%)** (`65.0s`, 3,856 out tok) | **10 / 10 PASSED** (`0.36s`) + **19 / 19** regresión (`0.92s`) | **8 / 10 PASSED** (`0.50s`, sin `ops_awaiting_claim.py`) | `attempt_2` (19/19 regresión mock legacy) | `71.0s` (`attempt_1`) + `16.0s` (`attempt_2`) | `712.0s` | `NOT_EXPOSED` (Suscripción IDE; `$0.00` extra) | **10/10 Target · 19/19 Regresión · 0 escrituras en aborto** |
+| **`antigravity_historical_gemini_flash`** *(Histórico `94d90d34`)* | Selector confirmado en transcript Step 388: `Gemini 3.8 Flash (Medium)` · Backend ID: `ANTIGRAVITY_HISTORICAL_MODEL_UNVERIFIED` | No ejecutado por separado | **10 / 10 PASSED** (`0.09s`) | **8 / 10 PASSED** (`0.14s`) | No aplicable | ~`130.0s` (Steps 559–585, 4,551 out tok) | `NOT_EXPOSED` | `NOT_EXPOSED` (Suscripción IDE; `$0.00` extra) | **10/10 Target · 0 escrituras en aborto** |
+| **`meta_muse_wonder_1_0`** | **Confirmado por API:** `muse-wonder-1.0` | **5 / 5 (100%)** (2 turnos, 4 tool calls en vivo) | Truncado en 3,600 tokens (`TRUNCATED_BY_MAX_OUTPUT_TOKENS`) | N/A (Incompleto por techo de salida) | No ejecutado | `25.82s` (Diag) / `23.81s` (Repair) | `49.63s` | **$0.0019 USD** (Diag) / **$0.005554 USD** (Repair) | **Frontera Read-Only segura** |
+| **`meta_muse_spark_open_baseten`** | **Confirmado por API:** `meta-models/muse-spark-open` | **5 / 5 (100%)** (1 turno CoT) | `BLOCKED_BY_PROVIDER_LIMIT` (3,800 tok retry) | Truncado en 2,800 tok (`9.08s`) | No ejecutado | `3.21s` (Diag) / `9.08s` (Repair) | `12.29s` | **$0.000271 USD** (Diag) | N/A |
+| **`meta_muse_spark_open_fireworks`** | **Confirmado por API:** `accounts/fireworks/models/muse-spark-open` | **5 / 5 (100%)** (1 turno CoT) | `BLOCKED_BY_PROVIDER_LIMIT` (Timeout 120s) | Truncado en 2,800 tok (`46.18s`) | No ejecutado | `5.30s` (Diag) / `46.18s` (Repair) | `51.48s` | **$0.000317 USD** (Diag) | N/A |
+| **`qwen3_coder_original`** | **Confirmado en vLLM:** `Qwen3-Coder-30B-AWQ` | **5 / 5 (100%)** (`6.44s`–`15.16s`) | N/A | **0 / 10 PASSED** (Firma incompatible) | Ver fila `qwen3_coder_assisted_v2` | `12.59s` (777 out tok) | `19.03s` | **$0.00 USD** marginal API (~`$0.00007` energía) | **CRITICAL FLAW** (`update_one` antes de heartbeat) |
+| **`qwen3_coder_assisted_v2`** | **Híbrido Confirmado:** `Qwen3-Coder-30B-AWQ` + remediación asistida | Hereda 5/5 local | **8 / 10 PASSED** (Multi-módulo) | N/A | **6 / 10 PASSED** (`0.15s`, módulo único) | N/A | N/A | **$0.00 USD** marginal API | **PASS REMEDIATED** (0 escrituras en aborto) |
+| **`modal_ephemeral_sandbox`** | **NO ES UN LLM:** `debian_slim` container (`ap-kxAe14gbo36ToQZDEKhNn3`) | N/A | N/A | N/A | N/A | `3.80s` (Sandbox test run) | `3.80s` | **$0.000045 USD** | **5/5 invariantes verificadas en contenedor aislado** |
