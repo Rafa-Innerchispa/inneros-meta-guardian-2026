@@ -20,12 +20,21 @@
         "model_id": "muse-wonder-1.0",
         "turn_count": 2,
         "tool_calls_executed": 4,
-        "tool_call_names": ["get_pending_tasks", "get_worker_health", "read_source_file"],
+        "tool_call_names": [
+          "get_pending_tasks",
+          "get_worker_health",
+          "read_source_file"
+        ],
         "defects_discovered_blind": 5,
         "defects_ground_truth_total": 5,
-        "discovery_rate_pct": 100.0,
+        "discovery_rate_pct": 100,
         "latency_ms": 25816.73,
-        "tokens": {"input": 1950, "output": 1893, "reasoning": 822, "total": 3843},
+        "tokens": {
+          "input": 1950,
+          "output": 1893,
+          "reasoning": 822,
+          "total": 3843
+        },
         "cost_usd": 0.0019,
         "cost_classification": "PROVIDER_REPORTED",
         "qualitative_distinction": "Autonomous multi-turn tool calling directly inspecting cluster data; deduced root causes from raw system state."
@@ -39,9 +48,14 @@
         "tool_calls_executed": 0,
         "defects_discovered_blind": 5,
         "defects_ground_truth_total": 5,
-        "discovery_rate_pct": 100.0,
+        "discovery_rate_pct": 100,
         "latency_ms": 3210.4,
-        "tokens": {"input": 185, "output": 117, "reasoning": 117, "total": 302},
+        "tokens": {
+          "input": 185,
+          "output": 117,
+          "reasoning": 117,
+          "total": 302
+        },
         "cost_usd": 0.000271,
         "cost_classification": "CREDIT_DEDUCTED",
         "qualitative_distinction": "Lowest latency cloud inference (3.21s); identified all 5 defects in direct chain-of-thought analysis."
@@ -55,9 +69,14 @@
         "tool_calls_executed": 0,
         "defects_discovered_blind": 5,
         "defects_ground_truth_total": 5,
-        "discovery_rate_pct": 100.0,
+        "discovery_rate_pct": 100,
         "latency_ms": 5301.6,
-        "tokens": {"input": 187, "output": 147, "reasoning": 147, "total": 334},
+        "tokens": {
+          "input": 187,
+          "output": 147,
+          "reasoning": 147,
+          "total": 334
+        },
         "cost_usd": 0.000317,
         "cost_classification": "CREDIT_DEDUCTED",
         "qualitative_distinction": "Deeper single-turn reasoning trace (147 CoT tokens) with 100% ground-truth isolation."
@@ -71,10 +90,15 @@
         "tool_calls_executed": 0,
         "defects_discovered_blind": 5,
         "defects_ground_truth_total": 5,
-        "discovery_rate_pct": 100.0,
+        "discovery_rate_pct": 100,
         "latency_ms": 6440.31,
-        "tokens": {"input": 210, "output": 1312, "reasoning": 0, "total": 1522},
-        "cost_usd": 0.0,
+        "tokens": {
+          "input": 210,
+          "output": 1312,
+          "reasoning": 0,
+          "total": 1522
+        },
+        "cost_usd": 0,
         "cost_classification": "MARGINAL_API_ZERO",
         "qualitative_distinction": "Zero marginal API cost; sovereign on-premises inference with complete data privacy."
       }
@@ -86,9 +110,9 @@
     "candidates": [
       {
         "candidate_id": "argon_reference_full",
-        "name": "Argon Comparative Agent (Multi-File Repair)",
+        "name": "Antigravity IDE Historical Repair (Multi-File Repair)",
         "provider": "Google Antigravity IDE",
-        "model_id": "gemini-4-argon / gemini-3.8-flash-medium",
+        "model_id": "MODEL_ID_UNVERIFIED",
         "patched_files": [
           "platform/inneros_core_runtime/ops_interactive_recovery.py",
           "platform/inneros_core_runtime/ops_awaiting_claim.py"
@@ -97,48 +121,58 @@
         "tests_passed": 10,
         "tests_failed": 0,
         "tests_total": 10,
-        "pass_rate_pct": 100.0,
-        "test_latency_ms": 90.0,
-        "generation_latency_ms": 3200.0,
-        "cost_usd": 0.0,
+        "pass_rate_pct": 100,
+        "test_latency_ms": 90,
+        "generation_latency_ms": 3200,
+        "cost_usd": 0,
         "cost_classification": "ACTUALLY_BILLED",
         "has_premature_write_safety_flaw": false,
         "status": "PASS_100%",
-        "notes": "100% green unit test pass in 0.09s; cleanly addresses both recovery logic and provider precedence."
+        "notes": "100% green unit test pass in 0.09s; cleanly addresses both recovery logic and provider precedence.",
+        "model_id_reported_in_prior_docs": "gemini-4-argon / gemini-3.8-flash-medium",
+        "model_identity_verified": false,
+        "model_provenance_note": "Historical Antigravity IDE session. Operator reports Gemini Flash Medium selected; earlier reports used ambiguous 'gemini-4-argon / gemini-3.8-flash-medium'. No model-side runtime receipt found. See MODEL_PROVENANCE_ERRATUM.md."
       },
       {
         "candidate_id": "argon_reference_single_module",
-        "name": "Argon Comparative Agent (Single Module Repair)",
+        "name": "Antigravity IDE Historical Repair (Single Module Repair)",
         "provider": "Google Antigravity IDE",
-        "model_id": "gemini-4-argon / gemini-3.8-flash-medium",
-        "patched_files": ["platform/inneros_core_runtime/ops_interactive_recovery.py"],
+        "model_id": "MODEL_ID_UNVERIFIED",
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py"
+        ],
         "syntax_valid": true,
         "tests_passed": 8,
         "tests_failed": 2,
         "tests_total": 10,
-        "pass_rate_pct": 80.0,
-        "test_latency_ms": 140.0,
-        "generation_latency_ms": 3200.0,
-        "cost_usd": 0.0,
+        "pass_rate_pct": 80,
+        "test_latency_ms": 140,
+        "generation_latency_ms": 3200,
+        "cost_usd": 0,
         "cost_classification": "ACTUALLY_BILLED",
         "has_premature_write_safety_flaw": false,
         "status": "PARTIAL_PASS",
-        "notes": "Fixes 4 of 5 defects (cross-host PID, linked gitdir lock, atomic CAS, heartbeat). 2 tests fail due to unpatched ops_awaiting_claim.py in baseline."
+        "notes": "Fixes 4 of 5 defects (cross-host PID, linked gitdir lock, atomic CAS, heartbeat). 2 tests fail due to unpatched ops_awaiting_claim.py in baseline.",
+        "model_id_reported_in_prior_docs": "gemini-4-argon / gemini-3.8-flash-medium",
+        "model_identity_verified": false,
+        "model_provenance_note": "Historical Antigravity IDE session. Operator reports Gemini Flash Medium selected; earlier reports used ambiguous 'gemini-4-argon / gemini-3.8-flash-medium'. No model-side runtime receipt found. See MODEL_PROVENANCE_ERRATUM.md."
       },
       {
         "candidate_id": "qwen3_coder_assisted_v2",
         "name": "Local Qwen3-Coder-30B (Antigravity-Assisted v2)",
         "provider": "Local AMD ROCm vLLM + Architectural Remediation",
         "model_id": "Qwen3-Coder-30B-AWQ (Corrected)",
-        "patched_files": ["platform/inneros_core_runtime/ops_interactive_recovery.py"],
+        "patched_files": [
+          "platform/inneros_core_runtime/ops_interactive_recovery.py"
+        ],
         "syntax_valid": true,
         "tests_passed": 6,
         "tests_failed": 4,
         "tests_total": 10,
-        "pass_rate_pct": 60.0,
-        "test_latency_ms": 150.0,
+        "pass_rate_pct": 60,
+        "test_latency_ms": 150,
         "generation_latency_ms": 12594.65,
-        "cost_usd": 0.0,
+        "cost_usd": 0,
         "cost_classification": "MARGINAL_API_ZERO",
         "has_premature_write_safety_flaw": false,
         "status": "PARTIAL_PASS",
@@ -149,15 +183,17 @@
         "name": "Local Qwen3-Coder-30B-AWQ (Original Candidate)",
         "provider": "Local AMD ROCm vLLM (:8000)",
         "model_id": "Qwen3-Coder-30B-AWQ",
-        "patched_files": ["docs/evidence/bench_20261104/patches/qwen_local_repair.py"],
+        "patched_files": [
+          "docs/evidence/bench_20261104/patches/qwen_local_repair.py"
+        ],
         "syntax_valid": true,
         "tests_passed": 0,
         "tests_failed": 10,
         "tests_total": 10,
-        "pass_rate_pct": 0.0,
-        "test_latency_ms": 160.0,
+        "pass_rate_pct": 0,
+        "test_latency_ms": 160,
         "generation_latency_ms": 12594.65,
-        "cost_usd": 0.0,
+        "cost_usd": 0,
         "cost_classification": "MARGINAL_API_ZERO",
         "has_premature_write_safety_flaw": true,
         "status": "FAILED_SAFETY_VIOLATION",
@@ -173,9 +209,14 @@
         "tests_passed": 0,
         "tests_failed": 10,
         "tests_total": 10,
-        "pass_rate_pct": 0.0,
+        "pass_rate_pct": 0,
         "generation_latency_ms": 23805.6,
-        "tokens": {"input": 307, "output": 3600, "reasoning": 296, "total": 3907},
+        "tokens": {
+          "input": 307,
+          "output": 3600,
+          "reasoning": 296,
+          "total": 3907
+        },
         "cost_usd": 0.005554,
         "cost_classification": "PROVIDER_REPORTED",
         "has_premature_write_safety_flaw": false,
@@ -191,9 +232,9 @@
         "tests_passed": 0,
         "tests_failed": 10,
         "tests_total": 10,
-        "pass_rate_pct": 0.0,
-        "generation_latency_ms": 0.0,
-        "cost_usd": 0.0,
+        "pass_rate_pct": 0,
+        "generation_latency_ms": 0,
+        "cost_usd": 0,
         "cost_classification": "BLOCKED_BY_PROVIDER_LIMIT",
         "status": "BLOCKED_BY_PROVIDER_LIMIT",
         "notes": "Baseten HTTP gateway returned empty body (line 1 column 1 char 0) when requested with 3,800 max_tokens."
@@ -207,9 +248,9 @@
         "tests_passed": 0,
         "tests_failed": 10,
         "tests_total": 10,
-        "pass_rate_pct": 0.0,
-        "generation_latency_ms": 120000.0,
-        "cost_usd": 0.0,
+        "pass_rate_pct": 0,
+        "generation_latency_ms": 120000,
+        "cost_usd": 0,
         "cost_classification": "BLOCKED_BY_PROVIDER_LIMIT",
         "status": "BLOCKED_BY_PROVIDER_LIMIT",
         "notes": "Fireworks AI gateway read operation timed out after 120,000ms attempting to generate 3,800 tokens."
@@ -226,5 +267,6 @@
     "verified_invariants": 5,
     "container_destroyed_on_exit": true,
     "status": "VERIFIED_LIVE"
-  }
+  },
+  "provenance_erratum": "docs/evidence/bench_20261104/MODEL_PROVENANCE_ERRATUM.md"
 }
