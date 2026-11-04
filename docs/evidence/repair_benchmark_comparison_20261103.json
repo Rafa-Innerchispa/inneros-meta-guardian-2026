@@ -3,7 +3,10 @@
   "evaluated_at": "2026-11-03T22:26:00-05:00",
   "task_id": "ops_9bf7a24c18e3",
   "correlation_id": "meta-ecosystem-repair-benchmark-20261103",
-  "cross_reference_issues": [255, 257],
+  "cross_reference_issues": [
+    255,
+    257
+  ],
   "benchmark_problem": {
     "title": "Expired claim lease recovery with cross-host and linked worktree safety",
     "component": "platform/inneros_core_runtime/ops_interactive_recovery.py",
@@ -61,6 +64,30 @@
   "summary": {
     "winner": "Argon Comparative Agent (Completed clean verified patch with 10/10 tests green in isolated worktree). Muse Code successfully installed, spawned MSP session, and stopped safely at the exact owner authentication boundary without leaking secrets or incurring unauthorized costs.",
     "production_safe": true,
-    "zero_unapproved_spend": true
+    "zero_unapproved_spend": true,
+    "astra_status": "BLOCKED_API_ACCESS (Truthfully reported, zero silent fallback)",
+    "qwen_status": "ONLINE_SOVEREIGN_AWQ (AMD ROCm 10.1)"
+  },
+  "astra_evaluation": {
+    "agent": "GPT-6 Astra (OpenAI)",
+    "model": "gpt-6-astra",
+    "status": "BLOCKED_API_ACCESS",
+    "reason": "No authorized OpenAI API key found in owner vault or environment. ChatGPT subscription does not provide API credits.",
+    "auth_frontier_status": "BLOCKED_API_ACCESS",
+    "tests_passed": 0,
+    "tests_failed": 0,
+    "incremental_cost_usd": 0.0,
+    "auto_merged_to_main": false
+  },
+  "qwen_local_baseline": {
+    "agent": "Local Qwen3-Coder-30B-AWQ (AMD Radeon AI PRO R9700)",
+    "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
+    "status": "ONLINE_SOVEREIGN_AWQ",
+    "vllm_port": 8000,
+    "latency_single_ms": 15155.0,
+    "latency_2turn_tool_ms": 6440.31,
+    "tokens_2turn": 1522,
+    "incremental_cost_usd": 0.0,
+    "privacy": "100% On-Premises LAN"
   }
 }

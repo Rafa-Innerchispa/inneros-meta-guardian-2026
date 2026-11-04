@@ -1,0 +1,11 @@
+# Cloudflare Ingress Configuration Snippet for InnerOS Meta Guardian
+# Host: 192.168.1.4 (Intel Coordinator) / 192.168.1.5 (AMD Server)
+# Tunnel ID: 6fb8ceab-a17e-41b3-872d-e26ef2d1383f (opportunityops)
+# Service config: /home/rlopez/.cloudflared/opportunityops.yml
+
+ingress:
+  - hostname: meta-guardian.pcdoctor.ai
+    service: http://192.168.1.5:8788
+    originRequest:
+      connectTimeout: 10s
+      noTLSVerify: false

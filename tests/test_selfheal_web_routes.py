@@ -159,6 +159,43 @@ class SelfHealingWebTests(unittest.TestCase):
         self.assertEqual("VERIFIED_PASS", benchmark["argon_repair"]["status"])
         self.assertEqual("BLOCKED_AWAITING_OWNER_AUTH", benchmark["muse_code_repair"]["auth_frontier_status"])
 
+    def test_public_mode_read_only_security_gate(self):
+        import os
+        old_mode = os.environ.get("GUARDIAN_PUBLIC_MODE")
+        try:
+            os.environ["GUARDIAN_PUBLIC_MODE"] = "true"
+            # Health reflects public judge demo mode
+            code, raw, _ = self.get("/api/health")
+            self.assertEqual(200, code)
+            import json
+            health = json.loads(raw)
+            self.assertTrue(health["public_mode"])
+            self.assertEqual("PUBLIC_JUDGE_DEMO", health["mode"])
+            self.assertTrue(health["meta_supported"])
+            self.assertEqual("HISTORICAL_EVIDENCE_AND_CLI_INSTALLED", health["meta_status"])
+            self.assertFalse(health["meta_live_api_active"])
+
+            # Privileged mutations are strictly blocked with 403
+            code, res = self.post("/api/orchestrator/investigate", {"prompt": "investigate"})
+            self.assertEqual(403, code)
+            self.assertIn("PUBLIC_READ_ONLY_MODE", res["error"])
+
+            code, res = self.post("/api/incidents", {"scenario": "door_propped"})
+            self.assertEqual(403, code)
+            self.assertIn("PUBLIC_READ_ONLY_MODE", res["error"])
+
+            code, res = self.post("/api/incidents/live", {"site": "casa"})
+            self.assertEqual(403, code)
+            self.assertIn("PUBLIC_READ_ONLY_MODE", res["error"])
+
+            code, res = self.post("/api/grants", {"snapshot_digest": "a" * 64})
+            self.assertEqual(403, code)
+        finally:
+            if old_mode is not None:
+                os.environ["GUARDIAN_PUBLIC_MODE"] = old_mode
+            else:
+                os.environ.pop("GUARDIAN_PUBLIC_MODE", None)
+
     def test_no_paid_web_execution_or_incorrect_real_scenario(self):
         code, data = self.post("/api/selfheal/labs", {"scenario": "real_server_reboot"})
         self.assertEqual(409, code)

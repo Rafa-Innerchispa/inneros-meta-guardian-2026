@@ -99,17 +99,36 @@ class Handler(BaseHTTPRequestHandler):
                 except LabError as exc:
                     self._json(404, {"error": str(exc)})
         elif path == "/api/health":
+            public_mode = os.getenv("GUARDIAN_PUBLIC_MODE", "false").lower() in ("true", "1", "yes")
             self._json(
                 200,
                 {
                     "ok": True,
-                    "version": "1.0.0",
+                    "version": "1.2.0",
                     "project": "InnerOS Autonomous Infrastructure Guardian",
                     "hackathon": "Meta Global AI Developer Hackathon 2026",
                     "track": "Startup Track (Push the Frontier)",
+                    "mode": "PUBLIC_JUDGE_DEMO" if public_mode else "PRIVATE_OPERATOR_LAB",
+                    "public_mode": public_mode,
                     "physical_actions_live": False,
-                    "meta_supported": False,
-                    "meta_status": "OPERATOR_ONLY_NOT_CONNECTED",
+                    "meta_supported": True,
+                    "meta_status": "HISTORICAL_EVIDENCE_AND_CLI_INSTALLED",
+                    "meta_live_api_active": False,
+                    "meta_evidence": {
+                        "wonder_investigation": "VERIFIED_2_TURN_TOOL_RECEIPT",
+                        "wonder_session_resp": "resp_6aea97477ecbaecc16a14e99 -> resp_6aea97f2ad831065ca8b4bc8",
+                        "cli_version": "1.4.14-R7309.1",
+                        "cli_status": "INSTALLED_LOCAL_CLI",
+                        "auth_status": "BLOCKED_AWAITING_OWNER_AUTH",
+                        "unapproved_cloud_spend_usd": 0.0,
+                    },
+                    "comparative_benchmark": {
+                        "argon_repair": "VERIFIED_PASS_10_OF_10_GREEN",
+                        "argon_commit": "94d90d34",
+                        "qwen_local_rocm": "ONLINE_SOVEREIGN_AWQ",
+                        "gpt6_astra": "BLOCKED_API_ACCESS",
+                    },
+                    "public_url": "https://meta-guardian.pcdoctor.ai/self-heal",
                 },
             )
         elif path == "/api/state":
@@ -156,6 +175,21 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):  # noqa: N802
         path = urlsplit(self.path).path
         try:
+            public_mode = os.getenv("GUARDIAN_PUBLIC_MODE", "false").lower() in ("true", "1", "yes")
+            if public_mode:
+                if path in (
+                    "/api/orchestrator/investigate",
+                    "/api/incidents",
+                    "/api/incidents/live",
+                    "/api/grants",
+                ) or path.startswith("/api/incidents/"):
+                    self._json(403, {
+                        "error": "PUBLIC_READ_ONLY_MODE: Privileged mutation and live investigation endpoints are disabled in public judge demo. Please inspect the recorded forensic evidence and benchmarks.",
+                        "mode": "PUBLIC_JUDGE_DEMO",
+                        "public_mode": True,
+                    })
+                    return
+
             body = self._body() if self.headers.get("Content-Length") else {}
 
             # Autonomous tool-calling diagnostic orchestrator (read-only + simulation tools, zero paid calls)

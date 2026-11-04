@@ -3,7 +3,10 @@
   "inventory_timestamp": "2026-11-03T22:21:00-05:00",
   "task_id": "ops_9bf7a24c18e3",
   "correlation_id": "meta-ecosystem-repair-benchmark-20261103",
-  "cross_reference_issues": [255, 257],
+  "cross_reference_issues": [
+    255,
+    257
+  ],
   "host": "node-amd-primary (ralfiia-amd / inneros-5)",
   "components": [
     {
@@ -13,7 +16,10 @@
       "install_path": "https://api.meta.ai/v1/responses (governed by meta_model_provider.py & meta_once.py)",
       "host": "cloud_governed",
       "status": "TESTED",
-      "dependencies": ["urllib.request", "Single-Use Owner Grant Ledger"],
+      "dependencies": [
+        "urllib.request",
+        "Single-Use Owner Grant Ledger"
+      ],
       "endpoint": "https://api.meta.ai/v1/responses",
       "test_result": "2-turn tool-assisted investigation verified (resp_6aea97477ecbaecc16a14e99 -> 4 function_calls -> resp_6aea97f2ad831065ca8b4bc8). Latency: 25,816.73 ms, 3,843 tokens, 822 reasoning CoT tokens.",
       "verified_at": "2026-11-03T21:26:58Z",
@@ -27,7 +33,10 @@
       "install_path": "/home/rlopez/.local/bin/muse-bin-1.4.14-R7309.1 (launcher: /home/rlopez/.local/bin/muse)",
       "host": "ralfiia-amd",
       "status": "INSTALLED",
-      "dependencies": ["ELF 64-bit LSB statically linked", "Linux x86_64"],
+      "dependencies": [
+        "ELF 64-bit LSB statically linked",
+        "Linux x86_64"
+      ],
       "endpoint": "local stdio / CLI",
       "test_result": "muse --version returned 1.4.14-R7309.1; muse model-profile show muse-spark-1.3 and muse-wonder-1.0 resolved; muse exec --provider echo --json verified.",
       "verified_at": "2026-11-03T22:15:06Z",
@@ -41,7 +50,11 @@
       "install_path": "/home/rlopez/inneros/meta_muse_sdk/node_modules/@muse-code/sdk",
       "host": "ralfiia-amd",
       "status": "INSTALLED",
-      "dependencies": ["Node.js v24.20.0", "npm 11.19.0", "package-lock.json pinned"],
+      "dependencies": [
+        "Node.js v24.20.0",
+        "npm 11.19.0",
+        "package-lock.json pinned"
+      ],
       "endpoint": "MSP over stdio (muse serve)",
       "test_result": "MuseClient.spawn succeeded; started MSP session 01a1a490-2a97-75c2-9954-5b073a7c8e03 with clientInfo.name='inneros_guardian'; closed cleanly.",
       "verified_at": "2026-11-03T22:17:53Z",
@@ -55,7 +68,10 @@
       "install_path": "https://api.meta.ai/v1/responses (model: muse-spark-1.3)",
       "host": "cloud_governed",
       "status": "CONFIGURED",
-      "dependencies": ["meta_model_provider.py", "Owner Grant Gate"],
+      "dependencies": [
+        "meta_model_provider.py",
+        "Owner Grant Gate"
+      ],
       "endpoint": "https://api.meta.ai/v1/responses",
       "test_result": "Model profile verified in Muse Code CLI (muse model-profile show muse-spark-1.3). Contract adapter added to InnerOS provider registry.",
       "verified_at": "2026-11-03T22:15:22Z",
@@ -69,7 +85,10 @@
       "install_path": "src/inneros_meta_guardian/meta_image.py",
       "host": "ralfiia-amd / InnerChispa Creative",
       "status": "INTEGRATED",
-      "dependencies": ["inneros_meta_guardian.meta_image", "Single-Use Grant Gate"],
+      "dependencies": [
+        "inneros_meta_guardian.meta_image",
+        "Single-Use Grant Gate"
+      ],
       "endpoint": "https://api.meta.ai/v1/images (governed)",
       "test_result": "Payload schema validation and contract tests pass offline; zero unauthorized network calls.",
       "verified_at": "2026-11-03T22:21:00Z",
@@ -83,7 +102,10 @@
       "install_path": "src/inneros_meta_guardian/meta_voice.py",
       "host": "ralfiia-amd / VoiceOps",
       "status": "INTEGRATED",
-      "dependencies": ["inneros_meta_guardian.meta_voice", "Single-Use Grant Gate"],
+      "dependencies": [
+        "inneros_meta_guardian.meta_voice",
+        "Single-Use Grant Gate"
+      ],
       "endpoint": "https://api.meta.ai/v1/audio/transcriptions (governed)",
       "test_result": "WAV/PCM/MP3 payload contract tests pass; preserves existing Grandstream/AssemblyAI pipeline intact.",
       "verified_at": "2026-11-03T22:21:00Z",
@@ -97,7 +119,10 @@
       "install_path": "src/inneros_meta_guardian/sam_inspector.py",
       "host": "ralfiia-amd / Physical Guardian",
       "status": "INTEGRATED",
-      "dependencies": ["SAMInspector", "offline SVG/PNG synthetic sensor fixture"],
+      "dependencies": [
+        "SAMInspector",
+        "offline SVG/PNG synthetic sensor fixture"
+      ],
       "endpoint": "local stdlib / memory",
       "test_result": "Synthetic rack switch LED asset inspection passes offline (test_sam_inspect_lab_asset_offline); zero private camera frames transmitted to external cloud.",
       "verified_at": "2026-11-03T21:30:00Z",
@@ -111,7 +136,9 @@
       "install_path": "DEFERRED_HARDWARE_LIMITATION",
       "host": "none",
       "status": "DEFERRED",
-      "dependencies": ["Requires ~400GB+ VRAM (multi-node 8xH100 cluster)"],
+      "dependencies": [
+        "Requires ~400GB+ VRAM (multi-node 8xH100 cluster)"
+      ],
       "endpoint": "none",
       "test_result": "Hardware infeasibility audited: single AMD Radeon AI PRO R9700 has 32GB VRAM; 816B model cannot fit. Recorded as DEFERRED_HARDWARE_LIMITATION with hosted API recommended.",
       "verified_at": "2026-11-03T22:21:00Z",
@@ -125,7 +152,9 @@
       "install_path": "EVALUATED_DEFERRED",
       "host": "none",
       "status": "DEFERRED",
-      "dependencies": ["ROCm vLLM / llama.cpp"],
+      "dependencies": [
+        "ROCm vLLM / llama.cpp"
+      ],
       "endpoint": "none",
       "test_result": "VRAM capacity evaluation: AMD R9700 currently hosts Qwen3-Coder-30B-AWQ (23.3GB used / 32GB total). Loading an additional local model would risk VRAM eviction or OOM during live vLLM inference. Deferred to avoid disturbing sovereign Qwen instance.",
       "verified_at": "2026-11-03T22:21:00Z",
@@ -139,7 +168,11 @@
       "install_path": "inneros-vllm-qwen3-coder-30b-awq on 127.0.0.1:8000",
       "host": "ralfiia-amd (Radeon AI PRO R9700, ROCm 10.1)",
       "status": "TESTED",
-      "dependencies": ["vLLM", "ROCm 10.1", "32GB VRAM"],
+      "dependencies": [
+        "vLLM",
+        "ROCm 10.1",
+        "32GB VRAM"
+      ],
       "endpoint": "http://127.0.0.1:8000/v1",
       "test_result": "6,440.31 ms 2-turn tool loop completed (1,522 tokens, $0.00 cost, zero data leaves LAN).",
       "verified_at": "2026-11-03T21:14:00Z",
@@ -153,12 +186,30 @@
       "install_path": "Google Antigravity Pair-Programming Environment",
       "host": "antigravity_ide",
       "status": "INTEGRATED",
-      "dependencies": ["Antigravity pair-programming agent"],
+      "dependencies": [
+        "Antigravity pair-programming agent"
+      ],
       "endpoint": "native Antigravity IDE",
       "test_result": "Active orchestrator agent; identified exact provider and model for comparative repair benchmark.",
       "verified_at": "2026-11-03T22:21:00Z",
       "evidence_file": "docs/evidence/repair_benchmark_comparison_20261103.json",
       "known_issues": "Operator reduced model to Flash to conserve credits per P0 instructions."
+    },
+    {
+      "name": "gpt-6-astra",
+      "product": "GPT-6 Astra (OpenAI Frontier Agent)",
+      "version": "1.0.0",
+      "install_path": "https://api.openai.com/v1/chat/completions",
+      "host": "cloud_unauthenticated",
+      "status": "BLOCKED",
+      "dependencies": [
+        "OpenAI API key with API billing credits"
+      ],
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "test_result": "Evaluated in benchmark: BLOCKED_API_ACCESS. Owner vault and environment lack API credentials. ChatGPT subscription does not provide API credits.",
+      "verified_at": "2026-11-04T10:00:00Z",
+      "evidence_file": "docs/evidence/repair_benchmark_comparison_20261103.json",
+      "known_issues": "Requires dedicated OpenAI API key and balance to execute remote diagnostic/repair turns."
     }
   ]
 }

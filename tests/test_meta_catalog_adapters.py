@@ -42,6 +42,12 @@ class MetaCatalogAndAdaptersTests(unittest.TestCase):
         self.assertIsNotNone(argon)
         self.assertEqual(argon["status"], "TESTED")
 
+        # Check GPT-6 Astra
+        astra = MetaProviderRegistry.get_provider("gpt6_astra")
+        self.assertIsNotNone(astra)
+        self.assertEqual(astra["status"], "BLOCKED")
+        self.assertEqual(astra["availability"], "BLOCKED_API_ACCESS")
+
         # Check summary counts
         summary = MetaProviderRegistry.get_ecosystem_summary()
         self.assertGreaterEqual(summary["total_catalog_models"], 9)

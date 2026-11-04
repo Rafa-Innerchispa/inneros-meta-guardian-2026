@@ -231,6 +231,29 @@ META_CATALOG: dict[str, dict[str, Any]] = {
         "privacy": "Active pair-programmer session",
         "verified_at": "2026-11-03T22:21:00Z",
     },
+    "gpt6_astra": {
+        "id": "gpt-6-astra",
+        "provider": "openai_api",
+        "display_name": "GPT-6 Astra (OpenAI Frontier Agent)",
+        "endpoint": "https://api.openai.com/v1/chat/completions",
+        "category": "frontier_reasoning",
+        "capabilities": ["deep_reasoning", "tool_calling", "code_repair"],
+        "max_context_tokens": 128000,
+        "tool_support": "function_calling",
+        "measured_latency_single_ms": 0.0,
+        "measured_latency_2turn_tool_ms": 0.0,
+        "measured_tokens_2turn": 0,
+        "cost_per_million_input_usd": 10.00,
+        "cost_per_million_output_usd": 50.00,
+        "per_call_budget_ceiling_usd": 1.00,
+        "incremental_cost_usd": 0.0,
+        "status": "BLOCKED",
+        "availability": "BLOCKED_API_ACCESS",
+        "requires_owner_grant": True,
+        "privacy": "N/A",
+        "verified_at": "2026-11-04T10:00:00Z",
+        "note": "No authorized OpenAI API key in owner vault or environment. ChatGPT subscription does not provide API credits.",
+    },
 }
 
 
@@ -257,3 +280,4 @@ class MetaProviderRegistry:
             "deferred_limitations": len([i for i in items if i["status"] == "DEFERRED"]),
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
+

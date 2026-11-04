@@ -77,7 +77,11 @@ class WebRouteTests(unittest.TestCase):
         status, data = self._get("/api/health")
         self.assertEqual(200, status)
         self.assertTrue(data["ok"])
-        self.assertFalse(data["meta_supported"])
+        self.assertTrue(data["meta_supported"])
+        self.assertEqual("HISTORICAL_EVIDENCE_AND_CLI_INSTALLED", data["meta_status"])
+        self.assertFalse(data["meta_live_api_active"])
+        self.assertIn("meta_evidence", data)
+        self.assertIn("comparative_benchmark", data)
 
     def test_voiceops_receipt_endpoint(self):
         status, data = self._get("/api/voiceops/receipt")
