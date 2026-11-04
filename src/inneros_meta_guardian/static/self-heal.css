@@ -147,3 +147,35 @@ footer{border-top:1px solid #24374d;margin-top:80px;padding:30px 0 40px;display:
 .dossier-table th, .dossier-table td { padding: 12px; border-bottom: 1px solid #24354a; text-align: left; }
 .dossier-table th { background: #0c1421; color: #78c6ec; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; }
 .dossier-table tr:hover { background: #132033; }
+
+/* Benchmark v3 Interactive Explorer */
+.benchmark-v3-section { background: #0f1624; border: 1px solid #25374d; border-radius: 12px; padding: 20px; margin: 24px 0; }
+.benchmark-v3-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.benchmark-v3-header h3 { margin: 0; font-size: 16px; color: #eaf3ff; letter-spacing: -0.3px; }
+.benchmark-v3-nav { display: flex; gap: 10px; border-bottom: 1px solid #23364c; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.bench-tab-btn { background: #132236; border: 1px solid #2a415d; color: #a9c6e2; padding: 8px 16px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.bench-tab-btn.active { background: #27486f; color: #fff; border-color: #5684ba; box-shadow: 0 0 10px rgba(86,132,186,0.3); }
+.bench-tab-btn:hover:not(.active) { background: #1a2f4a; color: #edf4ff; }
+.benchmark-table-wrap { overflow-x: auto; margin-top: 10px; }
+.benchmark-v3-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.benchmark-v3-table th { background: #0a111b; color: #7ec4e8; padding: 10px 12px; text-align: left; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; border-bottom: 2px solid #273e59; white-space: nowrap; }
+.benchmark-v3-table td { padding: 12px; border-bottom: 1px solid #1a293b; color: #cbd7e6; vertical-align: middle; }
+.benchmark-v3-table tr:hover td { background: #132032; }
+.badge-pass { background: #153a33; color: #60e2b7; border: 1px solid #296859; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.badge-partial { background: #352c1e; color: #f4c58b; border: 1px solid #6b573a; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.badge-fail { background: #3d1b1f; color: #ff8b94; border: 1px solid #733139; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.badge-info { background: #24223d; color: #b2a5ff; border: 1px solid #4a457a; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.badge-blocked { background: #2a2228; color: #d4a5b5; border: 1px solid #5a3d4d; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.btn-inspect { background: #1b2e46; border: 1px solid #36577c; color: #97cdfc; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.btn-inspect:hover { background: #264366; color: #fff; }
+
+/* Modal Drawer */
+.modal-overlay { position: fixed; inset: 0; background: rgba(5,9,16,0.85); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.hidden { display: none !important; }
+.modal-box { background: #0e1726; border: 1px solid #2b4363; border-radius: 12px; width: 100%; max-width: 900px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.modal-header { padding: 16px 20px; border-bottom: 1px solid #223750; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { margin: 0; font-size: 16px; color: #edf4ff; }
+.modal-close-btn { background: transparent; border: none; color: #94a8be; font-size: 20px; font-weight: bold; cursor: pointer; }
+.modal-body { padding: 20px; overflow-y: auto; font-size: 12px; color: #c4d5e8; }
+.modal-body pre { background: #080d16; border: 1px solid #1a2a3e; border-radius: 8px; padding: 14px; color: #8fd0f8; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; overflow-x: auto; white-space: pre-wrap; }
+

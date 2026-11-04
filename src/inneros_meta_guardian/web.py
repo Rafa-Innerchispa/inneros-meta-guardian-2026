@@ -157,6 +157,8 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, MetaProviderRegistry.list_providers())
         elif path == "/api/meta/benchmark":
             self._json(200, RepairEvaluator.get_benchmark_comparison())
+        elif path == "/api/meta/benchmark/v3":
+            self._json(200, RepairEvaluator.get_benchmark_v3())
         elif path == "/api/meta/finance":
             self._json(200, self.finance_manager.generate_financial_matrix())
         elif path == "/api/meta/dossier":

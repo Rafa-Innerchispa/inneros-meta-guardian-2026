@@ -91,3 +91,4 @@ Autonomous code generators frequently produce logically plausible code that viol
 1. Static AST analysis confirming mutation calls occur strictly after all precondition guard clauses.
 2. The complete regression suite in an isolated ephemeral worktree.
 3. Explicit human owner sign-off.
+

@@ -93,3 +93,4 @@ While Qwen3-Coder-30B incurs **$0.00 in marginal API fees**, enterprise total co
 - AMD Radeon AI PRO R9700 (32GB VRAM): ~240W compute consumption under full load.
 - Electricity cost in Ecuador (~$0.092/kWh): ~$0.00007 per 12.5s inference run.
 - Zero per-token rate, unlimited privacy, immunity to provider rate limits or internet partition.
+

@@ -190,6 +190,25 @@
         </div>
       </div>
 
+      <!-- INTERACTIVE BENCHMARK V3 MATRIX -->
+      <div class="benchmark-v3-section" id="benchmark-v3-container">
+        <div class="benchmark-v3-header">
+          <div>
+            <h3>Audited Benchmark v3 Matrix &amp; Verification Suite</h3>
+            <p style="margin: 4px 0 0; color: #8fa5bb; font-size: 11px;">Interactive side-by-side matrices for Track A (Blind Diagnosis) and Track B (Guided Code Repair) backed by cryptographic receipts.</p>
+          </div>
+          <span class="tag ok" id="bench-v3-live-tag">LIVE EVIDENCE LOADED</span>
+        </div>
+        <div class="benchmark-v3-nav" role="tablist">
+          <button type="button" class="bench-tab-btn active" id="btn-tab-track-b" role="tab" aria-selected="true" data-tab="track-b">Track B: Guided Repair &amp; CI Sandbox (8 Candidates)</button>
+          <button type="button" class="bench-tab-btn" id="btn-tab-track-a" role="tab" aria-selected="false" data-tab="track-a">Track A: Blind Forensic Diagnosis (4 Models)</button>
+          <button type="button" class="bench-tab-btn" id="btn-tab-invariants" role="tab" aria-selected="false" data-tab="invariants">Invariants Audit &amp; Safety Proof (INV-1..5)</button>
+        </div>
+        <div class="benchmark-table-wrap" id="benchmark-v3-content">
+          <p style="color: #8fa5bb; font-size: 12px;">Cargando matriz del benchmark v3...</p>
+        </div>
+      </div>
+
       <div class="arena-duel-grid">
         <!-- CANDIDATE 1: ARGON COMPARATIVE AGENT -->
         <article class="arena-card winner-card" id="arena-argon-card">
@@ -622,5 +641,18 @@
 
   <footer><span>InnerChispa LLC · Meta × Cerebral Valley 2026</span><span>SAFE, MEASURED, AUDITABLE · © 2026</span><a href="/">Return to Physical Guardian ↗</a></footer>
 </div>
+  <!-- Modal Drawer for Candidate Inspection -->
+  <div id="candidate-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-candidate-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-candidate-title">Candidate Verification Dossier</h3>
+        <button type="button" class="modal-close-btn" id="btn-close-modal" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-candidate-body">
+        <div id="modal-candidate-meta" style="margin-bottom: 12px;"></div>
+        <pre id="modal-candidate-json" style="max-height: 480px; overflow: auto;"></pre>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

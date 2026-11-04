@@ -88,3 +88,4 @@
   - Formula y refuta hipótesis basadas en evidencia objetiva.
   - Produce un informe forense sanitizado y un plan de reparación de 7 puntos con compuertas de seguridad para el operador humano.
 - Esto libera a los ingenieros de investigar incidentes a ciegas y provee diagnósticos auditables con trazabilidad matemática de tokens y hashes.
+
