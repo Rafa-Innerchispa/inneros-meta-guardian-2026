@@ -5,6 +5,9 @@
 **Evaluation Date:** November 4, 2026 | **Cutoff:** 21:00 Ecuador  
 **Status:** **CLOSED, AUDITED, RECONCILED AND VERIFIED (100% GREEN CI)**
 
+
+> **Model provenance correction (Nov 4, 2026):** The historical 10/10 Antigravity IDE repair is labeled `Argon` in older reports, but the underlying model identity is **not independently verified**: evidence inconsistently says `gemini-3.8-flash-medium / gemini-4-argon` and the operator reports using Gemini Flash Medium. Refer to it as **Antigravity IDE repair (model unverified)**, not an Argon model benchmark. See [MODEL_PROVENANCE_ERRATUM.md](MODEL_PROVENANCE_ERRATUM.md).
+
 ---
 
 ## 1. Concrete Answers to the 7 Core Evaluation Questions
