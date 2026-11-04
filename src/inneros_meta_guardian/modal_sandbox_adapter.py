@@ -156,3 +156,4 @@ class ModalSandboxAdapter:
             "sandbox_destroyed": True,
             "receipt": receipt,
         }
+

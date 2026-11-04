@@ -188,3 +188,4 @@ class BasetenAdapter:
             "response": data,
             "receipt": receipt,
         }
+

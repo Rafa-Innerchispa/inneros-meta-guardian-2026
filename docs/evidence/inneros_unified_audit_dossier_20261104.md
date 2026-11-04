@@ -59,3 +59,4 @@
 3. **Resolución de Puntero Worktree:** Parsear `gitdir: ` en archivos `.git` para localizar `index.lock` en el repositorio raíz compartido.
 4. **CAS Atómico:** Requerir `modified_count == 1` en la actualización de MongoDB para prevenir condiciones de carrera.
 5. **Verificación Determinista:** 10/10 pruebas verdes en `tests/test_ops_expired_claim_lease_recovery.py` sin regresiones.
+

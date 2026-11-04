@@ -1,0 +1,14 @@
+{
+  "provider": "fireworks_ai",
+  "endpoint": "https://api.fireworks.ai/inference/v1/chat/completions",
+  "model": "accounts/fireworks/models/muse-spark-open",
+  "response_id": "chatcmpl-f7f26716ee5647d891bf746f64f20f01",
+  "duration_ms": 5301.6,
+  "prompt_tokens": 184,
+  "completion_tokens": 150,
+  "reasoning_tokens": 147,
+  "total_tokens": 334,
+  "status": "VERIFIED_LIVE_CALL",
+  "cost_usd": 0.000317,
+  "recorded_at": "2026-11-04T17:00:06Z"
+}

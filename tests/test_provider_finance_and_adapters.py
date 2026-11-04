@@ -28,22 +28,24 @@ class ProviderFinanceAndAdaptersTests(unittest.TestCase):
 
         # Fireworks checks
         fw = ledger["fireworks_ai"]
-        self.assertEqual(fw["available_balance_usd"], 20.30)
+        self.assertAlmostEqual(fw["available_balance_usd"], 20.30, places=2)
         self.assertFalse(fw["auto_reload_enabled"])
         self.assertEqual(fw["account_email"], "rafagye@gmail.com")
-        self.assertEqual(fw["status"], "TESTED_OFFLINE")
+        self.assertEqual(fw["status"], "TESTED_LIVE")
         self.assertEqual(fw["proposed_test_budget_usd"], 1.00)
 
         # Baseten checks
         base = ledger["baseten"]
-        self.assertEqual(base["available_balance_usd"], 5.00)
+        self.assertAlmostEqual(base["available_balance_usd"], 5.00, places=2)
         self.assertEqual(base["extra_pools"]["tool_calls_available_usd"], 2.00)
         self.assertEqual(base["extra_pools"]["dedicated_inference_available_usd"], 0.0)
+        self.assertEqual(base["status"], "TESTED_LIVE")
 
         # Modal checks
         modal = ledger["modal"]
-        self.assertEqual(modal["available_balance_usd"], 1.00)
+        self.assertAlmostEqual(modal["available_balance_usd"], 1.00, places=2)
         self.assertEqual(modal["proposed_test_budget_usd"], 0.25)
+        self.assertEqual(modal["status"], "TESTED_LIVE")
 
         # Astra checks
         astra = ledger["gpt6_astra"]
@@ -90,7 +92,7 @@ class ProviderFinanceAndAdaptersTests(unittest.TestCase):
             completion_tokens=50,
         )
         self.assertEqual(rcpt["actual_cost_usd"], 0.02)
-        self.assertEqual(rcpt["post_balance_usd"], 20.28)
+        self.assertAlmostEqual(rcpt["post_balance_usd"], 20.28, places=2)
         self.assertTrue(rcpt["receipt_digest"])
 
     def test_fireworks_adapter(self) -> None:

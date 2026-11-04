@@ -13,6 +13,8 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 ## Verified Public Judge Demonstration
 
 > 🌐 **PUBLIC HTTPS URL:** **[https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal)**  
+> **1-Click Judge Access:** **[https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!](https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!)**  
+> **Judge Credentials:** Username: `judge` | Password: `MetaGuardian2026!`  
 > **Mode:** `PUBLIC_JUDGE_DEMO` (Cloudflare Tunnel TLS 1.3, origin isolated, fail-closed read-only gate, 0 unapproved model spend, zero VPN required).  
 > **Alternative Mirror:** `https://meta-guardian.pcdoctor.ai/self-heal`  
 > **Deployment Architecture:** Documented in [`docs/JUDGE_PUBLIC_DEPLOY.md`](docs/JUDGE_PUBLIC_DEPLOY.md).
@@ -81,6 +83,9 @@ PYTHONPATH=src python -m inneros_meta_guardian.web
 ## Evidence Index
 
 - [`docs/evidence/meta_wonder_tool_investigation_20261103.json`](docs/evidence/meta_wonder_tool_investigation_20261103.json): Authentic 2-turn tool-calling investigation receipt from **Meta Muse Wonder 1.0**.
+- [`docs/evidence/fireworks_live_receipt_20261104.json`](docs/evidence/fireworks_live_receipt_20261104.json): Authentic live API completion receipt from **Fireworks AI** (`muse-spark-open`, $0.000317 USD).
+- [`docs/evidence/baseten_live_receipt_20261104.json`](docs/evidence/baseten_live_receipt_20261104.json): Authentic live API completion receipt from **Baseten** (`muse-spark-open`, $0.000271 USD).
+- [`docs/evidence/modal_live_receipt_20261104.json`](docs/evidence/modal_live_receipt_20261104.json): Authentic isolated ephemeral container execution receipt from **Modal** ($0.000039 USD).
 - [`docs/evidence/repair_benchmark_comparison_20261103.json`](docs/evidence/repair_benchmark_comparison_20261103.json): Independent repair evaluation (Argon 10/10 vs. Muse Code vs. Astra vs. Qwen).
 - [`docs/evidence/inneros_unified_audit_dossier_20261104.json`](docs/evidence/inneros_unified_audit_dossier_20261104.json): Complete ten-domain cluster audit and multi-model findings.
 - [`docs/evidence/inneros_unified_audit_dossier_20261104.md`](docs/evidence/inneros_unified_audit_dossier_20261104.md): Human-readable markdown audit dossier.
