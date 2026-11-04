@@ -70,53 +70,33 @@ class Handler(BaseHTTPRequestHandler):
         return val
 
     def _check_auth(self) -> bool:
-        """Enforces judge authentication when GUARDIAN_REQUIRE_AUTH=true."""
+        """Optional judge authentication. Credentials must be set privately."""
         auth_required = os.getenv("GUARDIAN_REQUIRE_AUTH", "false").lower() in ("true", "1", "yes")
-        if not auth_required or os.getenv("GUARDIAN_NO_AUTH", "false").lower() in ("true", "1", "yes"):
+        if not auth_required:
             return True
 
-        path = urlsplit(self.path).path
-        query = parse_qs(urlsplit(self.path).query)
-
-        # Health endpoint remains public for Cloudflare monitoring and uptime checks
-        if path == "/api/health":
+        if urlsplit(self.path).path == "/api/health":
             return True
 
-        # Check token in query string: ?auth=MetaGuardian2026! or ?auth=meta2026
-        token_param = query.get("auth", [""])[0] or query.get("token", [""])[0]
-        if token_param in ("MetaGuardian2026!", "meta2026", "inneros2026"):
-            return True
+        import base64
+        import hmac
 
-        # Check Cookie: inneros_auth=MetaGuardian2026
-        cookies = self.headers.get("Cookie", "")
-        if "inneros_auth=MetaGuardian2026" in cookies or "inneros_auth=meta2026" in cookies:
-            return True
-
-        # Check HTTP Basic Auth header: Authorization: Basic <base64>
+        expected_password = os.getenv("GUARDIAN_JUDGE_PASS", "")
         auth_hdr = self.headers.get("Authorization", "")
-        if auth_hdr.startswith("Basic "):
+        if expected_password and auth_hdr.startswith("Basic "):
             try:
-                decoded = base64.b64decode(auth_hdr[6:].strip()).decode("utf-8")
-                user, _, password = decoded.partition(":")
-                valid_pass = os.getenv("GUARDIAN_JUDGE_PASS", "MetaGuardian2026!")
-                allowed_users = ("judge", "inneros", "admin", "rafael")
-                if user in allowed_users and password == valid_pass:
+                decoded = base64.b64decode(auth_hdr[6:].strip(), validate=True).decode("utf-8")
+                user, sep, password = decoded.partition(":")
+                if sep and user == "judge" and hmac.compare_digest(password, expected_password):
                     return True
-            except Exception:
+            except (ValueError, UnicodeError, TypeError):
                 pass
 
-        # Send HTTP 401 Challenge with Realm
-        msg = (
-            b"<!doctype html><html><body style='background:#080d17;color:#edf4ff;font-family:sans-serif;padding:40px;'>"
-            b"<h2>InnerOS Autonomous Infrastructure Guardian</h2>"
-            b"<p>Judge and Operator Authentication Required.</p>"
-            b"<p>Username: <code>judge</code> (or <code>inneros</code>)<br>Password: <code>MetaGuardian2026!</code></p>"
-            b"<p><a href='/self-heal?auth=MetaGuardian2026!' style='color:#6ccbf6;'>Or click here to enter with 1-click token</a></p>"
-            b"</body></html>"
-        )
+        msg = b"Judge access requires credentials provided privately by the project team."
         self.send_response(401)
-        self.send_header("WWW-Authenticate", 'Basic realm="InnerOS Autonomous Infrastructure Guardian (Judge Access)"')
-        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("WWW-Authenticate", 'Basic realm="InnerOS Guardian Judge Access"')
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(msg)))
         self.end_headers()
         self.wfile.write(msg)
@@ -134,8 +114,6 @@ class Handler(BaseHTTPRequestHandler):
         path = urlsplit(self.path).path
         query = parse_qs(urlsplit(self.path).query)
         cookie_header = None
-        if query.get("auth", [""])[0] in ("MetaGuardian2026!", "meta2026"):
-            cookie_header = [("Set-Cookie", "inneros_auth=MetaGuardian2026; Path=/; SameSite=Lax")]
 
         if path in ("/", "/index.html"):
             self._static("index.html", "text/html; charset=utf-8", cookie_header)
