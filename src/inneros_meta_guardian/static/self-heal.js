@@ -180,9 +180,35 @@ function renderBenchmarkV3Content() {
         </tbody>
       </table>
     `;
+    // The independent Argon run was recorded after the original v3 repair table.
+    // Keep its distinct experiment identity and test scopes visible to judges.
+    const argonRun = data.argon_independent_run;
+    if (argonRun && argonRun.quality && argonRun.identity) {
+      const q = argonRun.quality;
+      const identity = argonRun.identity;
+      const comparison = argonRun.historical_antigravity_comparison || {};
+      const summary = `<section class="catalog-card" style="margin-bottom:16px;padding:16px;border:1px solid #426a9a;border-radius:10px;background:#10253b;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <strong style="font-size:16px;color:#edf4ff;">Independent Argon Run · November 4</strong>
+          <span class="badge-pass">ISOLATED BENCHMARK · NOT DEPLOYED</span>
+        </div>
+        <p style="color:#b9d4ed;margin:10px 0;">IDE selector: ${escapeHtml(identity.selector_visible_name)}. Backend model ID: <strong>${escapeHtml(identity.effective_model_id)}</strong>.</p>
+        <p style="color:#edf4ff;margin:8px 0;">Blind root causes: <strong>${Number(q.blind_diagnosis_correct_findings)}/${Number(q.blind_diagnosis_ground_truth_total)}</strong> · Target tests: <strong>${Number(q.target_tests_passed_multi_module)}/${Number(q.target_tests_passed_multi_module) + Number(q.target_tests_failed_multi_module)}</strong> · Extended regression: <strong>${Number(q.extended_regression_tests_passed)}/${Number(q.extended_regression_tests_passed) + Number(q.extended_regression_tests_failed)}</strong></p>
+        <p style="color:#b9d4ed;margin:8px 0;">Historical Antigravity repair: ${escapeHtml(comparison.historical_tests_multi_module || '10/10 passed')} under Gemini 3.8 Flash (Medium) selector. Different scope; no unsupported overall model winner.</p>
+        <button type="button" class="btn-inspect btn-inspect-argon">Inspect independent run receipt</button>
+      </section>`;
+      html = summary + html;
+    }
     container.innerHTML = html;
 
-    container.querySelectorAll('.btn-inspect').forEach(btn => {
+    const argonButton = container.querySelector('.btn-inspect-argon');
+    if (argonButton) {
+      argonButton.onclick = () => openCandidateModal('Independent Argon Benchmark · November 4',
+        '<strong>Independent, isolated experiment. Production deployment not claimed. Backend model ID unverified.</strong>',
+        data.argon_independent_run);
+    }
+
+    container.querySelectorAll('.btn-inspect:not(.btn-inspect-argon)').forEach(btn => {
       btn.onclick = () => {
         const idx = parseInt(btn.getAttribute('data-idx'), 10);
         const item = results[idx];
