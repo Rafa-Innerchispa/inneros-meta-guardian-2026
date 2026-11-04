@@ -700,29 +700,36 @@ class DiagnosticOrchestrator:
             },
             "meta_muse_wonder": {
                 "engine": "Meta Model API · muse-wonder-1.0 (Responses API)",
-                "status": "VERIFIED_RECEIPT_PLUS_GOVERNED_TOOL_BRIDGE",
+                "status": "LIVE_2TURN_TOOL_INVESTIGATION_VERIFIED",
                 "response_id": "resp_6ae9322a12052fe018674cb6",
+                "tool_turn1_response_id": "resp_6aea97477ecbaecc16a14e99",
+                "tool_turn2_response_id": "resp_6aea97f2ad831065ca8b4bc8",
                 "diagnostic_latency_ms": 22059.672,
-                "model_calls": 1,
-                "prompt_tokens": 312,
-                "completion_tokens": 3130,
-                "reasoning_tokens": 1420,
-                "total_tokens": 3442,
-                "tools_used": 6,
+                "tool_assisted_session_ms": 25816.726,
+                "model_calls": 2,
+                "prompt_tokens": 1950,
+                "completion_tokens": 1893,
+                "reasoning_tokens": 822,
+                "total_tokens": 3843,
+                "single_turn_deep_tokens": 3442,
+                "single_turn_reasoning_tokens": 1420,
+                "tools_used": 4,
                 "hypotheses_registered": 4,
                 "root_cause_verified": True,
-                "proposed_repair_quality": "Matriz de 4 causas raíz con parches mínimos exactos y tabla de verificación independiente.",
-                "test_suite_result": "379 PASS / 0 FAIL (PR #256 CI 100% verde)",
+                "proposed_repair_quality": "En Turno 1 solicitó 4 function_calls (get_pending_tasks x2, get_worker_health, read_source_file); en Turno 2 diagnosticó hechos vs hipótesis, causas raíz y pruebas negativas/positivas.",
+                "test_suite_result": "380 PASS / 0 FAIL (PR #256 CI Run 41721839589 100% verde)",
                 "incremental_cost_usd": 0.00,
                 "promotional_credit_pool_usd": 150.00,
                 "per_call_budget_ceiling_usd": 0.50,
-                "gate_status": "BLOCKED_UNTIL_OWNER_GRANT (0 auto-retries, single-use HMAC/Mongo grant)",
+                "gate_status": "BLOCKED_UNTIL_OWNER_GRANT (0 auto-retries, single-use SQLite+Mongo grant)",
                 "privacy": "Sanitized & Redacted Payload Only (FICTIONAL LAB DATA ONLY marker)",
             },
             "hybrid_conclusion": (
-                "Arquitectura híbrida óptima demostrada: Qwen3-Coder-30B-AWQ en AMD R9700 resuelve la operación continua "
-                "y la inspección multi-herramienta local a costo $0.00 sin exponer datos privados, mientras que Meta Muse Wonder 1.0 "
-                "(con 1,420 tokens de razonamiento profundo) actúa como investigador externo gobernado bajo grant criptográfico de un solo uso."
+                "Arquitectura híbrida óptima demostrada con evidencia real de 2 turnos en ambos motores: "
+                "Qwen3-Coder-30B-AWQ en AMD R9700 completó el ciclo de herramientas en 6.44s (1,522 tokens, $0.00 USD) "
+                "sin que ningún dato salga del servidor local, mientras que Meta Muse Wonder 1.0 ejecutó un ciclo real de 2 turnos "
+                "(resp_6aea97477ecbaecc16a14e99 -> 4 function_calls -> resp_6aea97f2ad831065ca8b4bc8) en 25.82s (3,843 tokens, "
+                "822 reasoning tokens) separando rigurosamente hechos observados de hipótesis y especificando pruebas negativas y positivas."
             ),
         }
 

@@ -36,18 +36,22 @@ Production agentic platforms do not only fail at model generation—they fail in
 
 ### How We Used Meta Technology
 - **Meta Muse Wonder 1.0 (`muse-wonder-1.0` via `https://api.meta.ai/v1/responses`)**: Integrated as our governed frontier investigator in both `meta_model_provider.py` (PR #256) and `meta_once.py` / `diagnostic_orchestrator.py`.
-- **Verified Receipt & Deep Reasoning CoT**: Recorded receipt `meta_receipt_49523d4a555149cb49dc20e7` (`response_id: resp_6ae9322a12052fe018674cb6`, HTTP `200`, `312` input tokens, `3,130` output tokens including **`1,420` reasoning tokens**, `22,059.67 ms` latency, `0` retries).
-- **MCP Tool-Calling Bridge**: Extended `meta_model_provider.invoke_with_grant` to support allowlisted diagnostic tools (`ALLOWLISTED_DIAGNOSTIC_TOOLS`) and parse Responses API `function_call` items (`TOOL_CALL_REQUESTED`) while fixing SQLite receipt model attribution (`muse-wonder-1.0`).
+- **Live 2-Turn Tool-Assisted Investigation (`docs/evidence/meta_wonder_tool_investigation_20261103.json`)**:
+  - **Turn 1 (`resp_6aea97477ecbaecc16a14e99`, `6,035.72 ms`, `1,620` tokens, `205` reasoning CoT):** Inspected the sanitized `inneros_global_snapshot.json` and autonomously emitted 4 `function_call` requests: `get_pending_tasks("ops_4e977fd8ec43")`, `get_pending_tasks("ops_fcd8686d7fc6")`, `get_worker_health()`, and `read_source_file("ops_interactive_recovery.py")`.
+  - **Turn 2 (`resp_6aea97f2ad831065ca8b4bc8`, `19,781.00 ms`, `2,223` tokens, `617` reasoning CoT):** Analyzed the 4 verified tool outputs, separated observed facts from hypotheses, diagnosed the 3 root causes (including the cross-host PID hazard and linked Git worktree `.git` pointer lock defect), and specified 4 negative and 3 positive verification tests.
+  - **Combined 2-Turn Total:** `25,816.73 ms`, `3,843` total tokens (`822` reasoning tokens), `0` retries.
+- **Single-Shot Baseline Trial (`docs/evidence/meta_wonder_receipt_20261102.json`)**: `resp_6ae9322a12052fe018674cb6`, `3,442` total tokens (`1,420` reasoning tokens), `22,059.67 ms` latency.
 
 ### Measured Results & Comparison (Local AMD Qwen 30B vs. Meta Muse Wonder 1.0)
 | Metric | Local AMD Qwen3-Coder-30B-AWQ | Meta Muse Wonder 1.0 |
 |---|---|---|
 | **Compute / Endpoint** | AMD Radeon AI PRO R9700 (32 GB VRAM, ROCm 10.1, vLLM `:8000`) | Meta Model API (`/v1/responses`, `muse-wonder-1.0`) |
-| **Latency** | `15,155 ms` (single-shot) / `6,440.31 ms` (2-turn tool loop) | `22,059.67 ms` (single-shot with deep reasoning) |
-| **Tokens** | `1,367` (single-shot) / `1,522` (2-turn tool loop) | `3,442` total (`312` in / `3,130` out / `1,420` reasoning CoT) |
-| **Tools Used** | `get_pending_tasks`, `get_worker_health` (+ 6 in full orchestrator) | 6 allowlisted read-only & simulation tools wired in PR #256 |
+| **2-Turn Tool Loop Latency** | **`6,440.31 ms`** (`3,168.74 ms` + `3,271.57 ms`) | **`25,816.73 ms`** (`6,035.72 ms` + `19,781.00 ms`) |
+| **Single-Shot Latency** | `15,155.00 ms` (`1,367` tokens) | `22,059.67 ms` (`3,442` tokens, `1,420` CoT) |
+| **2-Turn Tool Loop Tokens** | **`1,522` tokens** (`1,153` in / `369` out) | **`3,843` tokens** (`1,950` in / `1,893` out / **`822` reasoning CoT**) |
+| **Tools Requested by Model** | `get_pending_tasks`, `get_worker_health` | `get_pending_tasks` (x2), `get_worker_health`, `read_source_file` |
 | **Verified Test Results** | `43/43` targeted PR #256 tests + `73/73` Guardian tests passing | `380/380` CI tests passing in GitHub Actions Run `41721839589` |
-| **Incremental Cost** | `$0.00 USD` (sovereign on-premises GPU) | Governed (`<= $0.50 USD` cap per single-use Owner Grant, `0` auto-retries) |
+| **Operational Cost** | `$0.00 USD` (sovereign on-premises GPU) | Governed (`<= $0.50 USD` cap per single-use Owner Grant, `0` auto-retries) |
 
 ### Honest Limitations & Truth Boundaries
 - PR #256 (`2481d2e7`) is verified 100% green in GitHub Actions CI (`41721839589`) in an isolated worktree branch and awaits explicit Owner release approval before merging to production `main`.
@@ -84,3 +88,4 @@ Production agentic platforms do not only fail at model generation—they fail in
 ### 02:40 – 03:00 | Conclusion
 - **Visual:** Interactive Self-Healing Sandbox Replay (`OBSERVE -> LOCAL -> WONDER -> ACK -> PATCH -> VERIFY`) + SHA-256 audit chain valid.
 - **Narration:** "InnerOS proves that autonomous self-healing can be local-first, frontier-assisted with Meta Muse Wonder 1.0, and strictly governed—with zero unapproved cloud spend and zero unverified production mutations. Thank you."
+

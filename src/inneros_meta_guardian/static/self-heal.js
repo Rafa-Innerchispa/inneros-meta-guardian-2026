@@ -96,10 +96,10 @@ function renderCase(data) {
   const links = [
     ['PR #256 CI (380 tests passing 100%)', data.pr256_candidate_ci ? data.pr256_candidate_ci.url : data.original_ci.url],
     ['PR #256 Safe Coordination Recovery', data.pr256_candidate_ci ? data.pr256_candidate_ci.pr_url : data.candidate_ci.pr_url],
+    ['Muse Wonder 2-Turn Tool Investigation JSON', data.wonder && data.wonder.tool_investigation_url ? data.wonder.tool_investigation_url : data.wonder.receipt_url],
     ['Qwen 30B Tool-Assisted Investigation JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.tool_investigation_url ? data.local_qwen_diagnostic.tool_investigation_url : '#'],
     ['InnerOS Global Snapshot JSON', data.local_qwen_diagnostic && data.local_qwen_diagnostic.global_snapshot_url ? data.local_qwen_diagnostic.global_snapshot_url : '#'],
-    ['Muse Wonder receipt', data.wonder.receipt_url],
-    ['Approval hardening PR', data.release.auth_pr],
+    ['Muse Wonder single-shot receipt', data.wonder.receipt_url],
   ];
   links.forEach(([label, link]) => {
     const item = externalLink(label, link, 'proof-link');
@@ -213,11 +213,11 @@ function renderOrchestratorSession(session) {
     const tbody = add('tbody', '');
     const rows = [
       ['Motor / Hardware', ql.engine, mw.engine],
-      ['Latencia (Single / Tool Loop)', (ql.diagnostic_latency_ms / 1000).toFixed(2) + 's / ' + (ql.tool_assisted_session_ms / 1000).toFixed(2) + 's', (mw.diagnostic_latency_ms / 1000).toFixed(2) + 's'],
-      ['Tokens Totales', ql.single_turn_deep_tokens + ' / ' + ql.total_tokens, mw.total_tokens + ' (' + mw.reasoning_tokens + ' CoT)'],
-      ['Herramientas Usadas', String(ql.tools_used) + ' tools verificadas', String(mw.tools_used) + ' tools habilitadas PR #256'],
+      ['Latencia (Single / 2-Turn Tool Loop)', (ql.diagnostic_latency_ms / 1000).toFixed(2) + 's / ' + (ql.tool_assisted_session_ms / 1000).toFixed(2) + 's', (mw.diagnostic_latency_ms / 1000).toFixed(2) + 's / ' + ((mw.tool_assisted_session_ms || 25816.73) / 1000).toFixed(2) + 's'],
+      ['Tokens (Single / 2-Turn Tool Loop)', ql.single_turn_deep_tokens + ' / ' + ql.total_tokens, (mw.single_turn_deep_tokens || 3442) + ' / ' + mw.total_tokens + ' (' + mw.reasoning_tokens + ' CoT)'],
+      ['Herramientas Invocadas (Real)', '2 tools (get_pending_tasks, get_worker_health)', '4 tools (get_pending_tasks x2, get_worker_health, read_source_file)'],
       ['Resultado de Pruebas', ql.test_suite_result, mw.test_suite_result],
-      ['Costo Incremental', '$0.00 USD (soberano local)', '$0.00 USD (techo $0.50 / grant)'],
+      ['Costo Operativo', '$0.00 USD (soberano local)', 'Gobernado (techo $0.50 USD / grant)'],
       ['Privacidad', ql.privacy, mw.privacy],
     ];
     rows.forEach(([m, v1, v2]) => {

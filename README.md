@@ -1,53 +1,60 @@
 # InnerOS Autonomous Infrastructure Guardian
-**The Infrastructure That Remembers and Responds**  
+**The Infrastructure That Investigates and Heals Itself**  
 *Meta Global AI Developer Hackathon 2026 — Startup Track (Push the Frontier / Build for Your World)*  
 InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 [![offline-demo-tests](https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026/actions/workflows/tests.yml/badge.svg)](https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026/actions/workflows/tests.yml)
 [![Python 3.10 | 3.12](https://img.shields.io/badge/python-3.10%20%7C%203.12-blue)](https://www.python.org/)
-[![License: Private / Proprietary](https://img.shields.io/badge/license-Proprietary-red)](#license)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
 
 ## Overview
 
-> **EVIDENCE STATUS — 2026-11-02:** This repo now includes two frontend experiences: `/` (Physical Guardian) and `/self-heal` (interactive coordination self-healing lab). The judge-lab branch has **69/69 offline tests passing in Python 3.10 and 3.12**. Clean core candidate PR #253 passed **339/339** safety/coordination tests in GitHub CI; it is **not deployed to production**. An operator report records a Muse Wonder 1.0 response (3,442 tokens, ~22.06s), but provider billing and exact owner authorization are **not independently reconciled**. The public UI NEVER triggers paid model inference. Its coordination repair replay uses deterministic *in-memory virtual state*, not live agents, not Qwen, not Meta. SAM 3.1 remains a static optical fixture; Cognee memory may return MEMORY_UNAVAILABLE. Read [the judge walkthrough](docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md) and [independent limits review](docs/evidence/INDEPENDENT_REVIEW_WONDER_RUN_AND_CLEAN_PORT_20261102.md).
+> **EVIDENCE STATUS — 2026-11-03:** This repository provides two interactive Mission Control experiences: `/` (**Physical Guardian**) and `/self-heal` (**5-Panel Autonomous Coordination Investigator & Self-Healing Lab**), backed by **73/73 passing offline unit & HTTP integration tests** in Python 3.10 and 3.12 (`scripts/build_public_release.py --check` green with 0 credential/IP leaks). Core platform candidate **PR #256** (`2481d2e7`) passed **380/380** runtime safety and coordination tests in GitHub Actions CI (Run `41721839589`). Both **Local AMD Qwen3-Coder-30B-AWQ** (`6,440.31 ms`, `1,522` tokens, `$0.00` cost) and **Meta Muse Wonder 1.0** (`resp_6aea97477ecbaecc16a14e99` $\rightarrow$ 4 tool calls $\rightarrow$ `resp_6aea97f2ad831065ca8b4bc8`, `25,816.73 ms`, `3,843` tokens including `822` reasoning CoT tokens) have completed verified **2-turn tool-assisted investigations** against the sanitized `inneros_global_snapshot.json`. The public web UI never triggers unapproved paid API calls.
 
+Most AI agents today answer questions inside chat windows. **InnerOS Autonomous Infrastructure Guardian** brings local-first and frontier AI into physical facilities, server racks, and multi-agent control planes:
 
-Most AI agents today answer questions inside chat windows. **InnerOS Autonomous Infrastructure Guardian** brings frontier AI into the physical facilities, server racks, and network backbones that sustain modern operations.
-
-Connected to live physical telemetry from Casa and Bellini facilities in Ecuador, InnerOS operates an end-to-end governed autonomic loop:
-```
-OBSERVE ➔ REMEMBER ➔ REASON ➔ AUTHORIZE ➔ ACT ➔ VERIFY ➔ PROVE
+```text
+OBSERVE (Context Collector) ➔ INVESTIGATE (Tool Loop: Local Qwen 30B / Meta Muse Wonder 1.0) ➔ GOVERN (Policy & Single-Use Grant) ➔ PATCH (Isolated Worktree) ➔ VERIFY (Independent CI & Readback) ➔ PROVE (SHA-256 Audit Chain)
 ```
 
-The guarded local reasoning layer and a separately documented **Meta Muse Wonder 1.0** operator experiment target two kinds of incidents: physical network/sensor events and failures inside InnerOS's own agent control plane. The UI distinguishes historic evidence, local fixture replays and optional read-only live observations. Every remote inference is strictly bounded by an atomic single-use cryptographic operator grant. Physical actions remain gated by human authority (Rafael López, Owner), followed by independent state readback, verified VoiceOps telephone confirmation, and permanent anchoring in a tamper-evident SHA-256 audit chain.
+---
+
+## Measured Comparison: Local AMD Qwen 30B vs. Meta Muse Wonder 1.0
+
+| Metric | Local AMD Qwen3-Coder-30B-AWQ | Meta Muse Wonder 1.0 |
+|---|---|---|
+| **Compute / Endpoint** | AMD Radeon AI PRO R9700 (32 GB VRAM, ROCm 10.1, vLLM `:8000`) | Meta Model API (`POST https://api.meta.ai/v1/responses`, `muse-wonder-1.0`) |
+| **2-Turn Tool-Assisted Latency** | **`6,440.31 ms`** (Turn 1: `3,168.74 ms` / Turn 2: `3,271.57 ms`) | **`25,816.73 ms`** (Turn 1: `6,035.72 ms` / Turn 2: `19,781.00 ms`) |
+| **Single-Shot Baseline Latency** | `15,155.00 ms` (`1,367` tokens) | `22,059.67 ms` (`3,442` tokens, `1,420` reasoning CoT, `resp_6ae9322a12052fe018674cb6`) |
+| **2-Turn Tool-Assisted Tokens** | **`1,522` tokens** (`1,153` prompt + `369` completion) | **`3,843` tokens** (`1,950` input + `1,893` output, incl. **`822` reasoning CoT**) |
+| **Tools Requested by Model** | `get_pending_tasks`, `get_worker_health` | `get_pending_tasks` (`ops_4e977fd8ec43`), `get_pending_tasks` (`ops_fcd8686d7fc6`), `get_worker_health`, `read_source_file` (`ops_interactive_recovery.py`) |
+| **Root Causes Identified** | Manual-only IDE lane (`do_not_auto_dispatch`), 15-day expired lease, cross-host PID hazard, linked worktree `.git` pointer lock | Strict separation of observed facts vs. hypotheses; verified all 4 root causes and specified 4 negative + 3 positive verification tests |
+| **Verification Test Results** | `43/43` targeted PR #256 tests + `73/73` Guardian tests passing | `380/380` CI tests passing in GitHub Actions Run `41721839589` |
+| **Operational Cost** | **`$0.00 USD`** (sovereign on-premises GPU) | Governed (`<= $0.50 USD` cap per single-use Owner Grant, `0` automatic retries) |
+| **Evidence Artifact** | [`docs/evidence/qwen_tool_assisted_investigation_20261103.json`](docs/evidence/qwen_tool_assisted_investigation_20261103.json) | [`docs/evidence/meta_wonder_tool_investigation_20261103.json`](docs/evidence/meta_wonder_tool_investigation_20261103.json) |
 
 ---
 
 ## Key Features
 
-1. **Live Infrastructure Telemetry (Read-Only):**
-   - Ingests real-time readings from Casa (13 network signals, server states, energy) and Bellini (14 network signals) via canonical REST contracts (`guardian.creatorcore.ai`).
-   - Every reading is cryptographically hashed with a 64-character SHA-256 snapshot digest.
-2. **AG-60 Verified Memory Recall:**
-   - Retrieves curated historical site baseline facts from persistent memory schemas.
-   - Deep regex-based privacy redaction strips private IP subnets, MAC addresses, and credentials.
-3. **Governed Meta Muse Spark 1.3 Operator (`muse-spark-1.3`):**
-   - Official Meta Model API Responses integration (`POST https://api.meta.ai/v1/responses`).
-   - Atomic single-use cryptographic grant validation prevents replay attacks or infinite retry loops.
-   - Four-part structured output: Observations, Hypotheses, Uncertainty, and Governed Action.
-   - Safe `NOT_RUN` fallback with deterministic local analysis when API keys are unconfigured or credits pending.
-4. **Meta SAM 3.1 Optical Lab Inspection (`sam-3.1`):**
-   - Optical inspection of laboratory physical rack equipment (SFP transceivers, cabling).
-   - Verifies optical link LEDs and fiber bend radius compliance using authorized bench assets.
-5. **Human Authority & Virtual Isolation:**
-   - AI models cannot authorize their own actions. Requires explicit human owner approval.
-   - Virtual actuator dispatches bounded actions in process isolation without unconsented device commands.
-6. **VoiceOps Telephone Verification:**
-   - Incorporates verified historical telephone call evidence from October 30 (3,853 tx / 9,389 rx RTP packets, 7 accepted conversational speech turns with local Whisper STT / Piper TTS).
-7. **Tamper-Evident SHA-256 Hash Chain:**
-   - Sequential cryptographic audit chaining anchoring every state transition. Exportable verified JSON evidence.
+1. **InnerOS Global Context Collector (`src/inneros_meta_guardian/context_collector.py`):**
+   - Builds a versioned, sanitized 6-domain operational snapshot (`inneros_global_snapshot.json`, SHA-256 `92796a036c6fd89643a0be11898723d60b679565a86edcd88cb11583db5d5f83`) covering Infrastructure, NCP Coordination, Agents, Code, History, and Security.
+   - Recursive sanitizer redacts private LAN/mesh IPs, API keys, tokens, and workstation/host paths before any external dispatch.
+2. **Autonomous Multi-Turn Diagnostic Orchestrator (`src/inneros_meta_guardian/diagnostic_orchestrator.py`):**
+   - Exposes 11 allowlisted diagnostic and verification tools across Level 0 (Read-Only), Level 1 (Simulation), and Level 2 (Isolated Worktree Verification): `get_ncp_state`, `get_pending_tasks`, `get_worker_health`, `get_agent_task_history`, `get_mcp_gateway_health`, `get_recent_errors`, `get_repo_status`, `read_source_file`, `read_log_excerpt`, `simulate_recovery_patch`, and `verify_repair_invariants`.
+   - Enforces loop detection (`HALTED_LOOP_DETECTED`), call ceilings (`max_tool_calls=6`), token ceilings (`4096`), cost ceilings (`$0.50`), and operator cancellation.
+3. **5-Panel Investigation Console (`/self-heal#investigator`):**
+   - **Panel 1 (Conversation):** Multi-turn prompt, tool call requests, and final synthesized diagnosis.
+   - **Panel 2 (Tool Execution Gateway):** Tool name, sanitized arguments, execution latency, result preview, and SHA-256 evidence digest.
+   - **Panel 3 (Infrastructure):** Live snapshot summary of AMD Primary (`Radeon AI PRO R9700`, vLLM `:8000`), Intel Secondary (`:11434` offline), MCP `:8001`/`:8102`, and NCP task queues.
+   - **Panel 4 (Decisions & Controlled Repair Levels 0–3):** Verified hypotheses `H1`–`H3` and explicit authorization boundaries.
+   - **Panel 5 (Comparative Metrics):** Real measured benchmark table comparing Local AMD Qwen 30B vs. Meta Muse Wonder 1.0.
+4. **Governed Meta Muse Wonder 1.0 & Muse Spark 1.3 Integration:**
+   - Official Meta Model API Responses integration (`POST https://api.meta.ai/v1/responses`) with `function_call` tool extraction (`TOOL_CALL_REQUESTED`), accurate per-model SQLite receipt attribution, and atomic single-use cryptographic Owner Grants.
+5. **Physical Infrastructure Guardian (`/`) & Meta SAM 3.1 Optical Lab Inspection:**
+   - Read-only telemetry normalization, AG-60 memory recall with regex privacy redaction, SAM 3.1 optical rack inspection fixture, VoiceOps SIP/RTP telephone verification receipt, and tamper-evident SHA-256 hash chain.
 
 ---
 
@@ -55,33 +62,22 @@ The guarded local reasoning layer and a separately documented **Meta Muse Wonder
 
 ```mermaid
 flowchart TD
-    subgraph S1["1. OBSERVE"]
-        A1["Live Telemetry (Casa / Bellini)"] --> B1["Normalized Snapshot + SHA-256 Digest"]
-        A2["Synthetic Sandbox Scenarios"] --> B1
+    subgraph S1["1. OBSERVE & SANITIZE"]
+        A1["InnerOS Context Collector"] --> B1["inneros_global_snapshot.json (6 Domains + SHA-256)"]
     end
 
-    subgraph S2["2. REMEMBER"]
-        B1 --> C1["AG-60 Verified Memory Store"]
-        C1 --> C2["Deep Privacy & Credential Redaction"]
+    subgraph S2["2. AUTONOMOUS TOOL-ASSISTED INVESTIGATION"]
+        B1 --> C1["Diagnostic Orchestrator (Loop & Budget Guards)"]
+        C1 --> D1["Local AMD Qwen3-Coder-30B-AWQ (ROCm vLLM :8000)"]
+        C1 --> D2["Meta Muse Wonder 1.0 (/v1/responses + Single-Use Owner Grant)"]
+        D1 <-->|11 Allowlisted Tools| E1["Tool Execution Gateway (Level 0-2)"]
+        D2 <-->|function_call: get_pending_tasks, get_worker_health, read_source_file| E1
     end
 
-    subgraph S3["3. REASON (Meta Muse Spark 1.3)"]
-        C2 --> D1["Single-Use Cryptographic Grant (Pre-Consumed)"]
-        D1 --> D2["Meta Responses API (muse-spark-1.3)"]
-        D2 --> D3["Structured Analysis (Obs, Hypo, Uncert, Action)"]
-        D2 -.->|Fallback| D4["Local Deterministic / Ollama Engine"]
-    end
-
-    subgraph S4["4. AUTHORIZE & ACT"]
-        D3 --> E1["Human Authority Gate (Rafael López, Owner)"]
-        E1 --> E2["Isolated Virtual Actuator"]
-    end
-
-    subgraph S5["5. VERIFY & PROVE"]
-        E2 --> F1["Independent State Readback"]
-        F1 --> F2["Historical VoiceOps Telephone Proof (SIP/RTP)"]
-        F2 --> G1["Tamper-Evident SHA-256 Audit Chain"]
-        G1 --> G2["Exportable JSON Evidence Package"]
+    subgraph S3["3. CONTROLLED REPAIR & VERIFICATION (PR #256)"]
+        E1 --> F1["Cross-Host PID Guard + Linked Worktree gitdir Lock Check + Multi-Field CAS"]
+        F1 --> G1["Independent CI Verification (380 Platform Tests + 73 Guardian Tests Green)"]
+        G1 --> G2["Cryptographic Receipts & SHA-256 Audit Chain"]
     end
 ```
 
@@ -90,16 +86,18 @@ flowchart TD
 ## Quickstart & Local Execution
 
 ### Requirements
-- Python 3.10+ (Standard library only; zero external pip dependencies required for core demo).
+- Python 3.10+ (Standard library only; zero external pip dependencies required for the demo and test suite).
 - Git.
 
-### 1. Run the Test Suite (69 Tests, 100% Offline)
+### 1. Run the Complete Test Suite (73 Tests, 100% Offline) & Sanitizer Gate
 ```bash
 # Windows PowerShell
 $env:PYTHONPATH="src"; python -m unittest discover -s tests -v
+python scripts/build_public_release.py --check
 
 # Linux / macOS
 PYTHONPATH=src python3 -m unittest discover -s tests -v
+python3 scripts/build_public_release.py --check
 ```
 
 ### 2. Launch the Web Console
@@ -110,33 +108,23 @@ $env:PYTHONPATH="src"; python -m inneros_meta_guardian.web
 # Linux / macOS
 PYTHONPATH=src python3 -m inneros_meta_guardian.web
 ```
-Open your browser to: **`http://127.0.0.1:8787`**
-
-Open **`http://127.0.0.1:8787/self-heal`** for the new Muse Wonder forensic mission control and interactive, synthetic self-healing replay. This route works without any external API keys and has a dedicated read-only case endpoint (`/api/selfheal/case`).
-
-### 3. Operator CLI Utilities
-```bash
-# Mint a single-use grant bound to a snapshot digest
-python scripts/make_one_shot_grant.py <64-char-snapshot-digest> --ttl 300
-
-# Execute a governed one-shot inference from the terminal
-python scripts/operator_meta_once.py <grant_token> incident.json --memory-json memory.json
-```
+- Open **`http://127.0.0.1:8787/self-heal`** for the **5-Panel Muse & Qwen Autonomous Investigation Console** and the interactive self-healing sandbox replay.
+- Open **`http://127.0.0.1:8787/`** for the **Physical Infrastructure Guardian** console.
 
 ---
 
-## Documentation Index
+## Evidence & Documentation Index
 
-- [`docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md`](docs/JUDGE_DEMO_MISSION_CONTROL_20261102.md): Current 2m52s two-layer judge demonstration and truthful claim boundaries.
-
-- [`docs/META_REUSE_HANDOFF_20261101.md`](docs/META_REUSE_HANDOFF_20261101.md): Detailed architectural reuse breakdown (Pre-existing vs. New Meta developments).
-- [`docs/JUDGE_STORYBOARD_20261101.md`](docs/JUDGE_STORYBOARD_20261101.md): Complete 2–3 minute video storyboard and presentation walkthrough.
-- [`docs/PROVENANCE.md`](docs/PROVENANCE.md): Full provenance disclosure, attribution, and safety guarantees.
-- [`docs/SUBMISSION.md`](docs/SUBMISSION.md): Official Cerebral Valley submission package and checklist.
+- [`docs/evidence/meta_wonder_tool_investigation_20261103.json`](docs/evidence/meta_wonder_tool_investigation_20261103.json): Verified 2-turn tool-assisted live investigation receipt from **Meta Muse Wonder 1.0** (`resp_6aea97477ecbaecc16a14e99` $\rightarrow$ 4 tool calls $\rightarrow$ `resp_6aea97f2ad831065ca8b4bc8`).
+- [`docs/evidence/qwen_tool_assisted_investigation_20261103.json`](docs/evidence/qwen_tool_assisted_investigation_20261103.json): Verified 2-turn tool-assisted live investigation receipt from **Local AMD Qwen3-Coder-30B-AWQ** (`6,440.31 ms`, `1,522` tokens, `$0.00`).
+- [`docs/evidence/inneros_global_snapshot_20261103.json`](docs/evidence/inneros_global_snapshot_20261103.json): Sanitized 6-domain InnerOS global snapshot (`SHA-256: 92796a036c6fd89643a0be11898723d60b679565a86edcd88cb11583db5d5f83`).
+- [`docs/evidence/meta_wonder_receipt_20261102.json`](docs/evidence/meta_wonder_receipt_20261102.json): Single-shot Meta Muse Wonder 1.0 receipt (`resp_6ae9322a12052fe018674cb6`, `3,442` tokens, `1,420` reasoning CoT).
+- [`docs/SUBMISSION_PACKAGE_20261104.md`](docs/SUBMISSION_PACKAGE_20261104.md): Complete Cerebral Valley submission form answers and 3-minute video script.
+- [`docs/meta_muse_coordination_p0/status.json`](docs/meta_muse_coordination_p0/status.json): Canonical P0 coordination status manifest.
 
 ---
 
 ## License & Attribution
 
-Copyright © 2026 InnerChispa LLC. All rights reserved.  
-Authored for the **Meta Global AI Developer Hackathon 2026** (Cerebral Valley & Meta).
+Released under the [MIT License](LICENSE). Copyright © 2026 InnerChispa LLC (Rafael López).  
+Built for the **Meta Global AI Developer Hackathon 2026** (Meta × Cerebral Valley).

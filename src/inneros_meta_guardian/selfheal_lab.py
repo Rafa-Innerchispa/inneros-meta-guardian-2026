@@ -21,6 +21,7 @@ AFTER_CI = CORE_REPO + "/actions/runs/41569825744"
 PR256_CI = CORE_REPO + "/actions/runs/41671522881"
 WONDER_REPORT = DEMO_REPO + "/blob/main/docs/evidence/MUSE_WONDER_SELF_HEALING_VERIFIED_20261102.md"
 WONDER_RECEIPT = DEMO_REPO + "/blob/main/docs/evidence/meta_wonder_receipt_20261102.json"
+WONDER_TOOL_INVESTIGATION_JSON = DEMO_REPO + "/blob/main/docs/evidence/meta_wonder_tool_investigation_20261103.json"
 QWEN_DIAGNOSTIC_JSON = DEMO_REPO + "/blob/main/docs/evidence/qwen_local_diagnostic_20261103.json"
 QWEN_TOOL_INVESTIGATION_JSON = DEMO_REPO + "/blob/main/docs/evidence/qwen_tool_assisted_investigation_20261103.json"
 GLOBAL_SNAPSHOT_JSON = DEMO_REPO + "/blob/main/docs/evidence/inneros_global_snapshot_20261103.json"
@@ -169,6 +170,12 @@ def case_evidence() -> dict[str, Any]:
             "model": "muse-wonder-1.0",
             "provider": "Meta Model API",
             "response_id": "resp_6ae9322a12052fe018674cb6",
+            "tool_turn1_response_id": "resp_6aea97477ecbaecc16a14e99",
+            "tool_turn2_response_id": "resp_6aea97f2ad831065ca8b4bc8",
+            "tool_assisted_latency_ms": 25816.726,
+            "tool_assisted_total_tokens": 3843,
+            "tool_assisted_reasoning_tokens": 822,
+            "tool_investigation_url": WONDER_TOOL_INVESTIGATION_JSON,
             "reported_http_status": 200,
             "reported_completion": "completed",
             "input_tokens": 312,
