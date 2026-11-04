@@ -1,16 +1,18 @@
 {
   "mission_id": "meta-wonder-coordination-p0-20261102",
-  "run_id": "run_ag_20261103_p0_continuation_repair",
+  "task_id": "ops_4e977fd8ec43",
+  "run_id": "run_ag_20261103_p0_final_verification",
   "status": "ALL_OBJECTIVES_VERIFIED_CI_GREEN_VLLM_ONLINE",
   "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
   "branch": "local-agent/meta-wonder-coordination-repair-20261102",
-  "verified_commit": "fe1d457530660a149cb2ea1f6ea9e1a1795ad5b6",
+  "verified_commit": "2481d2e749ebb2af3cdc85a13cec6eff598fc7c4",
+  "guardian_commit": "4f209476644dfae7825c815edfbedf65d1b7f99d",
   "pull_request_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/pull/256",
   "issue_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/issues/255",
-  "ci_run_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/actions/runs/41671522881",
-  "worktree": "/home/rlopez/inneros/inneros_core/var/local_execution/worktrees/meta-wonder-coordination-repair-20261102",
+  "ci_run_url": "https://github.com/Rafa-Innerchispa/innerops-agentic-platform/actions/runs/41721839589",
+  "worktree": "<INNEROS_HOST_HOME>/inneros/inneros_core/var/local_execution/worktrees/meta-wonder-coordination-repair-20261102",
   "timestamp_started": "2026-11-03T08:51:00-05:00",
-  "timestamp_completed": "2026-11-03T11:15:00-05:00",
+  "timestamp_completed": "2026-11-03T21:12:00-05:00",
   "zero_spend_guarantee": {
     "paid_secondary_agents_disabled": true,
     "automatic_retries": 0,
@@ -19,11 +21,11 @@
     "owner_grant_status": "BLOCKED_UNTIL_OWNER_GRANT"
   },
   "running_processes_observed": {
-    "host": "inneros-5-lan (192.168.1.5)",
+    "host": "node-amd-primary (ralfiia-amd)",
     "gpu_hardware": "AMD Radeon AI PRO R9700 (ROCm 10.1)",
     "gpu_rocm_vram_free_gb": 34.15,
     "local_models_on_disk": {
-      "path": "/home/rlopez/inneros/inneros_core/var/local_models/QuantTrio__Qwen3-Coder-30B-A3B-Instruct-AWQ",
+      "path": "PRIVATE_LOCAL_VOLUME_REDACTED/QuantTrio__Qwen3-Coder-30B-A3B-Instruct-AWQ",
       "size_gb": 16.4,
       "weights_verified": true
     },
@@ -34,8 +36,7 @@
       "state": "idle",
       "active_tasks_count": 0,
       "collision_risk": "NONE",
-      "owner_notification_delivered": true,
-      "notification_channels": ["Home Assistant (mobile_app_infinix_x6873)", "Telegram (InnerSparkOS_Bot, msg_id 37)"]
+      "owner_notification_delivered": true
     }
   },
   "qwen_local_execution": {
@@ -43,6 +44,9 @@
     "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
     "hardware": "AMD Radeon AI PRO R9700 (ROCm 10.1)",
     "latency_ms": 15155,
+    "tool_assisted_2turn_latency_ms": 6440.31,
+    "tool_assisted_2turn_tokens": 1522,
+    "tools_invoked": ["get_pending_tasks", "get_worker_health"],
     "usage": {
       "prompt_tokens": 343,
       "completion_tokens": 1024,
@@ -50,19 +54,23 @@
     },
     "cost_usd": 0.0,
     "prompt_sha256": "aa7cbb864ae96d3b776edf84b7111390915a101954dba76eb4a4699989147d2c",
-    "evidence_file": "docs/evidence/qwen_local_diagnostic_20261103.json"
+    "evidence_file": "docs/evidence/qwen_local_diagnostic_20261103.json",
+    "tool_investigation_evidence_file": "docs/evidence/qwen_tool_assisted_investigation_20261103.json",
+    "global_snapshot_file": "docs/evidence/inneros_global_snapshot_20261103.json",
+    "global_snapshot_sha256": "92796a036c6fd89643a0be11898723d60b679565a86edcd88cb11583db5d5f83"
   },
   "worker_liveness_protections": {
     "heartbeat_threshold_seconds": 180,
+    "cross_host_claim_verification": "fail_closed_remote_host_unverified",
     "pid_liveness_check": "os.kill(pid, 0)",
-    "git_worktree_lock_detection": ".git/index.lock",
+    "git_worktree_lock_detection": "_resolve_git_lock_paths (.git directory + linked worktree gitdir pointer file)",
     "zero_writes_on_active_worker": true,
     "atomic_cas_filter": ["task_id", "status: claimed", "claim_token", "lease_until", "revision"],
     "cas_modified_count_enforced": true
   },
   "reproduced_defect": {
     "task_id": "ops_fcd8686d7fc6",
-    "defect": "Stale claimed task with expired lease (15 days overdue) trapped between dev_swarm_scheduler and ops_interactive_recovery. Unconditional claim wiping produced risk of duplicate execution on active workers.",
+    "defect": "Stale claimed task with expired lease (15 days overdue) trapped between dev_swarm_scheduler and ops_interactive_recovery. Unconditional claim wiping produced risk of duplicate execution on active or cross-host workers.",
     "reproduction_test": "platform/tests/test_ops_expired_claim_lease_recovery.py",
     "status_before": "FAIL (AssertionError: awaiting_ide_claim != awaiting_antigravity_claim)"
   },
@@ -71,6 +79,8 @@
     "allowed_model": "muse-wonder-1.0",
     "max_tokens_budget": 4096,
     "budget_ceiling_usd": 0.50,
+    "tool_calling_bridge": "ALLOWLISTED_DIAGNOSTIC_TOOLS + _extract_tool_calls (TOOL_CALL_REQUESTED)",
+    "receipt_model_attribution_fix": "receipt.get('model') or MODEL",
     "security_gate": "BLOCKED_UNTIL_OWNER_GRANT",
     "test_suite": "platform/tests/test_meta_model_provider.py"
   },
@@ -82,6 +92,7 @@
       "platform/inneros_core_runtime/local_model_router.py",
       "platform/inneros_core_runtime/capability_gateway_model.py",
       "platform/inneros_core_runtime/meta_model_provider.py",
+      "platform/inneros_core_runtime/interactive_ops_runner.py",
       "platform/scripts/antigravity_ops_headless_execute_one.py",
       "platform/tests/test_provider_execution_trust_boundary.py",
       "platform/tests/test_meta_model_provider.py",
@@ -91,17 +102,20 @@
       "platform/tests/test_ops_expired_claim_lease_recovery.py"
     ],
     "test_delta": {
-      "local_recovery_suite": "7 passed, 0 failed in 0.16s (100% GREEN)",
-      "full_ci_suite": "376 passed, 0 failed, 13 subtests passed in CI Run 41671522881 (100% GREEN)"
+      "local_recovery_suite": "10 passed, 0 failed in 0.12s (100% GREEN)",
+      "meta_provider_suite": "33 passed, 0 failed in 0.11s (100% GREEN)",
+      "guardian_suite": "73 passed, 0 failed in 11.54s (100% GREEN)",
+      "full_ci_suite": "380 passed, 0 failed, 13 subtests passed in CI Run 41721839589 (100% GREEN)"
     }
   },
   "phases": {
-    "phase_0_claim_ack": { "status": "COMPLETED", "timestamp": "2026-11-03T08:52:00-05:00" },
-    "phase_1_task_recovery_safeguards": { "status": "COMPLETED", "timestamp": "2026-11-03T09:05:00-05:00" },
-    "phase_2_ci_general_green": { "status": "COMPLETED", "timestamp": "2026-11-03T11:11:00-05:00" },
-    "phase_3_vllm_repair_and_qwen_execution": { "status": "COMPLETED", "timestamp": "2026-11-03T11:00:00-05:00" },
-    "phase_4_meta_wonder_mcp_bridge": { "status": "COMPLETED_INTEGRATED_IN_PR256", "timestamp": "2026-11-03T11:05:00-05:00" },
-    "phase_5_diagnostic_comparison_matrix": { "status": "COMPLETED", "timestamp": "2026-11-03T11:15:00-05:00" },
-    "phase_6_frontend_evidence_pipeline": { "status": "COMPLETED", "timestamp": "2026-11-03T11:16:00-05:00" }
+    "phase_0_claim_ack": { "status": "COMPLETED", "timestamp": "2026-11-03T16:06:29-05:00" },
+    "phase_1_task_recovery_safeguards": { "status": "COMPLETED", "timestamp": "2026-11-03T16:15:00-05:00" },
+    "phase_2_ci_general_green": { "status": "COMPLETED", "timestamp": "2026-11-03T16:27:56-05:00" },
+    "phase_3_vllm_repair_and_qwen_execution": { "status": "COMPLETED", "timestamp": "2026-11-03T16:14:00-05:00" },
+    "phase_4_meta_wonder_mcp_bridge": { "status": "COMPLETED_INTEGRATED_IN_PR256", "timestamp": "2026-11-03T16:26:30-05:00" },
+    "phase_5_diagnostic_comparison_matrix": { "status": "COMPLETED", "timestamp": "2026-11-03T16:25:00-05:00" },
+    "phase_6_frontend_evidence_pipeline": { "status": "COMPLETED", "timestamp": "2026-11-03T16:27:15-05:00" },
+    "phase_7_ncp_coordination_sync": { "status": "COMPLETED", "timestamp": "2026-11-03T21:12:35-05:00" }
   }
 }
