@@ -1,0 +1,19 @@
+{
+  "candidate": "Meta Muse Spark Open (Fireworks AI)",
+  "provider": "fireworks_ai",
+  "model_id": "accounts/fireworks/models/muse-spark-open",
+  "run_id": "chatcmpl-b004eaab02d1486ea8baafe33b6682b4",
+  "dossier_hash": "fa35a5e02596ba44e658be79eb6aae502be9d56d5c156a6cc7915b4a2ff40390",
+  "prompt_hash": "3d00ee7708916d732eec596997961812e80b02fb9ae7134d020d23c49438ecde",
+  "duration_ms": 46182.32,
+  "tokens": {
+    "input": 1027,
+    "output": 1600,
+    "total": 2627,
+    "reasoning": 842
+  },
+  "cost_usd": 0.001485,
+  "code_chars": 0,
+  "finish_reason": "length",
+  "status": "TESTED_LIVE_SUCCESS"
+}

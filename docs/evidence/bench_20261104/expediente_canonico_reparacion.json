@@ -1,0 +1,57 @@
+{
+  "schema": "inneros.canonical_repair_dossier.v1",
+  "dossier_id": "inneros_repair_dossier_20261104",
+  "generated_at": "2026-11-04T19:40:00Z",
+  "classification": "SANITIZED_CANONICAL_INCIDENT_DOSSIER",
+  "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+  "test_suite": "tests/test_ops_expired_claim_lease_recovery.py",
+  "baseline_test_status": "9 FAILED, 1 PASSED in 0.15s",
+  "cluster_topology": {
+    "primary_host": "ralfiia-amd (AMD Radeon AI PRO R9700, vLLM :8000, MCP :8001/:8102)",
+    "secondary_host": "ralphi-ia-ver-10 (Intel secondary node, Ollama :11434 offline, SSH reachable)"
+  },
+  "incident_context": {
+    "active_workers": 0,
+    "blocked_workers": 260,
+    "stale_worker_reason": "stale_worker_retry_budget_exhausted",
+    "open_records": 178,
+    "focal_tasks": [
+      {
+        "task_id": "ops_4e977fd8ec43",
+        "status": "awaiting_antigravity_claim",
+        "execution_lane": "antigravity_interactive",
+        "do_not_auto_dispatch": true,
+        "note": "Interactive orchestrated task trapped awaiting interactive claim"
+      },
+      {
+        "task_id": "ops_fcd8686d7fc6",
+        "status": "claimed",
+        "execution_lane": "cursor_interactive",
+        "lease_until": "expired_15_days_ago",
+        "note": "Orphan claim lease with expired token"
+      }
+    ]
+  },
+  "identified_defects": [
+    {
+      "code": "DEFECT_01_AWAITING_CLAIM_PRECEDENCE",
+      "description": "Orchestrated tasks revert to generic awaiting_ide_claim instead of respecting awaiting_antigravity_claim or awaiting_cursor_claim precedence."
+    },
+    {
+      "code": "DEFECT_02_CROSS_HOST_PID_KILL_HAZARD",
+      "description": "Calling os.kill(pid, 0) blindly assumes worker is on local host. If worker is on remote Intel host (ralphi-ia-ver-10), local check is invalid and risks falsely terminating remote tasks."
+    },
+    {
+      "code": "DEFECT_03_LINKED_WORKTREE_GITDIR_LOCK",
+      "description": "Worktrees created via git worktree add contain a .git file ('gitdir: /path/to/real/gitdir') instead of a .git directory. Recovery checks (wt_path / '.git' / 'index.lock') fail to detect active locks in linked worktrees."
+    },
+    {
+      "code": "DEFECT_04_MISSING_ATOMIC_CAS",
+      "description": "Database updates in recovery do not enforce atomic CAS (update_one matched status, token, lease_until, revision with modified_count == 1), risking split-brain duplicate claims."
+    },
+    {
+      "code": "DEFECT_05_ACTIVE_HEARTBEAT_IGNORE",
+      "description": "Tasks with recent heartbeat (< 180s) or active local PID must never be recovered even if lease_until is in the past."
+    }
+  ]
+}

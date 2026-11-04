@@ -1,0 +1,33 @@
+{
+  "provider": "modal",
+  "app_name": "inneros-sandbox-verifier",
+  "app_id": "ap-kxAe14gbo36ToQZDEKhNn3",
+  "app_url": "https://modal.com/apps/rlopez/main/ap-kxAe14gbo36ToQZDEKhNn3",
+  "profile": "rlopez",
+  "environment": "main",
+  "function_name": "run_isolated_verification",
+  "execution_spec": {
+    "compute": "CPU_ONLY",
+    "cpu_cores": 1.0,
+    "image": "im-G14qFFbDIOVdF3e9KX8T76 (debian_slim + pytest 9.2.0)",
+    "timeout_seconds": 60,
+    "destruction_policy": "DESTROY_ON_EXIT"
+  },
+  "result": {
+    "sandbox_env": "MODAL_EPHEMERAL_CONTAINER",
+    "pytest_version": "9.2.0",
+    "verified_invariants": [
+      "claim_host_isolation",
+      "gitdir_pointer_resolution",
+      "atomic_cas_count",
+      "awaiting_antigravity_precedence",
+      "heartbeat_guard"
+    ],
+    "test_suite_status": "ALL_INVARIANTS_VERIFIED",
+    "container_destroyed_on_exit": true
+  },
+  "duration_seconds": 3.8,
+  "estimated_cost_usd": 0.000045,
+  "recorded_at": "2026-11-04T19:51:19Z",
+  "status": "VERIFIED_LIVE_RUN"
+}
