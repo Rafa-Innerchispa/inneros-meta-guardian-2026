@@ -8,6 +8,9 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 [![Python 3.10 | 3.12](https://img.shields.io/badge/python-3.10%20%7C%203.12-blue?style=for-the-badge)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
 
+
+> **Model provenance correction (Nov 4, 2026):** The historical 10/10 Antigravity IDE repair is labeled `Argon` in older reports, but the underlying model identity is **not independently verified**: evidence inconsistently says `gemini-3.8-flash-medium / gemini-4-argon` and the operator reports using Gemini Flash Medium. Refer to it as **Antigravity IDE repair (model unverified)**, not an Argon model benchmark. See [MODEL_PROVENANCE_ERRATUM.md](docs/evidence/bench_20261104/MODEL_PROVENANCE_ERRATUM.md).
+
 ---
 
 ## Verified Public Demonstration
