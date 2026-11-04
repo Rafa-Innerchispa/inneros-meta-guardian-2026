@@ -3,7 +3,7 @@
 *Meta Global AI Developer Hackathon 2026 — Startup Track (Push the Frontier / Build for Your World)*  
 InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
-[![Public Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Fmeta--guardian.pcdoctor.ai%2Fself--heal-success?style=for-the-badge&logo=cloudflare)](https://meta-guardian.pcdoctor.ai/self-heal)
+[![Public Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Fguardian.pcdoctor.ai%2Fself--heal-success?style=for-the-badge&logo=cloudflare)](https://guardian.pcdoctor.ai/self-heal)
 [![Unit Tests](https://img.shields.io/badge/tests-80%2F80%20passing-brightgreen?style=for-the-badge)](https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026)
 [![Python 3.10 | 3.12](https://img.shields.io/badge/python-3.10%20%7C%203.12-blue?style=for-the-badge)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
@@ -12,7 +12,7 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 ## Verified Public Judge Demonstration
 
-> 🌐 **PUBLIC HTTPS URL:** **[https://meta-guardian.pcdoctor.ai/self-heal](https://meta-guardian.pcdoctor.ai/self-heal)**  
+> 🌐 **PUBLIC HTTPS URL:** **[https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal)**  
 > **Mode:** `PUBLIC_JUDGE_DEMO` (Cloudflare Tunnel TLS 1.3, origin isolated, fail-closed read-only gate, 0 unapproved model spend, zero VPN required).  
 > **Deployment Architecture:** Documented in [`docs/JUDGE_PUBLIC_DEPLOY.md`](docs/JUDGE_PUBLIC_DEPLOY.md).
 

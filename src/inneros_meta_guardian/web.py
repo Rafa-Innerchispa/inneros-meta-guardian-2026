@@ -128,7 +128,7 @@ class Handler(BaseHTTPRequestHandler):
                         "qwen_local_rocm": "ONLINE_SOVEREIGN_AWQ",
                         "gpt6_astra": "BLOCKED_API_ACCESS",
                     },
-                    "public_url": "https://meta-guardian.pcdoctor.ai/self-heal",
+                    "public_url": "https://guardian.pcdoctor.ai/self-heal",
                 },
             )
         elif path == "/api/state":

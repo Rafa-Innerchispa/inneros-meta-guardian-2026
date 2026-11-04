@@ -2,7 +2,7 @@
 
 **Project:** InnerOS Autonomous Infrastructure Guardian × Meta Ecosystem  
 **Event:** Meta Global AI Developer Hackathon 2026 (Cerebral Valley)  
-**Public Live Demo URL:** [https://meta-guardian.pcdoctor.ai/self-heal](https://meta-guardian.pcdoctor.ai/self-heal)  
+**Public Live Demo URL:** [https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal)  
 **Mode:** `PUBLIC_JUDGE_DEMO` (Read-Only Forensic Evidence, 0 Paid Invocations, Isolated Origin)
 
 ---
@@ -87,4 +87,4 @@
    # Expects HTTP 403 Forbidden with PUBLIC_READ_ONLY_MODE
    ```
 4. **Browser Console Check:**
-   Navigate to [https://meta-guardian.pcdoctor.ai/self-heal](https://meta-guardian.pcdoctor.ai/self-heal) to inspect the 5-Panel Investigation Console, Meta Model Lab, and Agent Repair Arena.
+   Navigate to [https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal) to inspect the 5-Panel Investigation Console, Meta Model Lab, and Agent Repair Arena.
