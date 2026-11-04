@@ -1,0 +1,123 @@
+{
+  "evaluation_timestamp": "2026-11-04T20:29:43.609+00:00",
+  "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+  "reference_commit": "94d90d34ce5542f0a152f071852b2b2be4fadfd1",
+  "test_suite": "platform/tests/test_ops_expired_claim_lease_recovery.py",
+  "results": [
+    {
+      "candidate_id": "argon_reference",
+      "metadata": {
+        "name": "Argon Comparative Agent (Antigravity IDE)",
+        "provider": "Google Antigravity IDE",
+        "model_id": "gemini-4-argon / gemini-3.8-flash-medium",
+        "cost_usd": 0.0,
+        "cost_type": "ACTUALLY_BILLED",
+        "generation_latency_ms": 3200.0,
+        "role": "Comparative Reference Agent"
+      },
+      "syntax_valid": true,
+      "tests_passed": 8,
+      "tests_failed": 2,
+      "tests_total": 10,
+      "pass_rate_pct": 80.0,
+      "exit_code": 1,
+      "test_latency_ms": 754.89,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "2 failed, 8 passed in 0.14s",
+      "status": "PARTIAL_PASS",
+      "patch_sha256": "0a054df41d344f5154043c361749ab5a5597b6f11b720e9254abf23a105b90b7"
+    },
+    {
+      "candidate_id": "qwen3_coder_original",
+      "metadata": {
+        "name": "Local Qwen3-Coder-30B-AWQ (Original Candidate)",
+        "provider": "Local AMD ROCm vLLM (:8000)",
+        "model_id": "Qwen3-Coder-30B-AWQ",
+        "cost_usd": 0.0,
+        "cost_type": "MARGINAL_API_ZERO (Hardware Amortized)",
+        "generation_latency_ms": 12594.65,
+        "role": "Sovereign In-House Model"
+      },
+      "syntax_valid": true,
+      "tests_passed": 0,
+      "tests_failed": 10,
+      "tests_total": 10,
+      "pass_rate_pct": 0.0,
+      "exit_code": 1,
+      "test_latency_ms": 767.2,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "10 failed in 0.16s",
+      "status": "FAILED",
+      "patch_sha256": "1bd30a817b45a731ff0e7523fb288cc8a6908d1f8004399f5224dceb8bd6acaf"
+    },
+    {
+      "candidate_id": "qwen3_coder_assisted_v2",
+      "metadata": {
+        "name": "Local Qwen3-Coder-30B (Antigravity-Assisted v2)",
+        "provider": "Local AMD ROCm vLLM + Architectural Remediation",
+        "model_id": "Qwen3-Coder-30B-AWQ (Corrected)",
+        "cost_usd": 0.0,
+        "cost_type": "MARGINAL_API_ZERO",
+        "generation_latency_ms": 12594.65,
+        "role": "Remediated Sovereign Candidate"
+      },
+      "syntax_valid": true,
+      "tests_passed": 6,
+      "tests_failed": 4,
+      "tests_total": 10,
+      "pass_rate_pct": 60.0,
+      "exit_code": 1,
+      "test_latency_ms": 744.03,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "4 failed, 6 passed in 0.15s",
+      "status": "PARTIAL_PASS",
+      "patch_sha256": "959b2522c1068fe0bad7810731b3b01faf53412340d0b685053004a1b3a7315e"
+    },
+    {
+      "candidate_id": "meta_muse_wonder_1_0_live",
+      "metadata": {
+        "name": "Meta Muse Wonder 1.0 (Live Guided Repair)",
+        "provider": "Meta Model API (api.meta.ai)",
+        "model_id": "muse-wonder-1.0",
+        "cost_usd": 0.005554,
+        "cost_type": "PROVIDER_REPORTED",
+        "generation_latency_ms": 23805.6,
+        "receipt": {
+          "provider": "Meta Model API",
+          "model": "muse-wonder-1.0",
+          "response_id": "resp_6aeb953a817d2ad9c525439c",
+          "latency_ms": 23805.6,
+          "usage": {
+            "input_tokens": 307,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 3600,
+            "output_tokens_details": {
+              "reasoning_tokens": 296
+            },
+            "total_tokens": 3907
+          },
+          "input_tokens": 307,
+          "output_tokens": 3600,
+          "reasoning_tokens": 296,
+          "total_tokens": 3907,
+          "cost_usd": 0.005554,
+          "finish_reason": "max_output_tokens"
+        },
+        "role": "Frontier Orchestrator Candidate"
+      },
+      "syntax_valid": true,
+      "tests_passed": 0,
+      "tests_failed": 10,
+      "tests_total": 10,
+      "pass_rate_pct": 0.0,
+      "exit_code": 1,
+      "test_latency_ms": 644.29,
+      "has_premature_write_safety_flaw": false,
+      "stdout_summary": "10 failed in 0.09s",
+      "status": "FAILED",
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

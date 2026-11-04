@@ -1,0 +1,43 @@
+{
+  "schema": "inneros.blind_diagnosis_dossier.v2",
+  "dossier_id": "inneros_blind_diagnosis_20261104",
+  "generated_at": "2026-11-04T20:25:00Z",
+  "classification": "UNCONTAMINATED_BLIND_DIAGNOSIS_INCIDENT",
+  "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+  "target_repository": "Rafa-Innerchispa/innerops-agentic-platform",
+  "cluster_topology": {
+    "primary_host": "ralfiia-amd (AMD Ryzen 9 + Radeon AI PRO R9700 32GB VRAM, local vLLM :8000)",
+    "secondary_host": "ralphi-ia-ver-10 (Intel Core i9, Ollama :11434 offline, SSH reachable)"
+  },
+  "observed_cluster_symptoms": {
+    "active_workers": 0,
+    "blocked_workers": 260,
+    "blocked_worker_dominant_reason": "stale_worker_retry_budget_exhausted",
+    "focal_tasks": [
+      {
+        "task_id": "ops_4e977fd8ec43",
+        "status": "awaiting_antigravity_claim",
+        "execution_lane": "antigravity_interactive",
+        "do_not_auto_dispatch": true,
+        "symptom": "Interactive orchestrated task trapped awaiting claim; dev_swarm workers never pick it up."
+      },
+      {
+        "task_id": "ops_fcd8686d7fc6",
+        "status": "claimed",
+        "execution_lane": "cursor_interactive",
+        "lease_until": "2026-10-19T14:32:00Z (expired 15 days ago)",
+        "symptom": "Orphan claimed task with expired lease remains stuck in claimed status indefinitely."
+      }
+    ]
+  },
+  "allowed_diagnostic_tools": [
+    "get_ncp_state",
+    "get_pending_tasks",
+    "get_worker_health",
+    "read_source_file"
+  ],
+  "source_files_under_investigation": [
+    "platform/inneros_core_runtime/ops_interactive_recovery.py",
+    "platform/inneros_core_runtime/ops_awaiting_claim.py"
+  ]
+}

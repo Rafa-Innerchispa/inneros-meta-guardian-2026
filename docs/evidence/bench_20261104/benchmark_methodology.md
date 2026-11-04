@@ -43,3 +43,4 @@ Each candidate is evaluated across six rigorous dimensions:
 4. **Interface Contract Adherence:** Preserves existing module signatures and backward compatibility.
 5. **Latency & Throughput:** Time-to-first-token, inference duration, and end-to-end execution time.
 6. **Operational Cost:** Micro-spend incurred per query and per verified patch.
+

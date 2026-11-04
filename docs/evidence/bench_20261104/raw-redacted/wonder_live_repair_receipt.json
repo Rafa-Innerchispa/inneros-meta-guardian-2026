@@ -1,0 +1,23 @@
+{
+  "provider": "Meta Model API",
+  "model": "muse-wonder-1.0",
+  "response_id": "resp_6aeb953a817d2ad9c525439c",
+  "latency_ms": 23805.6,
+  "usage": {
+    "input_tokens": 307,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 3600,
+    "output_tokens_details": {
+      "reasoning_tokens": 296
+    },
+    "total_tokens": 3907
+  },
+  "input_tokens": 307,
+  "output_tokens": 3600,
+  "reasoning_tokens": 296,
+  "total_tokens": 3907,
+  "cost_usd": 0.005554,
+  "finish_reason": "max_output_tokens"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "inneros.guided_repair_specification.v2",
+  "dossier_id": "inneros_guided_repair_20261104",
+  "generated_at": "2026-11-04T20:25:00Z",
+  "classification": "GUIDED_CODE_REPAIR_REQUIREMENTS",
+  "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+  "target_file": "platform/inneros_core_runtime/ops_interactive_recovery.py",
+  "target_test_suite": "platform/tests/test_ops_expired_claim_lease_recovery.py",
+  "required_interface": "recover_orphan_interactive_ops_tasks(limit: int = 10, *, remote_liveness_verifier: callable = None) -> dict[str, Any]",
+  "required_invariants": [
+    {
+      "id": "INV-1_LANE_PRECEDENCE",
+      "description": "Recovered task must return to its specific awaiting claim state (awaiting_antigravity_claim or awaiting_cursor_claim) using awaiting_claim_status_for_task(task), never generic awaiting_claim or awaiting_ide_claim."
+    },
+    {
+      "id": "INV-2_REMOTE_HOST_SAFETY",
+      "description": "If task claim_host or headless_execution_host belongs to remote node (e.g., ralphi-ia-ver-10) and not local host, os.kill must NOT be executed locally. If remote_liveness_verifier is absent or returns non-False, recovery must abort with ZERO database writes."
+    },
+    {
+      "id": "INV-3_LINKED_WORKTREE_LOCK",
+      "description": "When inspecting task worktree path, if .git is a file starting with 'gitdir: <path>', resolve the actual git directory path and check if index.lock exists there. If locked, abort with ZERO database writes."
+    },
+    {
+      "id": "INV-4_ATOMIC_CAS",
+      "description": "Database updates must use an atomic CAS filter matching task_id, status='claimed', claim_token, lease_until, and revision. If modified_count != 1, recovery must be declared failed for that task to prevent race conditions."
+    },
+    {
+      "id": "INV-5_PRE_MUTATION_HEARTBEAT_CHECK",
+      "description": "CRITICAL PRE-CONDITION: Active heartbeat (< 180s) or active local PID check must be performed BEFORE any database mutation. If active, abort with ZERO database writes."
+    }
+  ]
+}

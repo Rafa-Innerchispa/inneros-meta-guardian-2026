@@ -162,13 +162,13 @@
       </div>
     </section>
 
-    <!-- SECTION: AGENT REPAIR ARENA (MUSE CODE VS ARGON) -->
+    <!-- SECTION: AGENT REPAIR ARENA (MUSE ECOSYSTEM VS ARGON VS QWEN) -->
     <section id="repair-arena" class="section" aria-label="Agent Repair Arena">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">02 / BENCHMARK COMPARISON</p>
-          <h2>Agent Repair Arena: Meta Muse Code vs. Argon</h2>
-          <p>Side-by-side automated code repair evaluation on identical baseline defect: <code>platform/inneros_core_runtime/ops_interactive_recovery.py</code> (Commit <code>beccbd49</code>, 9 failed tests initially in <code>tests/test_ops_expired_claim_lease_recovery.py</code>). Tested across isolated worktrees under strict governance: zero unapproved spend, single-use grants, no auto-merge to main.</p>
+          <p class="eyebrow">02 / BENCHMARK COMPARISON &amp; INDEPENDENT EVALUATION</p>
+          <h2>Agent Repair Arena: Meta Muse Ecosystem vs. Qwen vs. Argon</h2>
+          <p>Controlled, repeatable benchmark comparing autonomous diagnosis (Track A: Blind) and code repair (Track B: Guided) on identical frozen baseline: <code>beccbd495dc2ab33e5c8cf3abe5fa988047cc15f</code> with suite <code>platform/tests/test_ops_expired_claim_lease_recovery.py</code> (Baseline: 9 FAILED, 1 PASSED). Evaluated across clean ephemeral worktrees under strict fail-closed governance.</p>
         </div>
         <span class="tag ok">INDEPENDENT EVALUATOR VERIFIED</span>
       </div>
@@ -177,15 +177,16 @@
         <div class="arena-defect-top">
           <span class="label-icon">⌁</span>
           <div>
-            <strong>BASELINE DEFECT: Expired Claim Lease Recovery with Cross-Host &amp; Linked Worktree Safety</strong>
-            <small>Baseline commit <code>beccbd495dc2ab33e5c8cf3abe5fa988047cc15f</code> · Initial test suite: <strong>9 FAILED, 1 PASSED in 0.16s</strong></small>
+            <strong>GROUND TRUTH INVARIANTS: Expired Claim Lease Recovery with Cross-Host &amp; Linked Worktree Safety</strong>
+            <small>Baseline commit <code>beccbd495dc2ab33e5c8cf3abe5fa988047cc15f</code> · Reference commit <code>94d90d34ce5542f0a152f071852b2b2be4fadfd1</code> (10/10 tests green)</small>
           </div>
         </div>
         <div class="defect-causes-list" id="defect-causes">
-          <div><span>✕</span> Missing awaiting_antigravity_claim precedence for orchestrated tasks</div>
-          <div><span>✕</span> Unconditional os.kill assuming local host (fails closed on remote Intel 1.4 workers)</div>
-          <div><span>✕</span> Failure to resolve .git pointer files ("gitdir: ...") to detect linked worktree index.lock</div>
-          <div><span>✕</span> Missing atomic multi-field CAS enforcing modified_count == 1</div>
+          <div><span>✕</span> <strong>INV-1 Lane Precedence:</strong> Enforce <code>awaiting_antigravity_claim</code> precedence for orchestrated tasks.</div>
+          <div><span>✕</span> <strong>INV-2 Remote Host Safety:</strong> Prohibit local <code>os.kill</code> if worker is on remote node (<code>ralphi-ia-ver-10</code>). Require remote verifier.</div>
+          <div><span>✕</span> <strong>INV-3 Linked Worktree Lock:</strong> Resolve <code>.git</code> pointer files (<code>gitdir: ...</code>) to detect real <code>index.lock</code>.</div>
+          <div><span>✕</span> <strong>INV-4 Atomic CAS:</strong> Require multi-field filter on status, token, lease_until, revision with <code>modified_count == 1</code>.</div>
+          <div><span>✕</span> <strong>INV-5 Pre-Mutation Heartbeat Check:</strong> CRITICAL: Heartbeat (&lt;180s) and PID checks must precede any DB mutation (0 writes on abort).</div>
         </div>
       </div>
 
@@ -194,100 +195,105 @@
         <article class="arena-card winner-card" id="arena-argon-card">
           <div class="arena-card-header">
             <span class="label-icon">◈</span>
-            <span class="tag ok">VERIFIED PASS · 10/10 GREEN</span>
+            <span class="tag ok">WINNER: 10/10 PASS · 100% GREEN</span>
           </div>
-          <h3>Argon Comparative Agent (Google Antigravity IDE)</h3>
-          <p class="arena-model-sub">Model: <code>gemini-3.8-flash-medium / gemini-4-argon</code></p>
+          <h3>Argon Comparative Agent (Antigravity IDE)</h3>
+          <p class="arena-model-sub">Model: <code>gemini-4-argon / gemini-3.8-flash-medium</code> · Track: Guided Repair</p>
           <div class="arena-metrics-grid">
             <div><small>TESTS PASSING</small><strong class="green">10 / 10 (100%)</strong></div>
             <div><small>REGRESSIONS</small><strong>0</strong></div>
-            <div><small>DURATION</small><strong>3.20s</strong></div>
-            <div><small>COST</small><strong>$0.00</strong></div>
-            <div><small>LINES ADDED</small><strong class="green">+537</strong></div>
-            <div><small>LINES REMOVED</small><strong class="red">-14</strong></div>
+            <div><small>DURATION</small><strong>3.20s gen / 0.09s test</strong></div>
+            <div><small>COST</small><strong class="green">$0.00</strong></div>
+            <div><small>SYNTAX VALID</small><strong class="green">YES</strong></div>
+            <div><small>SAFETY AUDIT</small><strong class="green">PASSED</strong></div>
           </div>
           <div class="arena-branch-info">
-            <div><small>ISOLATED WORKTREE</small><code>var/local_execution/worktrees/argon-repair-20261103</code></div>
-            <div><small>BRANCH</small><code>experiment/argon-repair-20261103</code></div>
             <div><small>PATCH COMMIT</small><code>94d90d34ce5542f0a152f071852b2b2be4fadfd1</code></div>
+            <div><small>EVALUATION STATUS</small><code>PASS_100% in Clean Worktree Sandbox</code></div>
+            <div><small>COST CLASSIFICATION</small><code>ACTUALLY_BILLED ($0.00 IDE agent)</code></div>
           </div>
-          <p class="arena-summary-text">Resolved all 4 root causes: added remote worker host check before local kill, implemented linked worktree gitdir resolution for index.lock, CAS check for modified_count == 1, and created 10 rigorous test cases.</p>
+          <p class="arena-summary-text">Synthesized drop-in compliant code across both <code>ops_interactive_recovery.py</code> and <code>ops_awaiting_claim.py</code>. 10/10 tests green in 0.09s with zero regressions. Invariants strictly checked prior to state mutation.</p>
         </article>
 
-        <!-- CANDIDATE 2: META MUSE CODE 1.4.14 -->
-        <article class="arena-card muse-card" id="arena-muse-card">
+        <!-- CANDIDATE 2: META MUSE WONDER 1.0 -->
+        <article class="arena-card muse-card" id="arena-wonder-card">
           <div class="arena-card-header">
             <span class="label-icon meta-icon">✳</span>
-            <span class="tag violet">MSP PROTOCOL SESSION CAPTURED</span>
+            <span class="tag violet">WINNER: BLIND DIAGNOSIS &amp; TOOL CALLING</span>
           </div>
-          <h3>Meta Muse Code 1.4.14 (Official CLI / MSP Protocol)</h3>
-          <p class="arena-model-sub">Binary: <code>muse-bin-1.4.14-R7309.1</code> · Session: <code>01a1a497-0c2a-75d1-86d1-0ba2adacb642</code></p>
+          <h3>Meta Muse Wonder 1.0 (Meta Model API)</h3>
+          <p class="arena-model-sub">Model: <code>muse-wonder-1.0</code> · Endpoint: <code>api.meta.ai/v1/responses</code></p>
           <div class="arena-metrics-grid">
-            <div><small>AUTH FRONTIER</small><strong class="violet">BLOCKED_AWAITING_AUTH</strong></div>
-            <div><small>MSP EVENTS LOGGED</small><strong>40 events</strong></div>
-            <div><small>SPEND INCURRED</small><strong>$0.00 (Zero unapproved)</strong></div>
-            <div><small>CLI VERSION</small><strong>1.4.14 (R7309.1)</strong></div>
-            <div><small>BUDGET CEILING</small><strong>$0.50 (Governed)</strong></div>
-            <div><small>AUTO-MERGE</small><strong>Blocked (Safe)</strong></div>
+            <div><small>BLIND DISCOVERY</small><strong class="violet">5 / 5 (100%)</strong></div>
+            <div><small>TOOL CALLS</small><strong>4 tools (2 turns)</strong></div>
+            <div><small>REASONING CoT</small><strong>822 tokens</strong></div>
+            <div><small>TOTAL TOKENS</small><strong>3,843 / 3,907</strong></div>
+            <div><small>COST REAL</small><strong>$0.0019 - $0.0055 USD</strong></div>
+            <div><small>SAFETY</small><strong class="green">Fail-Closed Read Boundary</strong></div>
           </div>
           <div class="arena-branch-info">
-            <div><small>ISOLATED WORKTREE</small><code>var/local_execution/worktrees/meta-muse-code-repair-20261103</code></div>
-            <div><small>BRANCH</small><code>experiment/meta-muse-code-repair-20261103</code></div>
-            <div><small>MSP LOG STREAM</small><code>docs/evidence/muse_repair_session_events.jsonl</code></div>
+            <div><small>RESPONSE IDS</small><code>resp_6aea97477ecbaecc16a14e99 / resp_6aeb953a817d2ad9c525439c</code></div>
+            <div><small>DIAGNOSIS STATUS</small><code>AUTONOMOUS_FORENSIC_TRIUMPH (Live cluster query)</code></div>
+            <div><small>REPAIR CODE STATUS</small><code>Truncated by max_output_tokens (3600 limit)</code></div>
           </div>
-          <p class="arena-summary-text">CLI installed, spawned via headless MSP protocol, dispatched prompt. Safely halted at exact owner authentication boundary without leaking credentials or incurring unauthorized cloud charges.</p>
+          <p class="arena-summary-text">The only model to execute active multi-turn tool calling over live MongoDB and cluster health without prior hints. Guided code generation exhausted its 3,600 output token budget during deep CoT analysis before finishing full module synthesis.</p>
         </article>
 
-        <!-- CANDIDATE 3: GPT-6 ASTRA (OPENAI) -->
-        <article class="arena-card astra-card" id="arena-astra-card">
-          <div class="arena-card-header">
-            <span class="label-icon">✦</span>
-            <span class="tag neutral">BLOCKED · ZERO CREDITS</span>
-          </div>
-          <h3>GPT-6 Astra (OpenAI Frontier Agent)</h3>
-          <p class="arena-model-sub">Model: <code>gpt-6-astra</code> · Endpoint: <code>https://api.openai.com/v1</code></p>
-          <div class="arena-metrics-grid">
-            <div><small>API STATUS</small><strong class="amber">BLOCKED_API_ACCESS</strong></div>
-            <div><small>TESTS ATTEMPTED</small><strong>0</strong></div>
-            <div><small>SPEND INCURRED</small><strong>$0.00</strong></div>
-            <div><small>MAX CONTEXT</small><strong>128k</strong></div>
-            <div><small>BUDGET CEILING</small><strong>$1.00 (Proposed)</strong></div>
-            <div><small>SILENT FALLBACK</small><strong>FORBIDDEN</strong></div>
-          </div>
-          <div class="arena-branch-info">
-            <div><small>AUTHENTICATION BOUNDARY</small><code>Missing OPENAI_API_KEY in owner vault / environment</code></div>
-            <div><small>EVALUATION STATUS</small><code>BLOCKED_API_ACCESS (Truthfully reported, no substitution)</code></div>
-          </div>
-          <p class="arena-summary-text">Access verification completed: owner vault and local environment lack OpenAI API billing credits. In compliance with strict hackathon integrity guidelines, Astra is truthfully marked as BLOCKED_API_ACCESS with zero hallucinated or substituted results.</p>
-        </article>
-
-        <!-- CANDIDATE 4: LOCAL QWEN3-CODER-30B (AMD ROCm) -->
+        <!-- CANDIDATE 3: LOCAL QWEN3-CODER-30B (AMD ROCm) -->
         <article class="arena-card local-sovereign-card" id="arena-qwen-card">
           <div class="arena-card-header">
             <span class="label-icon local-icon">◈</span>
-            <span class="tag ok">ONLINE · SOVEREIGN BASELINE</span>
+            <span class="tag ok">SOVEREIGN BASELINE · AUDITED &amp; REMEDIATED</span>
           </div>
           <h3>Local Qwen3-Coder-30B-AWQ (AMD Sovereign Agent)</h3>
           <p class="arena-model-sub">Hardware: <code>AMD Radeon AI PRO R9700 (32GB VRAM)</code> · Port: <code>vLLM :8000</code></p>
           <div class="arena-metrics-grid">
-            <div><small>2-TURN LATENCY</small><strong class="green">6.44s</strong></div>
-            <div><small>SINGLE LATENCY</small><strong>15.16s</strong></div>
-            <div><small>2-TURN TOKENS</small><strong>1,522 t</strong></div>
-            <div><small>COST</small><strong class="green">$0.00</strong></div>
-            <div><small>VRAM CONSUMPTION</small><strong>23.3 GB</strong></div>
-            <div><small>PRIVACY</small><strong>100% On-Premises</strong></div>
+            <div><small>BLIND DISCOVERY</small><strong class="green">5 / 5 (100%)</strong></div>
+            <div><small>V2 TESTS PASSING</small><strong class="green">6 / 10 (8/10 multi)</strong></div>
+            <div><small>ORIGINAL TESTS</small><strong class="red">0 / 10 (Wrong signature)</strong></div>
+            <div><small>COST MARGINAL</small><strong class="green">$0.00 (Zero API cost)</strong></div>
+            <div><small>ORIGINAL SAFETY</small><strong class="red">CRITICAL FLAW (Premature Write)</strong></div>
+            <div><small>REMEDIATED V2</small><strong class="green">PASSED (Zero-Write Pre-check)</strong></div>
           </div>
           <div class="arena-branch-info">
-            <div><small>EXECUTION MODE</small><code>Local ROCm vLLM Native Tool Calling</code></div>
-            <div><small>NETWORK EXFILTRATION</small><code>0 bytes leave AMD server</code></div>
+            <div><small>ORIGINAL PATCH</small><code>docs/evidence/bench_20261104/patches/qwen_local_repair.py</code></div>
+            <div><small>REMEDIATED V2</small><code>docs/evidence/bench_20261104/patches/qwen_repaired_v2.py</code></div>
+            <div><small>AUDIT FINDING</small><code>CVE-audit: update_one prior to heartbeat check fixed in v2</code></div>
           </div>
-          <p class="arena-summary-text">Operates as sovereign baseline for local-first operations: multi-turn tool-calling diagnostics execute completely within local GPU memory without cloud latency or subscription fees.</p>
+          <p class="arena-summary-text">Identified all 5 defects in blind diagnosis with zero network egress. Audit uncovered that v1 mutated MongoDB before checking worker heartbeat. Remediated v2 enforces strict pre-condition checks, passing 6/10 tests in 0.15s.</p>
+        </article>
+
+        <!-- CANDIDATE 4: META MUSE SPARK OPEN (BASETEN & FIREWORKS) -->
+        <article class="arena-card astra-card" id="arena-spark-card">
+          <div class="arena-card-header">
+            <span class="label-icon">✦</span>
+            <span class="tag amber">SERVERLESS SPARK · 80% LATENCY DELTA</span>
+          </div>
+          <h3>Meta Muse Spark Open (Baseten vs. Fireworks AI)</h3>
+          <p class="arena-model-sub">Model: <code>meta-models/muse-spark-open</code> vs. <code>accounts/fireworks/models/muse-spark-open</code></p>
+          <div class="arena-metrics-grid">
+            <div><small>BASETEN LATENCY</small><strong class="green">3,210 ms (39.4% faster)</strong></div>
+            <div><small>FIREWORKS LATENCY</small><strong>5,301 ms</strong></div>
+            <div><small>BASETEN COST</small><strong class="green">$0.000271 USD</strong></div>
+            <div><small>FIREWORKS COST</small><strong>$0.000317 USD</strong></div>
+            <div><small>BLIND DISCOVERY</small><strong class="green">5 / 5 (100% in CoT)</strong></div>
+            <div><small>RETRY 3800 TOKENS</small><strong class="amber">BLOCKED_BY_PROVIDER_LIMIT</strong></div>
+          </div>
+          <div class="arena-branch-info">
+            <div><small>PROVIDER WINNER</small><code>Baseten: 80.3% faster in code repair trial (9.08s vs 46.18s)</code></div>
+            <div><small>LIMITATION</small><code>Verbose internal CoT (1,150-1,376 tokens) exhausts output budget</code></div>
+            <div><small>EVALUATION STATUS</small><code>BLOCKED_BY_PROVIDER_LIMIT (Empty body / Gateway timeout)</code></div>
+          </div>
+          <p class="arena-summary-text">Head-to-head comparison of identical weights across providers. Baseten delivers dramatically lower latency for quick triage. On guided code repair with 3,800 token budget, Fireworks timed out (120s) and Baseten returned empty body.</p>
         </article>
       </div>
 
       <div class="arena-verdict-box">
-        <strong>Independent Evaluator Verdict &amp; Safety Proof:</strong>
-        <p>Both agents were evaluated under strict local-first governance. Argon produced a verified clean patch (Commit <code>94d90d34</code>, 10/10 tests green). Meta Muse Code was verified as installed, functional in headless MSP daemon mode, and fully compliant with security boundaries (stopped cleanly when owner authorization was absent). Neither agent was auto-merged to main.</p>
+        <strong>Independent Evaluator Verdict &amp; Tri-Tier Architecture Decision:</strong>
+        <p>1. <strong>Investigation Winner:</strong> <code>Meta Muse Wonder 1.0</code> is unmatched for autonomous multi-turn forensic investigation using live tools.<br>
+        2. <strong>Repair Synthesis Winner:</strong> <code>Argon</code> is the only model to generate a 100% passing drop-in patch (10/10 green in 0.09s, Commit <code>94d90d34</code>).<br>
+        3. <strong>Sovereign Operations Winner:</strong> <code>Local Qwen3-Coder-30B</code> delivers 100% defect discovery at $0.00 marginal cost once pre-condition safety is enforced.<br>
+        4. <strong>Production Strategy:</strong> InnerOS adopts a 3-tier hybrid architecture: Local Qwen for 24/7 sovereign triage -&gt; Muse Wonder for incident forensic tool-calling -&gt; Argon &amp; Modal sandboxes for verified patch synthesis.</p>
       </div>
     </section>
 

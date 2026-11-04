@@ -24,3 +24,4 @@ def run_isolated_verification():
 def main():
     res = run_isolated_verification.remote()
     print("MODAL_VERIFICATION_RESULT:", res)
+
