@@ -509,4 +509,29 @@ function bindProviderActions() {
 document.addEventListener('DOMContentLoaded', () => {
   bindProviderActions();
   loadFinancialMatrix();
+
+  const params = new URLSearchParams(window.location.search);
+  const focus = params.get('focus');
+  if (focus) {
+    const target = document.getElementById(focus);
+    if (target) {
+      document.querySelectorAll('.hero, .notice, .metrics, section.section').forEach(el => {
+        if (el.id !== focus) {
+          el.style.display = 'none';
+        }
+      });
+      window.scrollTo(0, 0);
+    }
+  }
+
+  const targetId = params.get('scroll') || (window.location.hash ? window.location.hash.slice(1) : null);
+  if (targetId && !focus) {
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.body.style.scrollBehavior = 'auto';
+    const target = document.getElementById(targetId);
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo(0, top);
+    }
+  }
 });
