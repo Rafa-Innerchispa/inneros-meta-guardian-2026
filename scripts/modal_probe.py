@@ -14,3 +14,4 @@ def check_guardian_isolated():
 def main():
     res = check_guardian_isolated.remote()
     print("MODAL_RESULT_OK:", res)
+

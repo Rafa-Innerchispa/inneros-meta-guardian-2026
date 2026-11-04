@@ -5,9 +5,8 @@
 - **Lead / CEO:** Rafael López
 - **Submission Target:** Wednesday, November 4, 2026 — before 18:00 Ecuador (Official Cutoff: 21:00 EST / Ecuador)
 - **Live Public Demo (Cloudflare Tunnel Verified):** `https://guardian.pcdoctor.ai/self-heal` (Alternative: `https://meta-guardian.pcdoctor.ai/self-heal`)
-- **1-Click Judge Access:** `https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!`
-- **Judge Credentials:** Username: `judge` (or `inneros`) · Password: `MetaGuardian2026!`
-- **Public Demo Read-Only Gate:** Active (`GUARDIAN_PUBLIC_MODE=true`, HTTP 403 on mutations, zero internal leaks)
+- **Access Mode:** Direct public inspection (fail-closed read-only gate, zero internal leaks, no query-string secrets)
+- **Public Demo Read-Only Gate:** Active (`GUARDIAN_PUBLIC_MODE=true`, HTTP 403 on mutations)
 - **Coordination Task ID:** `ops_4e977fd8ec43` (`meta-wonder-coordination-p0-20261102`)
 - **Platform PR #256 Commit:** `2481d2e749ebb2af3cdc85a13cec6eff598fc7c4` (CI Run `41721839589` — 6/6 checks `SUCCESS`)
 - **Guardian Repository:** `https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026`
@@ -27,8 +26,7 @@
 `Startup Track — Push the Frontier`
 
 ### Live Demo URL (Verified Public HTTPS)
-`https://guardian.pcdoctor.ai/self-heal`  
-*(1-Click Judge Access: `https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!` — Username: `judge`, Password: `MetaGuardian2026!`)*
+`https://guardian.pcdoctor.ai/self-heal`
 
 ### One-Line Pitch
 A local-first autonomous infrastructure guardian that combines on-premises AMD ROCm inference with governed Meta Muse Wonder 1.0 tool-assisted reasoning to diagnose real multi-agent coordination failures, verify safe code repairs in isolated worktrees, and prove every outcome with cryptographic audit receipts.

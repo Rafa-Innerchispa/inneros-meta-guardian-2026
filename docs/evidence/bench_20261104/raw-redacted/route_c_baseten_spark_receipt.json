@@ -1,0 +1,14 @@
+{
+  "provider": "baseten",
+  "endpoint": "https://inference.baseten.co/v1/chat/completions",
+  "model": "meta-models/muse-spark-open",
+  "response_id": "chatcmpl-23099d883b834099a264e4e0109d7b4d",
+  "duration_ms": 3210.4,
+  "prompt_tokens": 182,
+  "completion_tokens": 120,
+  "reasoning_tokens": 117,
+  "total_tokens": 302,
+  "status": "VERIFIED_LIVE_CALL",
+  "cost_usd": 0.000271,
+  "recorded_at": "2026-11-04T17:00:46Z"
+}

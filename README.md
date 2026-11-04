@@ -10,13 +10,11 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 ---
 
-## Verified Public Judge Demonstration
+## Verified Public Demonstration
 
 > 🌐 **PUBLIC HTTPS URL:** **[https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal)**  
-> **1-Click Judge Access:** **[https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!](https://guardian.pcdoctor.ai/self-heal?auth=MetaGuardian2026!)**  
-> **Judge Credentials:** Username: `judge` | Password: `MetaGuardian2026!`  
 > **Mode:** `PUBLIC_JUDGE_DEMO` (Cloudflare Tunnel TLS 1.3, origin isolated, fail-closed read-only gate, 0 unapproved model spend, zero VPN required).  
-> **Alternative Mirror:** `https://meta-guardian.pcdoctor.ai/self-heal`  
+> **Access:** Direct public inspection (safe read-only mode, mutations strictly blocked with HTTP 403).  
 > **Deployment Architecture:** Documented in [`docs/JUDGE_PUBLIC_DEPLOY.md`](docs/JUDGE_PUBLIC_DEPLOY.md).
 
 ---

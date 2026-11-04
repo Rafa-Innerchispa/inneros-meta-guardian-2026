@@ -1,0 +1,202 @@
+{
+  "schema": "inneros.controlled_benchmark_results.v1",
+  "benchmark_id": "bench_meta_guardian_20261104",
+  "recorded_at": "2026-11-04T18:55:00Z",
+  "task_id": "ops_2f5f7283d70b",
+  "correlation_id": "meta-guardian-three-provider-controlled-benchmark-20261104",
+  "issue_reference": "https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026/issues/6",
+  "governance": {
+    "organization": "InnerChispa LLC",
+    "lead": "Rafael López",
+    "autonomy_policy": "inneros_agent_autonomy_v1",
+    "unapproved_spend_usd": 0.0,
+    "paid_call_automatic_retries": 0,
+    "mutation_policy": "isolated_worktree_only_zero_auto_deploy"
+  },
+  "canonical_baseline": {
+    "snapshot_digest_sha256": "92796a036c6fd89643a0be11898723d60b679565a86edcd88cb11583db5d5f83",
+    "baseline_git_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+    "test_suite": "tests/test_ops_expired_claim_lease_recovery.py",
+    "baseline_test_verdict": "9 FAILED, 1 PASSED in 0.16s",
+    "ground_truth_root_causes": [
+      {
+        "id": "H1",
+        "description": "Missing awaiting_antigravity_claim precedence for orchestrated interactive tasks",
+        "impact": "Task ops_4e977fd8ec43 trapped in awaiting_claim without worker auto-dispatch"
+      },
+      {
+        "id": "H2",
+        "description": "Unconditional os.kill assumes local host; fails closed across LAN when remote worker is on Intel secondary node",
+        "impact": "Remote active workers risk being falsely purged by primary AMD checks"
+      },
+      {
+        "id": "H3",
+        "description": "Failure to resolve linked worktree .git pointer files ('gitdir: ...') to detect shared index.lock",
+        "impact": "Recovery loop attempts Git operations while index.lock exists in master repository"
+      },
+      {
+        "id": "H4",
+        "description": "Missing atomic multi-field CAS check enforcing modified_count == 1 in MongoDB",
+        "impact": "Race condition allows concurrent workers to claim stale lease simultaneously"
+      }
+    ]
+  },
+  "routes": {
+    "route_a_meta_wonder": {
+      "name": "Meta Muse Wonder 1.0 (Frontier Reasoning & Autonomous Tool Loop)",
+      "provider": "Meta Model API",
+      "endpoint": "https://api.meta.ai/v1/responses",
+      "model_id": "muse-wonder-1.0",
+      "receipt_file": "docs/evidence/bench_20261104/raw-redacted/route_a_meta_wonder_receipt.json",
+      "run_id": "resp_6aea9747_6aea97f2",
+      "turns": 2,
+      "latency_ms": 25816.73,
+      "tokens": {
+        "input": 1950,
+        "output": 1893,
+        "reasoning_cot": 822,
+        "cached": 116,
+        "total": 3843
+      },
+      "cost_usd": 0.0019,
+      "tool_calls_emitted": 4,
+      "tool_calls_executed": 4,
+      "status": "TESTED_LIVE_AUTHENTIC_RECEIPT",
+      "diagnostic_depth": "Deepest: autonomously requested 4 forensic tools, correctly isolated H1, H2, and H3 with 822 reasoning tokens",
+      "repair_action": "Designed 7-point repair verification matrix; code mutation halted at owner grant boundary (fail-closed)"
+    },
+    "route_b_fireworks_spark": {
+      "name": "Meta Muse Spark Open via Fireworks AI Serverless",
+      "provider": "fireworks_ai",
+      "endpoint": "https://api.fireworks.ai/inference/v1/chat/completions",
+      "model_id": "accounts/fireworks/models/muse-spark-open",
+      "receipt_file": "docs/evidence/bench_20261104/raw-redacted/route_b_fireworks_spark_receipt.json",
+      "run_id": "chatcmpl-f7f26716ee5647d891bf746f64f20f01",
+      "turns": 1,
+      "latency_ms": 5301.6,
+      "tokens": {
+        "input": 184,
+        "output": 150,
+        "reasoning_cot": 147,
+        "cached": 0,
+        "total": 334
+      },
+      "cost_usd": 0.000317,
+      "tool_calls_emitted": 0,
+      "status": "TESTED_LIVE_AUTHENTIC_RECEIPT",
+      "diagnostic_depth": "High: 147 reasoning tokens identified worker lease expiration and retry starvation",
+      "repair_action": "Zero unapproved spend; proposed CAS update logic"
+    },
+    "route_c_baseten_spark": {
+      "name": "Meta Muse Spark Open via Baseten Serverless",
+      "provider": "baseten",
+      "endpoint": "https://inference.baseten.co/v1/chat/completions",
+      "model_id": "meta-models/muse-spark-open",
+      "receipt_file": "docs/evidence/bench_20261104/raw-redacted/route_c_baseten_spark_receipt.json",
+      "run_id": "chatcmpl-23099d883b834099a264e4e0109d7b4d",
+      "turns": 1,
+      "latency_ms": 3210.4,
+      "tokens": {
+        "input": 182,
+        "output": 120,
+        "reasoning_cot": 117,
+        "cached": 0,
+        "total": 302
+      },
+      "cost_usd": 0.000271,
+      "tool_calls_emitted": 0,
+      "status": "TESTED_LIVE_AUTHENTIC_RECEIPT",
+      "diagnostic_depth": "High: 117 reasoning tokens identified claim starvation and dual-node heartbeat gap",
+      "repair_action": "Zero unapproved spend; proposed worktree pointer lock check"
+    },
+    "route_d_modal_sandbox": {
+      "name": "Modal Ephemeral Isolated CPU Test Sandbox",
+      "provider": "modal",
+      "endpoint": "https://modal.com/apps/rlopez/main/ap-FgeaL6ROaCPzOSda8YgqB1",
+      "environment": "MODAL_CLOUD_EPHEMERAL (CPU_ONLY, 1.0 cores)",
+      "receipt_file": "docs/evidence/bench_20261104/raw-redacted/route_d_modal_sandbox_receipt.json",
+      "run_id": "ap-FgeaL6ROaCPzOSda8YgqB1",
+      "duration_seconds": 1.4,
+      "cost_usd": 0.000039,
+      "status": "TESTED_LIVE_AUTHENTIC_RUN",
+      "destruction_policy": "DESTROY_ON_EXIT (Verified Zero Background Leak)"
+    },
+    "reference_argon_repair": {
+      "name": "Argon Comparative Repair Agent (Antigravity IDE)",
+      "provider": "antigravity",
+      "model_id": "gemini-3.8-flash-medium / gemini-4-argon",
+      "worktree": "var/local_execution/worktrees/argon-repair-20261103",
+      "commit_sha": "94d90d34ce5542f0a152f071852b2b2be4fadfd1",
+      "duration_ms": 3200.0,
+      "tests_before": "9 FAILED, 1 PASSED in 0.16s",
+      "tests_after": "10 PASSED, 0 FAILED in 0.13s (100% GREEN)",
+      "regressions": 0,
+      "cost_usd": 0.0,
+      "status": "VERIFIED_PASS_IN_BRANCH"
+    },
+    "reference_qwen_sovereign": {
+      "name": "Local Qwen3-Coder-30B-AWQ (AMD ROCm 10.1)",
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8000/v1",
+      "model_id": "Qwen3-Coder-30B-AWQ",
+      "hardware": "AMD Radeon AI PRO R9700 (32GB VRAM)",
+      "latency_ms": 6440.31,
+      "tokens": 1522,
+      "cost_usd": 0.0,
+      "status": "ONLINE_SOVEREIGN_UNMETERED"
+    },
+    "reference_astra_openai": {
+      "name": "GPT-6 Astra (OpenAI)",
+      "provider": "openai",
+      "endpoint": "https://api.openai.com/v1",
+      "status": "BLOCKED_API_ACCESS",
+      "reason": "Credentials intentionally unpopulated; zero simulated mock bypass",
+      "cost_usd": 0.0
+    }
+  },
+  "comparative_analysis": {
+    "provider_vs_provider": {
+      "description": "Comparison of identical model 'muse-spark-open' across Fireworks AI and Baseten",
+      "fireworks_ai": {
+        "model": "accounts/fireworks/models/muse-spark-open",
+        "latency_ms": 5301.6,
+        "reasoning_tokens": 147,
+        "cost_usd": 0.000317,
+        "rate_per_million_tokens_approx": 0.95
+      },
+      "baseten": {
+        "model": "meta-models/muse-spark-open",
+        "latency_ms": 3210.4,
+        "reasoning_tokens": 117,
+        "cost_usd": 0.000271,
+        "rate_per_million_tokens_approx": 0.90
+      },
+      "key_finding": "Baseten demonstrated 39.4% lower latency (3,210 ms vs 5,301 ms) for muse-spark-open, while Fireworks AI produced a deeper reasoning trace (147 CoT tokens vs 117 CoT tokens). Both providers delivered authentic Meta reasoning at less than $0.00035 per diagnostic query."
+    },
+    "model_vs_model": {
+      "description": "Comparison of Meta Muse Wonder 1.0 (Frontier) vs Meta Muse Spark Open (Lightweight)",
+      "wonder_1_0": {
+        "role": "Frontier Orchestration & Multi-turn Tool Calling",
+        "reasoning_tokens": 822,
+        "tool_calling_capability": "Native multi-turn function_call (4 tools executed)",
+        "cost_per_query_usd": 0.0019
+      },
+      "spark_open": {
+        "role": "Fast Diagnostic & Single-turn Inspection",
+        "reasoning_tokens": 117,
+        "tool_calling_capability": "Direct text reasoning with CoT",
+        "cost_per_query_usd": 0.00027
+      },
+      "key_finding": "Wonder 1.0 is essential for autonomous multi-turn tool investigations where file reading and database inspection are required across turns. Spark Open is exceptionally cost-effective (7x cheaper) for quick triage and sanity checks."
+    }
+  },
+  "test_suite_reconciliation": {
+    "total_unit_tests": 87,
+    "breakdown": {
+      "core_guardian_and_orchestrator": 80,
+      "provider_finance_and_governance_adapters": 7
+    },
+    "all_passing": true,
+    "run_time_seconds": 1.59
+  }
+}

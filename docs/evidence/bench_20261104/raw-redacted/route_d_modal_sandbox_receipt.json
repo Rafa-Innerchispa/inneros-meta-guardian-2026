@@ -1,0 +1,26 @@
+{
+  "provider": "modal",
+  "app_name": "inneros-guardian-probe",
+  "app_id": "ap-FgeaL6ROaCPzOSda8YgqB1",
+  "app_url": "https://modal.com/apps/rlopez/main/ap-FgeaL6ROaCPzOSda8YgqB1",
+  "profile": "rlopez",
+  "environment": "main",
+  "function_name": "check_guardian_isolated",
+  "execution_spec": {
+    "compute": "CPU_ONLY",
+    "cpu_cores": 1.0,
+    "gpu": null,
+    "timeout_seconds": 30,
+    "ephemeral": true,
+    "destruction_policy": "DESTROY_ON_EXIT"
+  },
+  "result": {
+    "status": "ISOLATED_CPU_SANDBOX_SUCCESS",
+    "env": "MODAL_CLOUD_EPHEMERAL",
+    "verified": true
+  },
+  "duration_seconds": 1.4,
+  "estimated_cost_usd": 0.000039,
+  "recorded_at": "2026-11-04T17:02:42Z",
+  "status": "VERIFIED_LIVE_CALL"
+}
