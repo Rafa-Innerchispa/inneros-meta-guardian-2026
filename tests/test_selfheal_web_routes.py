@@ -137,6 +137,28 @@ class SelfHealingWebTests(unittest.TestCase):
         self.assertEqual("SIMULATED_REPLAY_NOT_LIVE_INNEROS", proof["truth"])
         self.assertEqual(6, proof["lab"]["audit"]["events"])
 
+    def test_meta_ecosystem_and_benchmark_routes(self):
+        code, raw, mime = self.get("/api/meta/ecosystem")
+        self.assertEqual(200, code)
+        self.assertIn("application/json", mime)
+        ecosystem = json.loads(raw)
+        self.assertIn("components", ecosystem)
+        self.assertGreaterEqual(len(ecosystem["components"]), 11)
+
+        code, raw, mime = self.get("/api/meta/providers")
+        self.assertEqual(200, code)
+        providers = json.loads(raw)
+        self.assertGreaterEqual(len(providers), 9)
+        provider_ids = [p["id"] for p in providers]
+        self.assertIn("muse-wonder-1.0", provider_ids)
+
+        code, raw, mime = self.get("/api/meta/benchmark")
+        self.assertEqual(200, code)
+        benchmark = json.loads(raw)
+        self.assertEqual("inneros.repair_benchmark_comparison.v1", benchmark["schema"])
+        self.assertEqual("VERIFIED_PASS", benchmark["argon_repair"]["status"])
+        self.assertEqual("BLOCKED_AWAITING_OWNER_AUTH", benchmark["muse_code_repair"]["auth_frontier_status"])
+
     def test_no_paid_web_execution_or_incorrect_real_scenario(self):
         code, data = self.post("/api/selfheal/labs", {"scenario": "real_server_reboot"})
         self.assertEqual(409, code)

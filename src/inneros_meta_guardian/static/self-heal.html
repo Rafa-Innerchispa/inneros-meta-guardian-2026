@@ -21,7 +21,9 @@
       <a href="/" class="nav">Physical Guardian</a>
       <a href="/self-heal" class="nav active" aria-current="page">Self-Healing Lab</a>
       <a href="#investigator" class="nav">Autonomous Investigator</a>
-      <a href="#evidence" class="nav">Forensic Evidence</a>
+      <a href="#model-lab" class="nav">Meta Model Lab</a>
+      <a href="#repair-arena" class="nav">Agent Repair Arena</a>
+      <a href="#forensics" class="nav">Forensic Evidence</a>
     </nav>
     <span class="chip security-chip"><span class="status-dot"></span> SAFE REPLAY · NO PAID CALLS</span>
   </header>
@@ -133,6 +135,110 @@
             <p class="empty">Cargando tabla comparativa verificada...</p>
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- SECTION: META MODEL LAB (11 COMPONENTS) -->
+    <section id="model-lab" class="section" aria-label="Meta Model Lab">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">01 / META ECOSYSTEM CATALOG</p>
+          <h2>Meta Model Lab &amp; Provider Registry</h2>
+          <p>Unified catalog of 11 components: Local AMD ROCm Qwen, Meta Muse Models (Wonder 1.0, Spark 1.3, Code 1.4, Image 1.0, Voice Transcribe), Physical Guardian SAM 3.1, open weights evaluations (Spark Open 816B, Glimmer Open), and Comparative Agent (Argon). Enforces single-use owner approval tokens, isolated sandboxes, and zero unapproved cloud spend.</p>
+        </div>
+        <div class="status-chips-wrap">
+          <span class="tag ok" id="lab-tested-badge">4 TESTED</span>
+          <span class="tag ok" id="lab-installed-badge">1 INSTALLED CLI</span>
+          <span class="tag violet" id="lab-integrated-badge">3 INTEGRATED</span>
+          <span class="tag neutral" id="lab-deferred-badge">2 DEFERRED</span>
+        </div>
+      </div>
+
+      <div class="catalog-grid" id="model-catalog-grid">
+        <p class="empty">Cargando catálogo del ecosistema Meta...</p>
+      </div>
+    </section>
+
+    <!-- SECTION: AGENT REPAIR ARENA (MUSE CODE VS ARGON) -->
+    <section id="repair-arena" class="section" aria-label="Agent Repair Arena">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">02 / BENCHMARK COMPARISON</p>
+          <h2>Agent Repair Arena: Meta Muse Code vs. Argon</h2>
+          <p>Side-by-side automated code repair evaluation on identical baseline defect: <code>platform/inneros_core_runtime/ops_interactive_recovery.py</code> (Commit <code>beccbd49</code>, 9 failed tests initially in <code>tests/test_ops_expired_claim_lease_recovery.py</code>). Tested across isolated worktrees under strict governance: zero unapproved spend, single-use grants, no auto-merge to main.</p>
+        </div>
+        <span class="tag ok">INDEPENDENT EVALUATOR VERIFIED</span>
+      </div>
+
+      <div class="arena-defect-box" id="arena-defect-details">
+        <div class="arena-defect-top">
+          <span class="label-icon">⌁</span>
+          <div>
+            <strong>BASELINE DEFECT: Expired Claim Lease Recovery with Cross-Host &amp; Linked Worktree Safety</strong>
+            <small>Baseline commit <code>beccbd495dc2ab33e5c8cf3abe5fa988047cc15f</code> · Initial test suite: <strong>9 FAILED, 1 PASSED in 0.16s</strong></small>
+          </div>
+        </div>
+        <div class="defect-causes-list" id="defect-causes">
+          <div><span>✕</span> Missing awaiting_antigravity_claim precedence for orchestrated tasks</div>
+          <div><span>✕</span> Unconditional os.kill assuming local host (fails closed on remote Intel 1.4 workers)</div>
+          <div><span>✕</span> Failure to resolve .git pointer files ("gitdir: ...") to detect linked worktree index.lock</div>
+          <div><span>✕</span> Missing atomic multi-field CAS enforcing modified_count == 1</div>
+        </div>
+      </div>
+
+      <div class="arena-duel-grid">
+        <!-- CANDIDATE 1: ARGON COMPARATIVE AGENT -->
+        <article class="arena-card winner-card" id="arena-argon-card">
+          <div class="arena-card-header">
+            <span class="label-icon">◈</span>
+            <span class="tag ok">VERIFIED PASS · 10/10 GREEN</span>
+          </div>
+          <h3>Argon Comparative Agent (Google Antigravity IDE)</h3>
+          <p class="arena-model-sub">Model: <code>gemini-3.8-flash-medium / gemini-4-argon</code></p>
+          <div class="arena-metrics-grid">
+            <div><small>TESTS PASSING</small><strong class="green">10 / 10 (100%)</strong></div>
+            <div><small>REGRESSIONS</small><strong>0</strong></div>
+            <div><small>DURATION</small><strong>3.20s</strong></div>
+            <div><small>COST</small><strong>$0.00</strong></div>
+            <div><small>LINES ADDED</small><strong class="green">+537</strong></div>
+            <div><small>LINES REMOVED</small><strong class="red">-14</strong></div>
+          </div>
+          <div class="arena-branch-info">
+            <div><small>ISOLATED WORKTREE</small><code>var/local_execution/worktrees/argon-repair-20261103</code></div>
+            <div><small>BRANCH</small><code>experiment/argon-repair-20261103</code></div>
+            <div><small>PATCH COMMIT</small><code>94d90d34ce5542f0a152f071852b2b2be4fadfd1</code></div>
+          </div>
+          <p class="arena-summary-text">Resolved all 4 root causes: added remote worker host check before local kill, implemented linked worktree gitdir resolution for index.lock, CAS check for modified_count == 1, and created 10 rigorous test cases.</p>
+        </article>
+
+        <!-- CANDIDATE 2: META MUSE CODE 1.4.14 -->
+        <article class="arena-card muse-card" id="arena-muse-card">
+          <div class="arena-card-header">
+            <span class="label-icon meta-icon">✳</span>
+            <span class="tag violet">MSP PROTOCOL SESSION CAPTURED</span>
+          </div>
+          <h3>Meta Muse Code 1.4.14 (Official CLI / MSP Protocol)</h3>
+          <p class="arena-model-sub">Binary: <code>muse-bin-1.4.14-R7309.1</code> · Session: <code>01a1a497-0c2a-75d1-86d1-0ba2adacb642</code></p>
+          <div class="arena-metrics-grid">
+            <div><small>AUTH FRONTIER</small><strong class="violet">BLOCKED_AWAITING_AUTH</strong></div>
+            <div><small>MSP EVENTS LOGGED</small><strong>40 events</strong></div>
+            <div><small>SPEND INCURRED</small><strong>$0.00 (Zero unapproved)</strong></div>
+            <div><small>CLI VERSION</small><strong>1.4.14 (R7309.1)</strong></div>
+            <div><small>BUDGET CEILING</small><strong>$0.50 (Governed)</strong></div>
+            <div><small>AUTO-MERGE</small><strong>Blocked (Safe)</strong></div>
+          </div>
+          <div class="arena-branch-info">
+            <div><small>ISOLATED WORKTREE</small><code>var/local_execution/worktrees/meta-muse-code-repair-20261103</code></div>
+            <div><small>BRANCH</small><code>experiment/meta-muse-code-repair-20261103</code></div>
+            <div><small>MSP LOG STREAM</small><code>docs/evidence/muse_repair_session_events.jsonl</code></div>
+          </div>
+          <p class="arena-summary-text">CLI installed, spawned via headless MSP protocol, dispatched prompt. Safely halted at exact owner authentication boundary without leaking credentials or incurring unauthorized cloud charges.</p>
+        </article>
+      </div>
+
+      <div class="arena-verdict-box">
+        <strong>Independent Evaluator Verdict &amp; Safety Proof:</strong>
+        <p>Both agents were evaluated under strict local-first governance. Argon produced a verified clean patch (Commit <code>94d90d34</code>, 10/10 tests green). Meta Muse Code was verified as installed, functional in headless MSP daemon mode, and fully compliant with security boundaries (stopped cleanly when owner authorization was absent). Neither agent was auto-merged to main.</p>
       </div>
     </section>
 

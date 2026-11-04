@@ -15,6 +15,8 @@ from .engine import Guardian, LifecycleError
 from .integrations import VoiceOpsRecordedReceipt
 from .meta_once import GRANT_STORE, GrantError
 from .sam_inspector import SAMInspector
+from .meta_registry import MetaProviderRegistry
+from .repair_evaluator import RepairEvaluator
 from .selfheal_lab import SelfHealingLab, LabError, case_evidence
 
 STATIC = Path(__file__).parent / "static"
@@ -73,6 +75,12 @@ class Handler(BaseHTTPRequestHandler):
             self._static("self-heal.css", "text/css; charset=utf-8")
         elif path == "/api/selfheal/case":
             self._json(200, case_evidence())
+        elif path == "/api/meta/ecosystem":
+            self._json(200, RepairEvaluator.get_ecosystem_inventory())
+        elif path == "/api/meta/providers":
+            self._json(200, MetaProviderRegistry.list_providers())
+        elif path == "/api/meta/benchmark":
+            self._json(200, RepairEvaluator.get_benchmark_comparison())
         elif path == "/api/orchestrator/snapshot":
             self._json(200, self.orchestrator.get_global_snapshot())
         elif path.startswith("/api/orchestrator/sessions/") and len(path.strip("/").split("/")) == 4:

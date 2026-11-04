@@ -90,6 +90,21 @@ class OneShotGrantStore:
         grant["consumed"] = True
         grant["consumed_at"] = now_iso()
         return grant
+    def consume(self, token: str, snapshot_digest: str | None = None):
+        """Convenience consume method for one-shot grants."""
+        if snapshot_digest is not None:
+            return self.consume_grant(token, snapshot_digest)
+        grant = self._grants.get(token)
+        if not grant:
+            raise GrantError("Grant token not found or already purged.")
+        if grant["consumed"]:
+            raise GrantError("Grant token has ALREADY been consumed (replay prevented).")
+        if time.time() > grant["expires_at"]:
+            raise GrantError("Grant token has expired.")
+        grant["consumed"] = True
+        grant["consumed_at"] = now_iso()
+        return grant
+
 
     def get_grant(self, token: str) -> dict[str, Any] | None:
         return self._grants.get(token)

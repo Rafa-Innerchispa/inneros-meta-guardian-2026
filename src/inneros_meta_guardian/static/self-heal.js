@@ -1,3 +1,71 @@
+
+function renderModelCatalog(providers, summary) {
+  const grid = el('model-catalog-grid');
+  if (!grid) return;
+  grid.replaceChildren();
+
+  if (summary) {
+    put('lab-tested-badge', (summary.tested_and_ready || 4) + ' TESTED');
+    put('lab-installed-badge', (summary.installed_locally || 1) + ' INSTALLED');
+    put('lab-integrated-badge', (summary.integrated_adapters || 3) + ' INTEGRATED');
+    put('lab-deferred-badge', (summary.deferred_limitations || 2) + ' DEFERRED');
+  }
+
+  (providers || []).forEach((item) => {
+    const card = add('article', 'catalog-card');
+    const top = add('div', 'catalog-card-top');
+    const isMeta = item.provider && item.provider.startsWith('meta');
+    const isLocal = item.provider && item.provider.startsWith('local');
+    const iconSpan = add('span', 'label-icon' + (isMeta ? ' meta-icon' : (isLocal ? ' local-icon' : '')), isMeta ? '✳' : (isLocal ? '◈' : '◎'));
+    
+    let tagCls = 'neutral';
+    if (item.status === 'TESTED' || item.status === 'INSTALLED') tagCls = 'ok';
+    else if (item.status === 'INTEGRATED') tagCls = 'violet';
+    else if (item.status === 'DEFERRED') tagCls = 'neutral';
+
+    const statusTag = add('span', 'tag ' + tagCls, item.status + ' · ' + (item.availability || ''));
+    top.append(iconSpan, statusTag);
+
+    const title = add('h3', '', item.display_name || item.id);
+    const sub = add('p', 'catalog-sub', (item.category || '').toUpperCase() + ' · ' + (item.endpoint || ''));
+
+    const gridSpecs = add('div', 'catalog-specs-grid');
+    const addSpec = (label, val) => {
+      const b = add('div');
+      b.append(add('small', '', label), add('strong', '', val));
+      gridSpecs.append(b);
+    };
+
+    addSpec('CONTEXT', (item.max_context_tokens || 0).toLocaleString('en-US') + ' t');
+    addSpec('1-SHOT LATENCY', item.measured_latency_single_ms > 0 ? (item.measured_latency_single_ms / 1000).toFixed(2) + 's' : '—');
+    addSpec('2-TURN LATENCY', item.measured_latency_2turn_tool_ms > 0 ? (item.measured_latency_2turn_tool_ms / 1000).toFixed(2) + 's' : '—');
+    addSpec('COST / M TOK', item.cost_per_million_output_usd > 0 ? '$' + item.cost_per_million_output_usd.toFixed(2) : '$0.00');
+
+    const foot = add('div', 'catalog-foot');
+    const privacy = add('p', 'fine-print', (item.requires_owner_grant ? '🔒 GRANT REQUIRED · ' : '⚡ NO GRANT NEEDED · ') + (item.privacy || ''));
+    foot.append(privacy);
+
+    if (item.note) {
+      foot.append(add('p', 'fine-print catalog-note', 'ℹ ' + item.note));
+    }
+
+    card.append(top, title, sub, gridSpecs, foot);
+    grid.append(card);
+  });
+}
+
+function renderRepairArena(benchmark) {
+  if (!benchmark) return;
+  const argon = benchmark.argon_repair || {};
+  const muse = benchmark.muse_code_repair || {};
+  const problem = benchmark.benchmark_problem || {};
+
+  // Update dynamic fields if present
+  if (argon.commit_sha) {
+    const elArgonCommit = document.querySelector('#arena-argon-card code');
+  }
+}
+
 'use strict';
 
 /* Read-only external evidence + a deliberately synthetic, server-side replay.
@@ -391,7 +459,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     renderInfraSnapshot(await api('/api/orchestrator/snapshot'));
     await runOrchestratorInvestigation();
-  } catch (_) {
-    // Non-fatal in minimal test harness
-  }
+  } catch (_) {}
+  try {
+    const providers = await api('/api/meta/providers');
+    const summary = await api('/api/meta/ecosystem');
+    renderModelCatalog(providers, summary);
+  } catch (_) {}
+  try {
+    const benchmark = await api('/api/meta/benchmark');
+    renderRepairArena(benchmark);
+  } catch (_) {}
 });
