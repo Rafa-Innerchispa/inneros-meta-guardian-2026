@@ -4,7 +4,7 @@
 InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 [![Public Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Fguardian.pcdoctor.ai%2Fself--heal-success?style=for-the-badge&logo=cloudflare)](https://guardian.pcdoctor.ai/self-heal)
-[![Unit Tests](https://img.shields.io/badge/tests-80%2F80%20passing-brightgreen?style=for-the-badge)](https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026)
+[![Unit Tests](https://img.shields.io/badge/tests-87%2F87%20passing-brightgreen?style=for-the-badge)](https://github.com/Rafa-Innerchispa/inneros-meta-guardian-2026)
 [![Python 3.10 | 3.12](https://img.shields.io/badge/python-3.10%20%7C%203.12-blue?style=for-the-badge)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
 
@@ -14,6 +14,7 @@ InnerChispa LLC · Guayaquil, Ecuador · Rafael López, Founder & CEO
 
 > 🌐 **PUBLIC HTTPS URL:** **[https://guardian.pcdoctor.ai/self-heal](https://guardian.pcdoctor.ai/self-heal)**  
 > **Mode:** `PUBLIC_JUDGE_DEMO` (Cloudflare Tunnel TLS 1.3, origin isolated, fail-closed read-only gate, 0 unapproved model spend, zero VPN required).  
+> **Alternative Mirror:** `https://meta-guardian.pcdoctor.ai/self-heal`  
 > **Deployment Architecture:** Documented in [`docs/JUDGE_PUBLIC_DEPLOY.md`](docs/JUDGE_PUBLIC_DEPLOY.md).
 
 ---
@@ -27,12 +28,13 @@ OBSERVE (Context Collector) ➔ INVESTIGATE (Tool Loop: Local Qwen 30B / Meta Mu
 ```
 
 - **Forensic Diagnosis:** Grounded in a real coordination failure (`InnerOS Global Snapshot`, SHA-256 `92796a03...`) with 15-day expired task claims, cross-host PID kill hazards, and linked worktree `.git` lock misses.
-- **Ecosystem Catalog:** 11 integrated components across Local Sovereign (Qwen 30B AWQ), Meta Model API (Wonder 1.0, Spark 1.3, Image, Voice Transcribe, SAM 3.1), Official Muse Code CLI/SDK, Open Weights (Spark Open 816B MoE & Glimmer Open evaluated/deferred), and Comparative Agent (Argon).
+- **Provider Lab & Financial Controls:** Verified ledger across Fireworks AI ($20.30 available, auto-reload OFF), Baseten ($5.00 Model APIs + $2.00 Tool Calls), Modal ($1.00 CPU Sandbox, $29 card offer denied), and Meta Model API (10-day evaluation window).
 - **Independent Benchmark Arena:** Evaluates agents side-by-side on identical baseline commit `beccbd49` with 9/10 failing tests without cross-contamination.
+- **Unified Ten-Domain Audit Dossier:** Comprehensive cluster audit covering AMD & Intel topology, MCP Small/Monolithic routing, queue leases, worktree locks, and deterministic repair invariants.
 
 ---
 
-## 3-Model Benchmark: Meta Muse vs. Argon vs. GPT-6 Astra (+ Sovereign Baseline)
+## Multi-Model Benchmark & Independent Audit
 
 Evaluated under strict local-first governance (zero unapproved spend, single-use grants, no auto-merge to `main`):
 
@@ -48,22 +50,23 @@ Evaluated under strict local-first governance (zero unapproved spend, single-use
 
 ---
 
-## 7 Interactive Mission Control Panels (`/self-heal`)
+## 8 Interactive Mission Control Panels (`/self-heal`)
 
 1. **Autonomous Diagnostic Orchestrator (5 Panels):** Direct diagnostic chat connected to `inneros_global_snapshot.json` and 11 allowlisted read-only and simulation tools (`get_pending_tasks`, `get_worker_health`, `read_source_file`, etc.).
-2. **Meta Model Lab:** Central registry of 11 components with measured single/2-turn latencies, context limits, token pricing, hardware limitations, and single-use owner approval tokens.
-3. **Agent Repair Arena:** Side-by-side comparative repair duel with diff statistics, test verdicts, and rollback integrity.
-4. **Forensic Evidence Explorer:** Direct links to authentic receipts, CI runs, and commit diffs.
-5. **Interactive Replay Sandbox:** 6-stage in-memory state machine demonstrating safe approval order (observe $\rightarrow$ local $\rightarrow$ wonder $\rightarrow$ ack $\rightarrow$ patch $\rightarrow$ verify).
-6. **Physical Guardian (`/`):** SAM 3.1 optical switch LED segmentation, Grandstream VoiceOps telephone verification, and tamper-evident SHA-256 hash chains.
-7. **Cloudflare Security Gate:** Default-deny public read-only isolation protecting private servers.
+2. **Provider Lab & Financial Controls:** Real-time ledger tracking balances ($26.30 external available, $0.00 unapproved spend), zero-spend dry-run contracts, and per-call budget ceilings.
+3. **Unified Ten-Domain Audit Dossier:** Comprehensive audit table inspecting cluster topology, MCP Small (:8001) vs Monolithic (:8102), worker queues, and deterministic repair invariants.
+4. **Meta Model Lab:** Central registry of 11 components with measured single/2-turn latencies, context limits, token pricing, hardware limitations, and single-use owner approval tokens.
+5. **Agent Repair Arena:** Side-by-side comparative repair duel with diff statistics, test verdicts, and rollback integrity.
+6. **Forensic Evidence Explorer:** Direct links to authentic receipts, CI runs, and commit diffs.
+7. **Interactive Replay Sandbox:** 6-stage in-memory state machine demonstrating safe approval order (observe $\rightarrow$ local $\rightarrow$ wonder $\rightarrow$ ack $\rightarrow$ patch $\rightarrow$ verify).
+8. **Physical Guardian (`/`):** SAM 3.1 optical switch LED segmentation, Grandstream VoiceOps telephone verification, and tamper-evident SHA-256 hash chains.
 
 ---
 
 ## Quickstart & Verification
 
 ```bash
-# 1. Run the Complete Test Suite (80 Tests, 100% Offline Passing)
+# 1. Run the Complete Test Suite (87 Tests, 100% Offline Passing)
 PYTHONPATH=src python -m unittest discover -s tests -v
 
 # 2. Run the Security & Secret Sanitization Check (0 leaks guaranteed)
@@ -78,16 +81,7 @@ PYTHONPATH=src python -m inneros_meta_guardian.web
 ## Evidence Index
 
 - [`docs/evidence/meta_wonder_tool_investigation_20261103.json`](docs/evidence/meta_wonder_tool_investigation_20261103.json): Authentic 2-turn tool-calling investigation receipt from **Meta Muse Wonder 1.0**.
-- [`docs/evidence/repair_benchmark_comparison_20261103.json`](docs/evidence/repair_benchmark_comparison_20261103.json): Multi-model benchmark evaluation (Muse vs. Argon vs. Astra vs. Qwen).
-- [`docs/evidence/muse_repair_session_events.jsonl`](docs/evidence/muse_repair_session_events.jsonl): 40 raw MSP protocol events captured from Meta Muse Code headless session.
-- [`docs/evidence/meta_ecosystem_inventory.json`](docs/evidence/meta_ecosystem_inventory.json): Full 11-component reconciled inventory.
-- [`docs/evidence/qwen_tool_assisted_investigation_20261103.json`](docs/evidence/qwen_tool_assisted_investigation_20261103.json): Sovereign AMD ROCm tool investigation receipt.
-- [`docs/JUDGE_PUBLIC_DEPLOY.md`](docs/JUDGE_PUBLIC_DEPLOY.md): Public Cloudflare Tunnel deployment and verification guide.
-- [`docs/SUBMISSION_PACKAGE_20261104.md`](docs/SUBMISSION_PACKAGE_20261104.md): 3-minute video sequence and Cerebral Valley submission form answers.
-
----
-
-## License & Attribution
-
-Released under the [MIT License](LICENSE). Copyright © 2026 InnerChispa LLC (Rafael López).  
-Built for the **Meta Global AI Developer Hackathon 2026** (Meta × Cerebral Valley).
+- [`docs/evidence/repair_benchmark_comparison_20261103.json`](docs/evidence/repair_benchmark_comparison_20261103.json): Independent repair evaluation (Argon 10/10 vs. Muse Code vs. Astra vs. Qwen).
+- [`docs/evidence/inneros_unified_audit_dossier_20261104.json`](docs/evidence/inneros_unified_audit_dossier_20261104.json): Complete ten-domain cluster audit and multi-model findings.
+- [`docs/evidence/inneros_unified_audit_dossier_20261104.md`](docs/evidence/inneros_unified_audit_dossier_20261104.md): Human-readable markdown audit dossier.
+- [`docs/SUBMISSION_PACKAGE_20261104.md`](docs/SUBMISSION_PACKAGE_20261104.md): Cerebral Valley submission fields, 3-minute video script, and HeyGen avatar prompt.

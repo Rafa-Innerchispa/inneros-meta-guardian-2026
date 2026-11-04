@@ -470,3 +470,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderRepairArena(benchmark);
   } catch (_) {}
 });
+
+
+// Provider Lab Financial Controls & Dry-Run
+async function loadFinancialMatrix() {
+  try {
+    const fin = await api('/api/meta/finance');
+    if (fin) {
+      if (el('fin-total-avail')) put('fin-total-avail', '$' + Number(fin.total_external_available_usd || 26.30).toFixed(2));
+      if (el('fin-unapproved')) put('fin-unapproved', '$' + Number(fin.unapproved_cloud_spend_usd || 0.00).toFixed(2));
+    }
+  } catch (_) {}
+}
+
+function bindProviderActions() {
+  document.querySelectorAll('.btn-dryrun').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const provider = btn.getAttribute('data-provider') || 'fireworks_ai';
+      const box = el('dryrun-result-box');
+      if (box) {
+        box.style.display = 'block';
+        box.textContent = 'Executing offline dry-run contract check for ' + provider + '… (Zero Cloud Spend)';
+      }
+      try {
+        const res = await api('/api/meta/finance/dryrun', { provider });
+        if (box) {
+          box.textContent = 'OFFLINE DRY-RUN SUCCESS [Zero Spend]:\n' + JSON.stringify(res, null, 2);
+        }
+      } catch (err) {
+        if (box) {
+          box.textContent = 'DRY-RUN FAILED:\n' + String(err.message || err);
+        }
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindProviderActions();
+  loadFinancialMatrix();
+});

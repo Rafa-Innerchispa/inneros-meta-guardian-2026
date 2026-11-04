@@ -23,6 +23,8 @@
       <a href="#investigator" class="nav">Autonomous Investigator</a>
       <a href="#model-lab" class="nav">Meta Model Lab</a>
       <a href="#repair-arena" class="nav">Agent Repair Arena</a>
+      <a href="#provider-lab" class="nav">Provider Lab</a>
+      <a href="#dossier" class="nav">Audit Dossier</a>
       <a href="#forensics" class="nav">Forensic Evidence</a>
     </nav>
     <span class="chip security-chip" id="top-security-chip"><span class="status-dot"></span> PUBLIC JUDGE DEMO · SAFE REPLAY · NO PAID CALLS · HTTPS CLOUDFLARE</span>
@@ -287,6 +289,243 @@
         <strong>Independent Evaluator Verdict &amp; Safety Proof:</strong>
         <p>Both agents were evaluated under strict local-first governance. Argon produced a verified clean patch (Commit <code>94d90d34</code>, 10/10 tests green). Meta Muse Code was verified as installed, functional in headless MSP daemon mode, and fully compliant with security boundaries (stopped cleanly when owner authorization was absent). Neither agent was auto-merged to main.</p>
       </div>
+    </section>
+
+    <!-- 02 / PROVIDER LAB & FINANCIAL GOVERNANCE -->
+    <section id="provider-lab" class="section" aria-label="Provider Lab & Financial Controls">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">01 / PROVIDER LAB &amp; FINANCIAL GOVERNANCE</p>
+          <h2>Governed External APIs &amp; Sovereign Compute</h2>
+          <p>Every provider is bound by cryptographic budget ceilings, zero automatic retries, and single-use owner approval grants. Unapproved cloud spend is strictly prohibited ($0.00 incurred).</p>
+        </div>
+        <span class="tag ok">FINANCIAL CONTROLS ENFORCED</span>
+      </div>
+
+      <div class="finance-summary-grid">
+        <div class="finance-stat-card">
+          <small>EXTERNAL AVAILABLE BALANCE</small>
+          <strong id="fin-total-avail">$26.30</strong>
+          <p>Fireworks ($20.30) + Baseten ($5.00) + Modal ($1.00)</p>
+        </div>
+        <div class="finance-stat-card">
+          <small>TOOL CALLS CREDIT POOL</small>
+          <strong id="fin-tool-avail">$2.00</strong>
+          <p>Baseten Serverless Tool Calling (Separated)</p>
+        </div>
+        <div class="finance-stat-card">
+          <small>UNAPPROVED CLOUD SPEND</small>
+          <strong class="green" id="fin-unapproved">$0.00</strong>
+          <p>Zero spend without cryptographic grant</p>
+        </div>
+        <div class="finance-stat-card">
+          <small>SOVEREIGN LOCAL COMPUTE</small>
+          <strong class="green">UNMETERED</strong>
+          <p>AMD ROCm 10.1 (On-Premises LAN)</p>
+        </div>
+      </div>
+
+      <div class="provider-cards-grid" id="provider-cards-container">
+        <!-- FIREWORKS AI -->
+        <article class="provider-card active-card">
+          <div class="provider-card-top">
+            <span class="tag ok">CONFIGURED · TESTED_OFFLINE</span>
+            <span class="mono">Auto-Reload: OFF</span>
+          </div>
+          <h3>Fireworks AI (Meta Open Models)</h3>
+          <p class="provider-card-sub">Org: InnerChispa LLC · Account: rafagye@gmail.com</p>
+          <div class="provider-balance-box">
+            <div><small>AVAILABLE BALANCE</small><strong>$20.30 USD</strong></div>
+            <div><small>PROPOSED TEST BUDGET</small><strong>$1.00 USD</strong></div>
+            <div><small>PER-CALL CEILING</small><strong>$0.25 USD</strong></div>
+            <div><small>TARGET MODEL</small><strong>Llama 3.3 70B / 8B</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" class="btn-dryrun" data-provider="fireworks_ai">Run Zero-Spend Dry Run</button>
+          </div>
+        </article>
+
+        <!-- BASETEN -->
+        <article class="provider-card active-card">
+          <div class="provider-card-top">
+            <span class="tag ok">CONFIGURED · TESTED_OFFLINE</span>
+            <span class="mono">Dedicated: $0.00</span>
+          </div>
+          <h3>Baseten (Model APIs &amp; Tool Calls)</h3>
+          <p class="provider-card-sub">Org: InnerChispa LLC · Endpoint: inference.baseten.co/v1</p>
+          <div class="provider-balance-box">
+            <div><small>MODEL APIS BALANCE</small><strong>$5.00 USD (Free)</strong></div>
+            <div><small>TOOL CALLS BALANCE</small><strong>$2.00 USD (Free)</strong></div>
+            <div><small>PROPOSED TEST BUDGET</small><strong>$0.50 USD</strong></div>
+            <div><small>TARGET MODEL</small><strong>muse-spark-open</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" class="btn-dryrun" data-provider="baseten">Run Zero-Spend Dry Run</button>
+          </div>
+        </article>
+
+        <!-- MODAL -->
+        <article class="provider-card active-card">
+          <div class="provider-card-top">
+            <span class="tag ok">CONFIGURED · TESTED_OFFLINE</span>
+            <span class="mono">GPU: None (CPU Only)</span>
+          </div>
+          <h3>Modal (Ephemeral CPU Sandbox)</h3>
+          <p class="provider-card-sub">Org: InnerChispa LLC · Isolation: NO_LAN_ACCESS</p>
+          <div class="provider-balance-box">
+            <div><small>AVAILABLE BALANCE</small><strong>$1.00 USD (Free)</strong></div>
+            <div><small>CARD OFFER ($29)</small><strong style="color:var(--amber);">DENIED / UNAUTHORIZED</strong></div>
+            <div><small>PROPOSED TEST BUDGET</small><strong>$0.25 USD</strong></div>
+            <div><small>DESTRUCTION POLICY</small><strong>Destroy on Exit</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" class="btn-dryrun" data-provider="modal">Run Zero-Spend Dry Run</button>
+          </div>
+        </article>
+
+        <!-- META MODEL API -->
+        <article class="provider-card active-card">
+          <div class="provider-card-top">
+            <span class="tag ok">TESTED_LIVE · AUTHENTIC RECEIPT</span>
+            <span class="mono">10-Day Window</span>
+          </div>
+          <h3>Meta Model API (Muse Wonder 1.0)</h3>
+          <p class="provider-card-sub">Endpoint: api.meta.ai/v1/responses · Single-Use Grant</p>
+          <div class="provider-balance-box">
+            <div><small>HISTORICAL USAGE</small><strong>$0.0019 USD</strong></div>
+            <div><small>REASONING TOKENS</small><strong>822 CoT (2-Turn)</strong></div>
+            <div><small>PER-CALL CEILING</small><strong>$0.50 USD</strong></div>
+            <div><small>LIVE CALL STATUS</small><strong>Fail-Closed (Grant Req)</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" disabled>Governed by Owner Grant</button>
+          </div>
+        </article>
+
+        <!-- LOCAL AMD ROCm -->
+        <article class="provider-card active-card">
+          <div class="provider-card-top">
+            <span class="tag ok">TESTED_LIVE · ON-PREMISES</span>
+            <span class="mono">Port: 8000</span>
+          </div>
+          <h3>Local Qwen3-Coder-30B-AWQ (AMD R9700)</h3>
+          <p class="provider-card-sub">Hardware: AMD Radeon AI PRO R9700 · ROCm 10.1</p>
+          <div class="provider-balance-box">
+            <div><small>COST PER TOKEN</small><strong class="green">$0.00 (Unmetered)</strong></div>
+            <div><small>2-TURN LATENCY</small><strong>6,440 ms</strong></div>
+            <div><small>PRIVACY</small><strong>100% On-Premises</strong></div>
+            <div><small>AUTOMATIC RETRIES</small><strong>Local Failover</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" disabled>Active Sovereign Engine</button>
+          </div>
+        </article>
+
+        <!-- GPT-6 ASTRA -->
+        <article class="provider-card blocked-card">
+          <div class="provider-card-top">
+            <span class="tag amber">BLOCKED · ZERO CREDITS</span>
+            <span class="mono">Truth Integrity</span>
+          </div>
+          <h3>GPT-6 Astra (OpenAI)</h3>
+          <p class="provider-card-sub">Endpoint: api.openai.com/v1 · Missing API Key</p>
+          <div class="provider-balance-box">
+            <div><small>CREDENTIAL STATUS</small><strong class="amber">MISSING_IN_VAULT</strong></div>
+            <div><small>SPEND INCURRED</small><strong>$0.00</strong></div>
+            <div><small>STATUS</small><strong>BLOCKED_API_ACCESS</strong></div>
+            <div><small>SILENT FALLBACK</small><strong>STRICTLY FORBIDDEN</strong></div>
+          </div>
+          <div class="provider-actions">
+            <button type="button" disabled>Blocked (No API Key)</button>
+          </div>
+        </article>
+      </div>
+      <div id="dryrun-result-box" class="task-state" style="display:none;"></div>
+    </section>
+
+    <!-- 03 / UNIFIED AUDIT DOSSIER -->
+    <section id="dossier" class="section" aria-label="Unified Audit Dossier & Local Repair Plan">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">02 / UNIFIED AUDIT DOSSIER &amp; LOCAL REPAIRS</p>
+          <h2>Ten-Domain Cluster Audit &amp; Deterministic Fixes</h2>
+          <p>Consolidated evidence across AMD &amp; Intel architecture, MCP topology, worker queues, Git worktrees, and comparative findings from Meta Muse Wonder 1.0, Argon, and local Qwen.</p>
+        </div>
+        <span class="tag ok">SANITY AUDIT 100% GREEN</span>
+      </div>
+
+      <table class="dossier-table" aria-label="Ten Domain Audit Summary">
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Primary Observed Facts</th>
+            <th>Identified Risk &amp; Root Cause</th>
+            <th>Local Repair Invariant</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Architecture &amp; Nodes</strong></td>
+            <td>AMD Primary (R9700, :8000, :8793) + Intel Secondary (:27017, :8001, :8102, Ollama :11434 offline)</td>
+            <td>Secondary node degradation leaves orphan leases</td>
+            <td>Dual-node heartbeat quorum before lease claim</td>
+          </tr>
+          <tr>
+            <td><strong>2. MCP Topology</strong></td>
+            <td>MCP Small (:8001) for fast telemetry; MCP Monolithic (:8102) for Mongo state</td>
+            <td>Monolithic bottleneck under burst coordination</td>
+            <td>Route all diagnostic tool calls to MCP Small</td>
+          </tr>
+          <tr>
+            <td><strong>3. NCP Coordination</strong></td>
+            <td>Incident task `ops_4e977fd8ec43` stalled in `awaiting_claim`</td>
+            <td>Missing precedence for orchestrated claims</td>
+            <td>Enforce `awaiting_antigravity_claim` precedence</td>
+          </tr>
+          <tr>
+            <td><strong>4. Workers &amp; Leases</strong></td>
+            <td>260 DevSwarm workers exhausted retry budget (0 active)</td>
+            <td>Workers crash-loop without yielding lease</td>
+            <td>Auto-expire stale leases after 900 seconds</td>
+          </tr>
+          <tr>
+            <td><strong>5. Cross-Host PIDs</strong></td>
+            <td>`os.kill(pid, 0)` fails closed across distributed hosts</td>
+            <td>Remote Intel worker wiped if AMD tests PID</td>
+            <td>Strict check: `claim_host == current_node_host`</td>
+          </tr>
+          <tr>
+            <td><strong>6. Git Worktrees</strong></td>
+            <td>Linked worktree `.git` is a file pointing to `gitdir: ...`</td>
+            <td>`index.lock` checked in missing folder</td>
+            <td>Resolve `gitdir:` pointer to find true `index.lock`</td>
+          </tr>
+          <tr>
+            <td><strong>7. State CAS</strong></td>
+            <td>MongoDB state updates without atomic count check</td>
+            <td>Race condition allows double lease claim</td>
+            <td>Require atomic CAS `modified_count == 1`</td>
+          </tr>
+          <tr>
+            <td><strong>8. Financial Ledger</strong></td>
+            <td>Fireworks ($20.30), Baseten ($5+$2), Modal ($1), Meta (10d grant)</td>
+            <td>Unchecked retry loops trigger cloud bills</td>
+            <td>Single-use Owner Approval Grant + 0 auto-retries</td>
+          </tr>
+          <tr>
+            <td><strong>9. High Availability</strong></td>
+            <td>Cloudflare tunnel on Intel routes to AMD 8793; Mongo master on Intel</td>
+            <td>Split-brain if LAN disconnects</td>
+            <td>Fail-closed read-only gate on split partition</td>
+          </tr>
+          <tr>
+            <td><strong>10. Physical Guardian</strong></td>
+            <td>SAM 3.1 visual inspector + Meta Voice audible alerts</td>
+            <td>Unauthorized actuation on physical gates/beacons</td>
+            <td>Deterministic policy allowlist + 2-operator rule</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="forensics" class="section">

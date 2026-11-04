@@ -38,3 +38,13 @@ class RepairEvaluator:
             except Exception:
                 pass
         return MetaProviderRegistry.get_ecosystem_summary()
+
+    @staticmethod
+    def get_unified_dossier() -> dict[str, Any]:
+        evidence_path = Path(__file__).parent.parent.parent / "docs" / "evidence" / "inneros_unified_audit_dossier_20261104.json"
+        if evidence_path.is_file():
+            try:
+                return json.loads(evidence_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        return {"schema": "inneros.unified_audit_dossier.v1", "status": "READY"}

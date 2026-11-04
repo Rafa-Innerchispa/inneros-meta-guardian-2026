@@ -14,9 +14,13 @@ from .diagnostic_orchestrator import ORCHESTRATOR, OrchestratorError
 from .engine import Guardian, LifecycleError
 from .integrations import VoiceOpsRecordedReceipt
 from .meta_once import GRANT_STORE, GrantError
-from .sam_inspector import SAMInspector
 from .meta_registry import MetaProviderRegistry
+from .provider_finance import ProviderFinanceManager
+from .fireworks_adapter import FireworksAdapter
+from .baseten_adapter import BasetenAdapter
+from .modal_sandbox_adapter import ModalSandboxAdapter
 from .repair_evaluator import RepairEvaluator
+from .sam_inspector import SAMInspector
 from .selfheal_lab import SelfHealingLab, LabError, case_evidence
 
 STATIC = Path(__file__).parent / "static"
@@ -26,7 +30,8 @@ class Handler(BaseHTTPRequestHandler):
     guardian: Guardian
     selfheal_lab = SelfHealingLab()  # process-local, isolated demo only
     orchestrator = ORCHESTRATOR
-    server_version = "InnerOSMetaGuardian/1.2"
+    finance_manager = ProviderFinanceManager()
+    server_version = "InnerOSMetaGuardian/1.3"
 
     def _write(self, status: int, content: bytes, mime: str = "application/json; charset=utf-8") -> None:
         self.send_response(status)
@@ -59,6 +64,9 @@ class Handler(BaseHTTPRequestHandler):
             raise LifecycleError("JSON object required")
         return val
 
+    def do_HEAD(self):  # noqa: N802
+        self.do_GET()
+
     def do_GET(self):  # noqa: N802
         path = urlsplit(self.path).path
         if path in ("/", "/index.html"):
@@ -81,6 +89,10 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, MetaProviderRegistry.list_providers())
         elif path == "/api/meta/benchmark":
             self._json(200, RepairEvaluator.get_benchmark_comparison())
+        elif path == "/api/meta/finance":
+            self._json(200, self.finance_manager.generate_financial_matrix())
+        elif path == "/api/meta/dossier":
+            self._json(200, RepairEvaluator.get_unified_dossier())
         elif path == "/api/orchestrator/snapshot":
             self._json(200, self.orchestrator.get_global_snapshot())
         elif path.startswith("/api/orchestrator/sessions/") and len(path.strip("/").split("/")) == 4:
@@ -104,7 +116,7 @@ class Handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "ok": True,
-                    "version": "1.2.0",
+                    "version": "1.3.0",
                     "project": "InnerOS Autonomous Infrastructure Guardian",
                     "hackathon": "Meta Global AI Developer Hackathon 2026",
                     "track": "Startup Track (Push the Frontier)",
@@ -114,6 +126,14 @@ class Handler(BaseHTTPRequestHandler):
                     "meta_supported": True,
                     "meta_status": "HISTORICAL_EVIDENCE_AND_CLI_INSTALLED",
                     "meta_live_api_active": False,
+                    "financial_matrix_available": True,
+                    "unified_dossier_available": True,
+                    "provider_finance": {
+                        "fireworks_status": "TESTED_OFFLINE",
+                        "baseten_status": "TESTED_OFFLINE",
+                        "modal_status": "TESTED_OFFLINE",
+                        "unapproved_cloud_spend_usd": 0.0,
+                    },
                     "meta_evidence": {
                         "wonder_investigation": "VERIFIED_2_TURN_TOOL_RECEIPT",
                         "wonder_session_resp": "resp_6aea97477ecbaecc16a14e99 -> resp_6aea97f2ad831065ca8b4bc8",
@@ -191,6 +211,34 @@ class Handler(BaseHTTPRequestHandler):
                     return
 
             body = self._body() if self.headers.get("Content-Length") else {}
+
+            # Offline Dry-Run Contract Verification (allowed in public mode since it spends $0.00)
+            if path == "/api/meta/finance/dryrun":
+                provider = str(body.get("provider") or "fireworks_ai")
+                if provider == "fireworks_ai":
+                    adapter = FireworksAdapter(finance_manager=self.finance_manager)
+                    res = adapter.complete(
+                        messages=[{"role": "user", "content": "Dry-run sanitized coordination evaluation"}],
+                        dry_run=True,
+                    )
+                elif provider == "baseten":
+                    adapter = BasetenAdapter(finance_manager=self.finance_manager)
+                    res = adapter.complete(
+                        messages=[{"role": "user", "content": "Dry-run sanitized coordination evaluation"}],
+                        dry_run=True,
+                    )
+                elif provider == "modal":
+                    adapter = ModalSandboxAdapter(finance_manager=self.finance_manager)
+                    res = adapter.run_isolated_test(
+                        test_script_content="pytest tests/test_ops_expired_claim_lease_recovery.py",
+                        files_manifest={"test_ops.py": "pass"},
+                        dry_run=True,
+                    )
+                else:
+                    self._json(400, {"error": f"Unknown provider for dry run: {provider}"})
+                    return
+                self._json(200, res)
+                return
 
             # Autonomous tool-calling diagnostic orchestrator (read-only + simulation tools, zero paid calls)
             if path == "/api/orchestrator/investigate":

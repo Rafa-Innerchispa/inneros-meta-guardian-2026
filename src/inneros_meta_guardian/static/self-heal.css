@@ -118,3 +118,32 @@ footer{border-top:1px solid #24374d;margin-top:80px;padding:30px 0 40px;display:
 .public-url-badge a:hover { text-decoration: underline; }
 .arena-card.astra-card { border-color: #64748b; }
 .arena-card.local-sovereign-card { border-color: #0284c7; }
+
+
+/* Provider Lab & Financial Ledger Styles */
+.finance-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.finance-stat-card { background: #111d2e; border: 1px solid #2f425c; border-radius: 12px; padding: 18px; }
+.finance-stat-card small { display: block; font-size: 10px; color: #8ba2b9; letter-spacing: 1px; font-weight: 800; margin-bottom: 6px; }
+.finance-stat-card strong { font-size: 28px; letter-spacing: -1px; font-variant-numeric: tabular-nums; color: #edf4ff; }
+.finance-stat-card strong.green { color: var(--green); }
+.finance-stat-card p { font-size: 11px; color: #7fa6bd; margin: 4px 0 0; }
+
+.provider-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; margin-bottom: 30px; }
+.provider-card { background: linear-gradient(170deg, #16243a, #101b2c); border: 1px solid #2c3d53; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
+.provider-card.active-card { border-color: #3b82f6; }
+.provider-card.blocked-card { border-color: #ef4444; opacity: 0.85; }
+.provider-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.provider-card h3 { font-size: 18px; margin: 0 0 6px; color: #edf4ff; }
+.provider-card-sub { font-size: 11px; color: #8fa5bb; margin-bottom: 14px; font-family: monospace; }
+.provider-balance-box { background: #0b1422; border: 1px solid #24354a; border-radius: 8px; padding: 12px; margin-bottom: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.provider-balance-box div small { display: block; font-size: 9px; color: #7fa6bd; font-weight: 700; margin-bottom: 2px; }
+.provider-balance-box div strong { font-size: 14px; color: #edf4ff; font-family: monospace; }
+.provider-actions { display: flex; gap: 8px; margin-top: auto; }
+.provider-actions button { flex: 1; padding: 9px 12px; font-size: 11px; font-weight: 750; border-radius: 7px; border: 1px solid #36506c; background: #17283e; color: #d6e9fe; }
+.provider-actions button:hover:not(:disabled) { background: #223c5e; }
+
+/* Dossier Domain Table */
+.dossier-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
+.dossier-table th, .dossier-table td { padding: 12px; border-bottom: 1px solid #24354a; text-align: left; }
+.dossier-table th { background: #0c1421; color: #78c6ec; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; }
+.dossier-table tr:hover { background: #132033; }

@@ -1,0 +1,176 @@
+{
+  "schema": "inneros.unified_audit_dossier.v1",
+  "audit_date": "2026-11-04T11:25:00-05:00",
+  "dossier_id": "dossier_inneros_coordination_and_infra_20261104",
+  "organization": "InnerChispa LLC",
+  "lead": "Rafael López, CEO",
+  "sanitized": true,
+  "zero_secrets_leaked": true,
+  "domains": {
+    "1_architecture_amd_intel": {
+      "primary_node": {
+        "hostname": "inneros-5 (AMD)",
+        "role": "Primary Inference & Public Cloudflare Tunnel Service",
+        "hardware": "AMD Ryzen 9 + Radeon AI PRO R9700 (32 GB VRAM)",
+        "stack": "ROCm 10.1, vLLM (:8000), Local Qwen3-Coder-30B-AWQ, systemd user service (:8793)",
+        "status": "ONLINE_ACTIVE"
+      },
+      "secondary_node": {
+        "hostname": "inneros-4 (Intel)",
+        "role": "Coordinator, State Database & Voice/Telemetry Hub",
+        "hardware": "Intel Core i9 / Xeon, 64 GB RAM",
+        "stack": "MongoDB (:27017), Cloudflare Tunnel Host, MCP Small (:8001), MCP Monolithic (:8102), Ollama (:11434, offline)",
+        "status": "ONLINE_COORDINATOR"
+      }
+    },
+    "2_mcp_topology": {
+      "mcp_small": {
+        "port": 8001,
+        "purpose": "Targeted lightweight tool calls (system_status, lease_read, telemetry)",
+        "status": "HEALTHY"
+      },
+      "mcp_monolithic": {
+        "port": 8102,
+        "purpose": "Full-platform orchestration and database operations",
+        "status": "HEALTHY"
+      }
+    },
+    "3_ncp_coordination": {
+      "incident_task": "ops_4e977fd8ec43",
+      "correlation_id": "meta-wonder-coordination-p0-20261102",
+      "symptom": "Trapped in awaiting_claim status, interactive claim lease expired",
+      "secondary_task": "ops_fcd8686d7fc6",
+      "secondary_symptom": "Claim lease expired for 15 days, missing automatic garbage collection",
+      "root_cause_summary": "Missing awaiting_claim precedence and cross-host PID kill hazard"
+    },
+    "4_workers_queues_leases": {
+      "devswarm_workers_total": 260,
+      "devswarm_workers_active": 0,
+      "devswarm_workers_blocked": 260,
+      "cause": "Retry budget exhaustion without lease yield",
+      "lease_duration_seconds": 900
+    },
+    "5_logs_and_recent_failures": [
+      {
+        "timestamp": "2026-11-02T18:44:10Z",
+        "module": "ops_interactive_recovery.py",
+        "error": "ProcessLookupError / HostMismatch on os.kill(pid, 0) across secondary node",
+        "severity": "CRITICAL"
+      },
+      {
+        "timestamp": "2026-11-02T19:12:35Z",
+        "module": "ops_awaiting_claim.py",
+        "error": "AssertionError: precedence inverted during auto-recovery claim",
+        "severity": "HIGH"
+      },
+      {
+        "timestamp": "2026-11-03T04:22:00Z",
+        "module": "git_worktree_manager.py",
+        "error": "NotADirectoryError: .git is a file in linked worktrees, index.lock path unresolved",
+        "severity": "HIGH"
+      }
+    ],
+    "6_git_state_and_worktrees": {
+      "repository": "innerops-agentic-platform",
+      "baseline_commit": "beccbd495dc2ab33e5c8cf3abe5fa988047cc15f",
+      "pr_256_commit": "2481d2e749ebb2af3cdc85a13cec6eff598fc7c4",
+      "argon_patch_commit": "94d90d34ce5542f0a152f071852b2b2be4fadfd1",
+      "linked_worktrees": [
+        "var/local_execution/worktrees/argon-repair-20261103",
+        "var/local_execution/worktrees/meta-muse-code-repair-20261103"
+      ]
+    },
+    "7_permissions_and_policy": {
+      "policy_module": "policy.py",
+      "model_grant_rule": "Deterministic fail-closed. No LLM authorizes physical mutations or billable cloud spend.",
+      "public_mode_gate": "GUARDIAN_PUBLIC_MODE=true enforces HTTP 403 Forbidden on all POST mutations."
+    },
+    "8_credit_and_financial_management": {
+      "fireworks_ai": "$20.30 USD available, Auto-Reload Disabled",
+      "baseten_model_apis": "$5.00 USD free credits available ($0.00 used)",
+      "baseten_tool_calls": "$2.00 USD free credits available ($0.00 used)",
+      "baseten_dedicated": "$0.00 USD (disabled)",
+      "modal_cpu_sandbox": "$1.00 USD free credits available ($29 card offer denied)",
+      "meta_model_api": "10-day evaluation window (receipt verified, live calls capped at $0.50 per grant)"
+    },
+    "9_high_availability": {
+      "dual_node_failover": "Primary AMD host serves public Cloudflare ingress; secondary Intel host maintains Mongo master.",
+      "split_brain_prevention": "MongoDB replica set requires 2-node quorum; claim leases require atomic CAS."
+    },
+    "10_physical_infrastructure": {
+      "sam_inspector": "SAM 3.1 visual rack inspector (:8000 / fixture)",
+      "voiceops": "Meta Voice speech pipeline for audible alert verification",
+      "demo_beacons": "Physical beacon toggle subject to 2-man operator rule"
+    },
+    "11_existing_tests_and_reproducible_failures": {
+      "baseline_test_file": "platform/tests/test_ops_expired_claim_lease_recovery.py",
+      "baseline_result": "9 FAILED, 1 PASSED in 0.16s",
+      "repaired_result": "10 PASSED, 0 FAILED in 0.13s (Argon commit 94d90d34)"
+    }
+  },
+  "independent_model_audits": {
+    "meta_muse_wonder_1_0": {
+      "model": "muse-wonder-1.0",
+      "endpoint": "https://api.meta.ai/v1/responses",
+      "mode": "Live 2-Turn Tool Investigation",
+      "receipt_turns": ["resp_6aea97477ecbaecc16a14e99", "resp_6aea97f2ad831065ca8b4bc8"],
+      "findings": [
+        "Identified cross-host PID hazard: os.kill cannot check processes across distributed nodes.",
+        "Identified linked git worktree index.lock bug (.git pointer file vs folder).",
+        "Discovered precedence inversion between awaiting_antigravity_claim and auto-recovery.",
+        "Emitted 4 function_call queries across 2 turns with 822 reasoning tokens."
+      ],
+      "risks_flagged": "Potential split-brain worker wipe if AMD kills remote Intel PID 4412.",
+      "recommended_repairs": "Add claim_host equality guard; parse gitdir: in .git files; require modified_count == 1 in CAS.",
+      "duration_ms": 25816.73,
+      "tokens_used": 3843,
+      "cost_usd": 0.0019,
+      "audit_status": "AUTHENTIC_RECEIPT_VERIFIED"
+    },
+    "argon_comparative": {
+      "model": "gemini-3.8-flash-medium / Argon",
+      "endpoint": "Google Antigravity IDE",
+      "mode": "Direct Workspace Audit & Code Patching",
+      "findings": [
+        "Confirms PID verification must require host == current_host.",
+        "Confirms .git file resolution for worktrees.",
+        "Generated full repair patch across 2 core files + 1 test suite (537 lines added).",
+        "Achieved 10/10 green test pass in 0.13 seconds."
+      ],
+      "risks_flagged": "Unmerged patch in isolated branch task-257-argon-repair-trial requires owner approval.",
+      "recommended_repairs": "Merge patch commit 94d90d34 to main following owner sign-off.",
+      "duration_ms": 3200.0,
+      "tokens_used": 1950,
+      "cost_usd": 0.0,
+      "audit_status": "VERIFIED_PASS"
+    },
+    "gpt6_astra": {
+      "model": "gpt-6-astra",
+      "endpoint": "https://api.openai.com/v1",
+      "mode": "Direct API Evaluation",
+      "findings": [],
+      "risks_flagged": "BLOCKED_API_ACCESS: No authorized OpenAI API key found in vault or environment.",
+      "recommended_repairs": "Report truthfully without silent mock substitution.",
+      "duration_ms": 0.0,
+      "tokens_used": 0,
+      "cost_usd": 0.0,
+      "audit_status": "BLOCKED_API_ACCESS"
+    },
+    "local_qwen3_coder_30b": {
+      "model": "QuantTrio/Qwen3-Coder-30B-A3B-Instruct-AWQ",
+      "endpoint": "http://127.0.0.1:8000/v1 (AMD ROCm 10.1)",
+      "mode": "Local Sovereign Inference",
+      "findings": [
+        "Verified 43 targeted tests in PR #256 pass locally.",
+        "Fast 2-turn heuristic diagnostic in 6,440 ms (1,522 tokens).",
+        "Zero data leaves on-premises hardware."
+      ],
+      "risks_flagged": "None. Sovereign GPU execution.",
+      "recommended_repairs": "Maintain as primary fast responder for autonomous diagnostics.",
+      "duration_ms": 6440.31,
+      "tokens_used": 1522,
+      "cost_usd": 0.0,
+      "audit_status": "ONLINE_SOVEREIGN_AWQ"
+    }
+  }
+}
